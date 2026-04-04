@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রেজিস্ট্রেশন — Road Track BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        :root {
+            --green-neon: #00ff88;
+            --green-dark: #006a4e;
+            --red-neon: #ff1744;
+            --bg-deep: #020a05;
+            --bg-panel: rgba(0, 15, 8, 0.85);
+            --glass-border: rgba(0, 255, 136, 0.15);
+            --text-primary: #e0fff0;
+            --text-muted: rgba(180, 255, 210, 0.6);
+            --glow-green: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', 'Exo 2', sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(0, 106, 78, 0.12) 0%, transparent 70%), repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(0, 255, 136, 0.02) 80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 64px;
+            background: rgba(2, 10, 5, 0.92);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .flag-icon {
+            width: 36px;
+            height: 24px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .flag-bg {
+            width: 100%;
+            height: 100%;
+            background: #006a4e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flag-circle {
+            width: 13px;
+            height: 13px;
+            background: #f42a41;
+            border-radius: 50%;
+            margin-left: -2px;
+        }
+
+        .brand-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--green-neon), #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            padding: 90px 1.5rem 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3rem;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        @media(max-width:900px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+
+            .left-col {
+                display: none;
+            }
+        }
+
+        .left-col {}
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            background: rgba(0, 255, 136, 0.06);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            color: var(--green-neon);
+            text-transform: uppercase;
+            font-family: 'Exo 2', sans-serif;
+            margin-bottom: 1.5rem;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green-neon);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .hero-heading {
+            font-family: 'Exo 2', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 900;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero-heading span {
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+        }
+
+        .hero-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-mini {
+            background: rgba(0, 255, 136, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .stat-mini-val {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--green-neon);
+        }
+
+        .stat-mini-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .right-col {}
+
+        .auth-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--green-neon), #00ccff, var(--green-neon));
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+        }
+
+        .auth-tab.active {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--green-neon);
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .role-btn {
+            padding: 12px 8px;
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .role-btn:hover {
+            border-color: rgba(0, 255, 136, 0.4);
+        }
+
+        .role-btn.selected {
+            border-color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--green-neon);
+        }
+
+        .role-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .form-group.full {
+            grid-column: 1/-1;
+        }
+
+        label {
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        input,
+        select {
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 0.82rem;
+            outline: none;
+            transition: all 0.25s;
+            width: 100%;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.06);
+        }
+
+        select option {
+            background: #020a05;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--green-dark), #005a40);
+            border: 1px solid var(--green-neon);
+            border-radius: 8px;
+            color: var(--green-neon);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--glow-green);
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--green-neon);
+            color: var(--bg-deep);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .switch-link button {
+            background: none;
+            border: none;
+            color: var(--green-neon);
+            cursor: pointer;
+            font-size: 0.78rem;
+            text-decoration: underline;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 20px;
+            background: rgba(2, 10, 5, 0.95);
+            border: 1px solid var(--green-neon);
+            border-radius: 8px;
+            color: var(--green-neon);
+            font-size: 0.82rem;
+            z-index: 9999;
+            display: none;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .toast.error {
+            border-color: var(--red-neon);
+            color: var(--red-neon);
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a class="nav-brand" href="/">
+            <div class="flag-icon">
+                <div class="flag-bg">
+                    <div class="flag-circle"></div>
+                </div>
+            </div><span class="brand-title">Road Track BD</span>
+        </a>
+    </nav>
+
+    <main>
+        <div class="left-col">
+            <div class="hero-tag">
+                <div class="pulse-dot"></div>Smart Registration
+            </div>
+            <div class="hero-heading">পরিবর্তন টা <span>আপনার থেকেই</span> শুরু হোক</div>
+            <div class="hero-desc">বাংলাদেশের রাস্তাগুলোকে সবার জন্য নিরাপদ ও পরিচ্ছন্ন করতে হাজার মানুষের নেটওয়ার্কে
+                যোগ দিন।</div>
+            <div class="stats-row">
+                <div class="stat-mini">
+                    <div class="stat-mini-val">৫০কে+</div>
+                    <div class="stat-mini-label">সক্রিয় সদস্য</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="stat-mini-val">১২০০+</div>
+                    <div class="stat-mini-label">দৈনিক রিপোর্ট</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-col">
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchTab('register',this)">নিবন্ধন করুন</button>
+                    <button class="auth-tab" onclick="switchTab('login',this)">লগইন করুন</button>
+                </div>
+
+                <div id="registerPanel">
+                    <div style="margin-bottom:1rem;">
+                        <label style="margin-bottom:8px;display:block;">ভূমিকা নির্বাচন করুন *</label>
+                        <div class="role-grid">
+                            <button class="role-btn selected" data-role="স্বেচ্ছাসেবক" onclick="selectRole(this)"><span
+                                    class="role-icon">🤝</span>স্বেচ্ছাসেবক</button>
+                            <button class="role-btn" data-role="ঠিকাদার" onclick="selectRole(this)"><span
+                                    class="role-icon">🏗️</span>ঠিকাদার</button>
+                            <button class="role-btn" data-role="সরকারিকর্মকর্তা" onclick="selectRole(this)"><span
+                                    class="role-icon">🏛️</span>সরকারি ব্যক্তি</button>
+                        </div>
+                        <input type="hidden" id="selectedRole" value="স্বেচ্ছাসেবক">
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>পূর্ণ নাম *</label><input type="text" id="regName"
+                                placeholder="আপনার নাম"></div>
+                        <div class="form-group"><label>ফোন নম্বর *</label><input type="tel" id="regPhone"
+                                placeholder="০১৮XXXXXXXX"></div>
+                        <div class="form-group"><label>জন্ম তারিখ *</label><input type="date" id="regDob"></div>
+                        <div class="form-group"><label>এনআইডি (আবশ্যক) *</label><input type="text" id="regNid"
+                                placeholder="আপনার ১০ সংখ্যার সঠিক এনআইডি নাম্বার দিন"></div>
+                        <div class="form-group"><label>পেশা</label><input type="text" id="regJob"
+                                placeholder="বর্তমান পেশা"></div>
+                        <div class="form-group"><label>পাসওয়ার্ড *</label><input type="password" id="regPass"
+                                placeholder="কমপক্ষে ৬ অক্ষর"></div>
+                        <div class="form-group"><label>পাসওয়ার্ড নিশ্চিত *</label><input type="password" id="regPass2"
+                                placeholder="পুনরায় লিখুন"></div>
+                    </div>
+                    <button class="submit-btn" id="regBtn" onclick="doRegister()">সাবমিট করুন</button>
+                    <div class="switch-link">ইতিমধ্যে অ্যাকাউন্ট আছে? <button onclick="switchTab('login',null)">লগইন
+                            করুন</button></div>
+                </div>
+
+                <div id="loginPanel" style="display:none;">
+                    <div class="form-group" style="margin-bottom:12px;"><label>ফোন নম্বর</label><input type="tel"
+                            id="loginPhone" placeholder="০১৮XXXXXXXX"></div>
+                    <div class="form-group" style="margin-bottom:12px;"><label>পাসওয়ার্ড</label><input type="password"
+                            id="loginPass" placeholder="পাসওয়ার্ড"></div>
+                    <div style="text-align:right; margin-bottom:16px;">
+                        <button onclick="openResetModal()" style="background:none; border:none; color:var(--text-muted); font-size:0.7rem; cursor:pointer; text-decoration:underline;">পাসওয়ার্ড ভুলে গেছেন?</button>
+                    </div>
+                    <button class="submit-btn" id="loginBtn" onclick="doLogin()">লগইন করুন</button>
+                    <div class="switch-link">নতুন ব্যবহারকারী? <button onclick="switchTab('register',null)">নিবন্ধন
+                            করুন</button></div>
+                </div>
+
+                <div id="resetPanel" style="display:none;">
+                    <div class="modal-title" style="font-size:0.9rem; margin-bottom:1rem;">পাসওয়ার্ড রিসেট</div>
+                    <div class="form-group"><label>ফোন নম্বর</label><input type="tel" id="resetPhone" placeholder="০১৮XXXXXXXX"></div>
+                    <div class="form-group"><label>এনআইডি নম্বর</label><input type="text" id="resetNid" placeholder="১০ সংখ্যার এনআইডি"></div>
+                    <div class="form-group"><label>নতুন পাসওয়ার্ড</label><input type="password" id="resetPass" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+                    <button class="submit-btn" id="resetBtn" onclick="doReset()">পাসওয়ার্ড পরিবর্তন করুন</button>
+                    <div class="switch-link"><button onclick="switchTab('login',null)">লগইন পেজে ফিরুন</button></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            else if (tab === 'register' || tab === 'login') document.querySelectorAll('.auth-tab')[tab === 'register' ? 0 : 1].classList.add('active');
+            
+            document.getElementById('registerPanel').style.display = tab === 'register' ? 'block' : 'none';
+            document.getElementById('loginPanel').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('resetPanel').style.display = tab === 'reset' ? 'block' : 'none';
+        }
+
+        function openResetModal() {
+            switchTab('reset', null);
+        }
+
+        function selectRole(btn) {
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.getElementById('selectedRole').value = btn.dataset.role;
+        }
+
+        async function doRegister() {
+            const name = document.getElementById('regName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const dob = document.getElementById('regDob').value;
+            const nid = document.getElementById('regNid').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const pass2 = document.getElementById('regPass2').value;
+            const role = document.getElementById('selectedRole').value;
+            
+            if (!name || !phone || !pass || !dob || !nid) { showToast('সব বাধ্যতামূলক তথ্য দিন', 'error'); return; }
+            if (nid.length !== 10) { showToast('আপনার ১০ সংখ্যার সঠিক এনআইডি নাম্বার দিন', 'error'); return; }
+            if (pass !== pass2) { showToast('পাসওয়ার্ড মিলছে না', 'error'); return; }
+            if (pass.length < 6) { showToast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error'); return; }
+            
+            const btn = document.getElementById('regBtn');
+            btn.disabled = true; btn.textContent = 'প্রক্রিয়া হচ্ছে...';
+            try {
+                const d = await apiPost('/api/auth/register', { 
+                    name, phone, dob, nid, 
+                    password: pass, role, 
+                    job: document.getElementById('regJob').value.trim() 
+                });
+                if (d.success) { 
+                    saveAuth(d.token, d.user); 
+                    typeof showCongratsCard === 'function' ? showCongratsCard('🎉 অভিনন্দন!', 'আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।') : showToast('✅ নিবন্ধন সফল হয়েছে!'); 
+                    setTimeout(() => window.location.href = '/', 3000); 
+                }
+                else showToast(d.message || 'নিবন্ধন ব্যর্থ হয়েছে', 'error');
+            } catch (e) { showToast('সার্ভার সমস্যা হয়েছে', 'error'); }
+            btn.disabled = false; btn.textContent = 'সাবমিট করুন';
+        }
+
+        async function doReset() {
+            const phone = document.getElementById('resetPhone').value.trim();
+            const nid = document.getElementById('resetNid').value.trim();
+            const newPassword = document.getElementById('resetPass').value;
+            
+            if (!phone || !nid || !newPassword) { showToast('সবগুলো তথ্য দিন', 'error'); return; }
+            
+            const btn = document.getElementById('resetBtn');
+            btn.disabled = true; btn.textContent = 'পরিবর্তন হচ্ছে...';
+            try {
+                const d = await apiPost('/api/auth/reset-password', { phone, nid, newPassword });
+                if (d.success) {
+                    showToast('✅ পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে। লগইন করুন।');
+                    setTimeout(() => switchTab('login', null), 2000);
+                } else {
+                    showToast(d.message || 'রিসেট ব্যর্থ হয়েছে', 'error');
+                }
+            } catch (e) { showToast('সার্ভার সমস্যা হয়েছে', 'error'); }
+            btn.disabled = false; btn.textContent = 'পাসওয়ার্ড পরিবর্তন করুন';
+        }
+
+        async function doLogin() {
+            const phone = document.getElementById('loginPhone').value.trim();
+            const pass = document.getElementById('loginPass').value;
+            if (!phone || !pass) { showToast('ফোন ও পাসওয়ার্ড দিন', 'error'); return; }
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true; btn.textContent = 'যাচাই হচ্ছে...';
+            try {
+                const d = await apiPost('/api/auth/login', { phone, password: pass });
+                if (d.success) { saveAuth(d.token, d.user); typeof showCongratsCard === 'function' ? showCongratsCard('🎉 স্বাগতম!', 'আপনি সফলভাবে লগইন করেছেন।') : showToast('✅ লগইন সফল হয়েছে!'); setTimeout(() => window.location.href = '/', 3000); }
+                else showToast(d.message || 'লগইন ব্যর্থ হয়েছে', 'error');
+            } catch (e) { showToast('সার্ভার সমস্যা হয়েছে', 'error'); }
+            btn.disabled = false; btn.textContent = 'লগইন করুন';
+        }
+
+        const u = getUser();
+        if (u) window.location.href = '/';
+    </script>
+</body>
+
+</html>

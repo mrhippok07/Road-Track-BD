@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>স্বেচ্ছাসেবক — Road Track BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <style>
+        :root {
+            --green-neon: #00ff88;
+            --green-dark: #006a4e;
+            --red-neon: #ff1744;
+            --bg-deep: #020a05;
+            --bg-panel: rgba(0, 15, 8, 0.85);
+            --glass-border: rgba(0, 255, 136, 0.15);
+            --text-primary: #e0fff0;
+            --text-muted: rgba(180, 255, 210, 0.6);
+            --glow-green: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', 'Exo 2', sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(0, 106, 78, 0.12) 0%, transparent 70%), repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(0, 255, 136, 0.02) 80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 64px;
+            background: rgba(2, 10, 5, 0.92);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .flag-icon {
+            width: 36px;
+            height: 24px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .flag-bg {
+            width: 100%;
+            height: 100%;
+            background: #006a4e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flag-circle {
+            width: 13px;
+            height: 13px;
+            background: #f42a41;
+            border-radius: 50%;
+            margin-left: -2px;
+        }
+
+        .brand-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--green-neon), #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .nav-link {
+            padding: 6px 16px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: all 0.25s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--green-neon);
+            border-color: var(--glass-border);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            padding: 90px 1.5rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-header h1 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--green-neon);
+        }
+
+        .join-btn {
+            padding: 10px 22px;
+            background: linear-gradient(135deg, var(--green-dark), #005a40);
+            border: 1px solid var(--green-neon);
+            border-radius: 6px;
+            color: var(--green-neon);
+            font-size: 0.8rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s;
+            box-shadow: var(--glow-green);
+        }
+
+        .join-btn:hover {
+            background: var(--green-neon);
+            color: var(--bg-deep);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+
+        .filter-chip {
+            padding: 6px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.06);
+        }
+
+        .vol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+        }
+
+        .vol-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+        }
+
+        .vol-card:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            transform: translateY(-3px);
+            box-shadow: var(--glow-green);
+        }
+
+        .vol-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-dark), #004d38);
+            border: 1.5px solid var(--green-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+
+        .vol-name {
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            margin-bottom: 2px;
+        }
+
+        .vol-role {
+            font-size: 0.68rem;
+            color: var(--green-neon);
+            font-family: 'Exo 2', sans-serif;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .vol-info {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .vol-stats {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .vol-stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .vol-stat-val {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--green-neon);
+        }
+
+        .vol-stat-label {
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 7px;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .contact-btn:hover {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+        }
+
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 20px;
+            background: rgba(2, 10, 5, 0.95);
+            border: 1px solid var(--green-neon);
+            border-radius: 8px;
+            color: var(--green-neon);
+            font-size: 0.82rem;
+            z-index: 9999;
+            display: none;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .toast.error {
+            border-color: var(--red-neon);
+            color: var(--red-neon);
+        }
+
+        @media(max-width:600px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a class="nav-brand" href="/">
+            <div class="flag-icon"><div class="flag-bg"><div class="flag-circle"></div></div></div>
+            <span class="brand-title">Road Track BD</span>
+        </a>
+        <div class="nav-links">
+            <a class="nav-link" href="/" data-i18n="nav.map">ম্যাপ</a>
+            <a class="nav-link" href="/report" data-i18n="nav.report">রিপোর্ট</a>
+            <a class="nav-link" href="/feed" data-i18n="nav.feed">ফিড</a>
+            <a class="nav-link" href="/dashboard" data-i18n="nav.dashboard">ড্যাশবোর্ড</a>
+            <a class="nav-link active" href="/volunteer" data-i18n="nav.volunteer">স্বেচ্ছাসেবক</a>
+        </div>
+        <div id="navRight" style="display:flex;gap:10px;align-items:center;">
+            <div class="nav-status"><div class="status-dot"></div><span data-i18n="nav.live">লাইভ</span></div>
+            <button class="nav-btn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1 data-i18n="vol.title">🤝 স্বেচ্ছাসেবক ও ঠিকাদার</h1>
+            <a id="joinBannerBtn" href="javascript:void(0)" onclick="openAuthModal()" class="join-btn" data-i18n="vol.join">➕ যোগ দিন</a>
+        </div>
+        <div class="filter-row">
+            <button class="filter-chip active" onclick="filterVols('all',this)">সবাই</button>
+            <button class="filter-chip" onclick="filterVols('স্বেচ্ছাসেবক',this)">স্বেচ্ছাসেবক</button>
+            <button class="filter-chip" onclick="filterVols('ঠিকাদার',this)">ঠিকাদার</button>
+            <button class="filter-chip" onclick="filterVols('সরকারিকর্মকর্তা',this)">সরকারি ব্যক্তি</button>
+        </div>
+        <div class="vol-grid" id="volGrid">
+            <div class="empty-state">লোড হচ্ছে...</div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let allVols = [];
+
+        const ROLE_ICONS = { 'স্বেচ্ছাসেবক': '🤝', 'ঠিকাদার': '🏗️', 'সরকারিকর্মকর্তা': '🏛️' };
+
+        async function loadVols() {
+            try {
+                const d = await apiFetch('/api/volunteers');
+                allVols = d.success ? d.data : [];
+                renderVols(allVols);
+            } catch (e) { document.getElementById('volGrid').innerHTML = '<div class="empty-state">ডেটা লোড ব্যর্থ</div>'; }
+        }
+
+        function renderVols(list) {
+            const g = document.getElementById('volGrid');
+            if (!list.length) { g.innerHTML = '<div class="empty-state">কোনো তথ্য নেই</div>'; return; }
+            g.innerHTML = list.map(v => `
+    <div class="vol-card">
+      <div class="vol-avatar">${v.avatar ? `<img src="${v.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : (v.icon || ROLE_ICONS[v.role] || '👤')}</div>
+      <div class="vol-name">${v.name}</div>
+      <div class="vol-role">${v.role}</div>
+      <div class="vol-info">📍 ${v.address || v.district || v.area || '—'}<br>📞 ${v.phone || '—'}<br>${v.job ? '💼 ' + v.job : ''}</div>
+      <div class="vol-stats">
+        <div class="vol-stat"><div class="vol-stat-val">${v.reportCount || 0}</div><div class="vol-stat-label">রিপোর্ট</div></div>
+        <div class="vol-stat"><div class="vol-stat-val">${v.points || 0}</div><div class="vol-stat-label">পয়েন্ট</div></div>
+      </div>
+      <button class="contact-btn" onclick="contact('${v.phone || ''}')" data-i18n="vol.contact">যোগাযোগ করুন</button>
+    </div>`).join('');
+        }
+
+        function filterVols(role, btn) {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            renderVols(role === 'all' ? allVols : allVols.filter(v => v.role === role));
+        }
+
+        function contact(phone) {
+            if (!phone) { showToast('ফোন নম্বর পাওয়া যায়নি', 'error'); return; }
+            window.location.href = 'tel:' + phone;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNavAuth(); injectLangToggle('nav'); applyLang();
+            if (getUser()) {
+                const btn = document.getElementById('joinBannerBtn');
+                if (btn) btn.style.display = 'none';
+            }
+            loadVols();
+        });
+    </script>
+</body>
+
+</html>

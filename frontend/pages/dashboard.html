@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ড্যাশবোর্ড — Road Track BD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<style>
+:root{--green-neon:#00ff88;--green-mid:#00cc6a;--green-dark:#006a4e;--red-neon:#ff1744;--bg-deep:#020a05;--bg-panel:rgba(0,15,8,0.85);--glass-border:rgba(0,255,136,0.15);--text-primary:#e0fff0;--text-muted:rgba(180,255,210,0.6);--glow-green:0 0 20px rgba(0,255,136,0.3),0 0 60px rgba(0,255,136,0.08);--glow-red:0 0 20px rgba(255,23,68,0.3);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100%;background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans Bengali','Exo 2',sans-serif;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 50% 40% at 10% 60%,rgba(0,106,78,0.1) 0%,transparent 70%),repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(0,255,136,0.015) 80px);pointer-events:none;z-index:0;}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(2,10,5,0.95);border-bottom:1px solid var(--glass-border);backdrop-filter:blur(20px);}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.flag-icon{width:36px;height:24px;border-radius:3px;overflow:hidden;}
+.flag-bg{width:100%;height:100%;background:#006a4e;display:flex;align-items:center;justify-content:center;}
+.flag-circle{width:13px;height:13px;background:#f42a41;border-radius:50%;margin-left:-2px;}
+.brand-title{font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,var(--green-neon),#00ccff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;}
+.nav-links{display:flex;gap:0.3rem;}
+.nav-link{padding:6px 16px;font-size:0.78rem;color:var(--text-muted);text-decoration:none;border:1px solid transparent;border-radius:4px;transition:all 0.25s;}
+.nav-link:hover,.nav-link.active{color:var(--green-neon);border-color:var(--glass-border);background:rgba(0,255,136,0.05);}
+.nav-status{display:flex;align-items:center;gap:6px;font-size:0.7rem;color:var(--green-neon);}
+.status-dot{width:6px;height:6px;background:var(--green-neon);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.dash-wrap{position:relative;z-index:1;padding:90px 2rem 4rem;max-width:1400px;margin:0 auto;}
+.dash-header{margin-bottom:2rem;}
+.dash-header h1{font-family:'Exo 2',sans-serif;font-size:clamp(1.2rem,3vw,1.8rem);font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--green-neon);text-shadow:var(--glow-green);}
+.dash-header p{font-size:0.78rem;color:var(--text-muted);margin-top:4px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:2rem;}
+.kpi-card{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:12px;padding:20px 18px;backdrop-filter:blur(16px);position:relative;overflow:hidden;transition:all 0.3s;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green-neon),transparent);}
+.kpi-card:hover{transform:translateY(-3px);box-shadow:var(--glow-green);}
+.kpi-card.red::before{background:linear-gradient(90deg,transparent,var(--red-neon),transparent);}
+.kpi-card.red:hover{box-shadow:var(--glow-red);}
+.kpi-card.cyan::before{background:linear-gradient(90deg,transparent,#00e8ff,transparent);}
+.kpi-label{font-size:0.62rem;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;font-family:'Exo 2',sans-serif;margin-bottom:8px;}
+.kpi-val{font-family:'Exo 2',sans-serif;font-size:2.2rem;font-weight:900;color:var(--green-neon);line-height:1;text-shadow:var(--glow-green);}
+.kpi-val.red{color:var(--red-neon);text-shadow:var(--glow-red);}
+.kpi-val.cyan{color:#00e8ff;}
+.kpi-sub{font-size:0.65rem;color:var(--text-muted);margin-top:6px;font-family:'Noto Sans Bengali',sans-serif;}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:2rem;}
+@media(max-width:900px){.charts-grid{grid-template-columns:1fr;}}
+.chart-card{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:12px;padding:20px;backdrop-filter:blur(16px);position:relative;overflow:hidden;}
+.chart-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green-neon),transparent);}
+.chart-card.wide{grid-column:1/-1;}
+.chart-title{font-family:'Exo 2',sans-serif;font-size:0.72rem;letter-spacing:2px;color:var(--green-neon);text-transform:uppercase;margin-bottom:16px;}
+.pending-list{display:flex;flex-direction:column;gap:8px;}
+.pending-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(0,255,136,0.03);border:1px solid var(--glass-border);border-radius:8px;transition:all 0.25s;}
+.pending-item:hover{border-color:rgba(0,255,136,0.3);}
+.pending-num{font-family:'Exo 2',sans-serif;font-size:0.65rem;color:var(--text-muted);width:20px;}
+.pending-info{flex:1;}
+.pending-road{font-size:0.82rem;color:var(--text-primary);font-weight:600;font-family:'Noto Sans Bengali',sans-serif;}
+.pending-district{font-size:0.68rem;color:var(--text-muted);}
+.pending-badge{padding:3px 10px;border-radius:12px;font-size:0.6rem;background:rgba(255,23,68,0.15);border:1px solid var(--red-neon);color:var(--red-neon);font-family:'Exo 2',sans-serif;}
+.pending-date{font-size:0.65rem;color:var(--text-muted);font-family:'Exo 2',sans-serif;text-align:right;}
+.district-bars{display:flex;flex-direction:column;gap:10px;}
+.district-bar-item{display:flex;align-items:center;gap:10px;}
+.district-name{font-size:0.72rem;color:var(--text-muted);width:80px;font-family:'Noto Sans Bengali',sans-serif;text-align:right;flex-shrink:0;}
+.bar-track{flex:1;height:6px;background:rgba(0,255,136,0.08);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green-dark),var(--green-neon));transition:width 1.5s ease;}
+.bar-count{font-size:0.72rem;color:var(--green-neon);font-family:'Exo 2',sans-serif;width:24px;}
+.progress-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:2rem;}
+@media(max-width:600px){.progress-overview{grid-template-columns:1fr;}}
+.progress-card{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:10px;padding:18px;backdrop-filter:blur(12px);text-align:center;}
+.progress-label{font-size:0.65rem;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;font-family:'Exo 2',sans-serif;margin-bottom:10px;}
+.circle-wrap{width:80px;height:80px;margin:0 auto 10px;position:relative;}
+.circle-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-size:1rem;font-weight:700;}
+.scanline{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green-neon),transparent);opacity:0.3;animation:scanMove 10s linear infinite;z-index:9999;pointer-events:none;}
+@keyframes scanMove{0%{top:0}100%{top:100vh}}
+.toast{position:fixed;bottom:30px;right:30px;padding:12px 20px;background:rgba(2,10,5,0.95);border:1px solid var(--green-neon);border-radius:8px;color:var(--green-neon);font-size:0.82rem;z-index:9999;display:none;font-family:'Noto Sans Bengali',sans-serif;}
+@media(max-width:768px){nav{padding:0 1rem;}.nav-links{display:none;}}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+<nav>
+  <a class="nav-brand" href="/"><div class="flag-icon"><div class="flag-bg"><div class="flag-circle"></div></div></div><span class="brand-title">Road Track BD</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="/" data-i18n="nav.map">ম্যাপ</a>
+    <a class="nav-link" href="/report" data-i18n="nav.report">রিপোর্ট</a>
+    <a class="nav-link" href="/feed" data-i18n="nav.feed">ফিড</a>
+    <a class="nav-link active" href="/dashboard" data-i18n="nav.dashboard">ড্যাশবোর্ড</a>
+    <a class="nav-link" href="/volunteer" data-i18n="nav.volunteer">স্বেচ্ছাসেবক</a>
+  </div>
+  <div id="navRight" style="display:flex;gap:10px;align-items:center;">
+    <div class="nav-status"><div class="status-dot"></div><span data-i18n="nav.live">লাইভ ডেটা</span></div>
+    <button class="nav-btn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>
+  </div>
+</nav>
+
+<div class="dash-wrap">
+  <div class="dash-header">
+    <h1>⚡ কেন্দ্রীয় বিশ্লেষণ ড্যাশবোর্ড</h1>
+    <p>বাংলাদেশের সড়ক অবস্থার রিয়েল-টাইম পরিসংখ্যান ও বিশ্লেষণ</p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-label">মোট রিপোর্ট</div><div class="kpi-val" id="kTotal">—</div><div class="kpi-sub">সর্বমোট জমা</div></div>
+    <div class="kpi-card red"><div class="kpi-label">মেরামত বাকি</div><div class="kpi-val red" id="kPending">—</div><div class="kpi-sub">Pending রাস্তা</div></div>
+    <div class="kpi-card cyan"><div class="kpi-label">আজকের রিপোর্ট</div><div class="kpi-val cyan" id="kToday">—</div><div class="kpi-sub">আজ জমা পড়েছে</div></div>
+    <div class="kpi-card"><div class="kpi-label">সম্পন্ন মেরামত</div><div class="kpi-val" id="kResolved">—</div><div class="kpi-sub">রাস্তা মেরামত হয়েছে</div></div>
+    <div class="kpi-card cyan"><div class="kpi-label">সংস্কার চলছে</div><div class="kpi-val cyan" id="kUnderRepair">—</div><div class="kpi-sub">In-Progress</div></div>
+    <div class="kpi-card"><div class="kpi-label">সক্রিয় ব্যবহারকারী</div><div class="kpi-val" style="font-size:1.6rem;color:#ff9800;" id="kUsers">—</div><div class="kpi-sub">অনলাইন</div></div>
+  </div>
+
+  <div class="progress-overview">
+    <div class="progress-card">
+      <div class="progress-label">মেরামত অগ্রগতি</div>
+      <div class="circle-wrap">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(0,255,136,0.1)" stroke-width="6"/>
+          <circle id="progCircle1" cx="40" cy="40" r="34" fill="none" stroke="#00ff88" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+        </svg>
+        <div class="circle-val" style="color:var(--green-neon);" id="progPct1">0%</div>
+      </div>
+      <div class="kpi-sub" id="progSub1">— টি রাস্তা মেরামত হয়েছে</div>
+    </div>
+    <div class="progress-card">
+      <div class="progress-label">সংস্কার চলমান</div>
+      <div class="circle-wrap">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,152,0,0.1)" stroke-width="6"/>
+          <circle id="progCircle2" cx="40" cy="40" r="34" fill="none" stroke="#ff9800" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+        </svg>
+        <div class="circle-val" style="color:#ff9800;" id="progPct2">0%</div>
+      </div>
+      <div class="kpi-sub" id="progSub2">— টি রিপোর্ট চলমান</div>
+    </div>
+    <div class="progress-card">
+      <div class="progress-label">পেন্ডিং রিপোর্ট</div>
+      <div class="circle-wrap">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,23,68,0.1)" stroke-width="6"/>
+          <circle id="progCircle3" cx="40" cy="40" r="34" fill="none" stroke="#ff1744" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+        </svg>
+        <div class="circle-val" style="color:#ff1744;" id="progPct3">0%</div>
+      </div>
+      <div class="kpi-sub" id="progSub3">— টি রিপোর্ট বাকি</div>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom: 2rem; background: var(--bg-panel); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px;">
+    <div class="chart-title" style="margin-bottom:15px;">📋 সমস্যার ধরন অনুযায়ী মোট রিপোর্ট</div>
+    <div id="typeStatsContainer" style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="color:var(--text-muted);font-size:0.85rem;">লোড হচ্ছে...</div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">📊 সমস্যার ধরন অনুযায়ী বিতরণ</div>
+      <div style="height:220px;"><canvas id="typeChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">📈 গত ৭ দিনের রিপোর্ট প্রবাহ</div>
+      <div style="height:220px;"><canvas id="trendChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">🗺️ সর্বাধিক ক্ষতিগ্রস্ত জেলা</div>
+      <div class="district-bars" id="districtBars"><div style="color:var(--text-muted);text-align:center;padding:1rem;">লোড হচ্ছে...</div></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">📅 মাসিক রিপোর্ট তুলনা</div>
+      <div style="height:220px;"><canvas id="monthChart"></canvas></div>
+    </div>
+    <div class="chart-card wide">
+      <div class="chart-title">📋 সাম্প্রতিক পেন্ডিং রাস্তার তালিকা</div>
+      <div class="pending-list" id="pendingList"><div style="color:var(--text-muted);text-align:center;padding:1rem;">লোড হচ্ছে...</div></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="/assets/js/main.js"></script>
+<script>
+Chart.defaults.color='rgba(180,255,210,0.7)';
+Chart.defaults.borderColor='rgba(0,255,136,0.2)';
+
+let typeChartInst=null,trendChartInst=null,monthChartInst=null;
+
+async function loadDash(){
+  try{
+    const d=await apiFetch('/api/reports/stats');
+    if(!d.success)return;
+    const s=d.data;
+    animateCount('kTotal',s.total||0);
+    animateCount('kPending',s.pending||0);
+    animateCount('kToday',s.today||0);
+    animateCount('kResolved',s.resolved||0);
+    animateCount('kUnderRepair',s.underRepair||0);
+    const total=s.total||1;
+    const rPct=Math.round((s.resolved/total)*100);
+    const uPct=Math.round((s.underRepair/total)*100);
+    const pPct=Math.round((s.pending/total)*100);
+    setCircle('progCircle1',rPct);document.getElementById('progPct1').textContent=rPct+'%';document.getElementById('progSub1').textContent=(s.resolved||0)+' টি রাস্তা মেরামত হয়েছে';
+    setCircle('progCircle2',uPct);document.getElementById('progPct2').textContent=uPct+'%';document.getElementById('progSub2').textContent=(s.underRepair||0)+' টি রিপোর্ট চলমান';
+    setCircle('progCircle3',pPct);document.getElementById('progPct3').textContent=pPct+'%';document.getElementById('progSub3').textContent=(s.pending||0)+' টি রিপোর্ট বাকি';
+    if(s.byType){
+      renderTypeChart(s.byType);
+      const tEl = document.getElementById('typeStatsContainer');
+      if (tEl) {
+          tEl.innerHTML = Object.entries(s.byType).map(([k, v]) => 
+              `<div style="background:rgba(0,255,136,0.05);border:1px solid var(--glass-border);padding:6px 14px;border-radius:20px;font-size:0.9rem;color:var(--green-neon);">
+                  ${PROBLEM_LABELS[k] || k} : <strong style="color:#fff;">${v}</strong>
+              </div>`
+          ).join('');
+      }
+    }
+    if(s.byDistrict)renderDistrictBars(s.byDistrict);
+    if(s.trend7)renderTrendChart(s.trend7);
+    if(s.monthly)renderMonthChart(s.monthly);
+  }catch(e){}
+  loadPendingList();
+}
+
+function setCircle(id,pct){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const circ=2*Math.PI*34;
+  el.style.strokeDashoffset=circ-(circ*(pct/100));
+}
+
+async function loadPendingList(){
+  try{
+    const d=await apiFetch('/api/reports?status=pending&limit=6');
+    const el=document.getElementById('pendingList');
+    if(d.success&&d.data.length){
+      el.innerHTML=d.data.map((r,i)=>`
+        <div class="pending-item">
+          <div class="pending-num">${i+1}</div>
+          <div class="pending-info"><div class="pending-road">${r.roadName}</div><div class="pending-district">📍 ${r.district||''} ${r.area?'— '+r.area:''}</div></div>
+          <div class="pending-badge">${PROBLEM_LABELS[r.problemType]||r.problemType}</div>
+          <div class="pending-date">${formatTime(r.createdAt)}</div>
+        </div>`).join('');
+    }else el.innerHTML='<div style="color:var(--text-muted);text-align:center;padding:1rem;">কোনো পেন্ডিং রিপোর্ট নেই</div>';
+  }catch(e){}
+}
+
+function renderTypeChart(byType){
+  const labels=Object.keys(byType).map(k=>PROBLEM_LABELS[k]||k);
+  const data=Object.values(byType);
+  const colors=['rgba(255,23,68,0.7)','rgba(255,109,0,0.7)','rgba(0,176,255,0.7)','rgba(255,214,0,0.7)','rgba(156,39,176,0.7)','rgba(0,188,212,0.7)','rgba(121,85,72,0.7)','rgba(0,191,165,0.7)'];
+  const ctx=document.getElementById('typeChart').getContext('2d');
+  if(typeChartInst)typeChartInst.destroy();
+  typeChartInst=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:1,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Noto Sans Bengali'"},padding:8,boxWidth:10}}},cutout:'65%'}});
+}
+
+function renderTrendChart(trend7){
+  const days=['সোম','মঙ্গল','বুধ','বৃহ','শুক্র','শনি','রবি'];
+  const ctx=document.getElementById('trendChart').getContext('2d');
+  if(trendChartInst)trendChartInst.destroy();
+  trendChartInst=new Chart(ctx,{type:'line',data:{labels:days.slice(0,trend7.length),datasets:[{label:'রিপোর্ট',data:trend7,borderColor:'#00ff88',backgroundColor:'rgba(0,255,136,0.08)',borderWidth:2,fill:true,tension:0.4,pointBackgroundColor:'#00ff88',pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,255,136,0.05)'}},y:{grid:{color:'rgba(0,255,136,0.05)'},beginAtZero:true}}}});
+}
+
+function renderMonthChart(monthly){
+  const ctx=document.getElementById('monthChart').getContext('2d');
+  if(monthChartInst)monthChartInst.destroy();
+  monthChartInst=new Chart(ctx,{type:'bar',data:{labels:monthly.labels,datasets:[{label:'নতুন রিপোর্ট',data:monthly.new,backgroundColor:'rgba(0,255,136,0.3)',borderColor:'#00ff88',borderWidth:1},{label:'মেরামত সম্পন্ন',data:monthly.resolved,backgroundColor:'rgba(0,232,255,0.3)',borderColor:'#00e8ff',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10,family:"'Noto Sans Bengali'"},padding:10,boxWidth:8}}},scales:{x:{grid:{color:'rgba(0,255,136,0.05)'}},y:{grid:{color:'rgba(0,255,136,0.05)'},beginAtZero:true}}}});
+}
+
+function renderDistrictBars(byDistrict){
+  const sorted=Object.entries(byDistrict).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  const max=sorted[0]?sorted[0][1]:1;
+  document.getElementById('districtBars').innerHTML=sorted.map(([name,count],i)=>`
+    <div class="district-bar-item">
+      <div class="district-name">${name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(count/max*100).toFixed(0)}%;${i<2?'background:linear-gradient(90deg,#b71c1c,#ff1744)':''}"></div></div>
+      <div class="bar-count">${count}</div>
+    </div>`).join('');
+}
+
+initSocket(sk=>{
+  sk.on('report_update',()=>loadDash());
+  sk.on('active_users',n=>{document.getElementById('kUsers').textContent=n;});
+});
+
+window.addEventListener('DOMContentLoaded',()=>{
+  renderNavAuth(); injectLangToggle('nav'); applyLang();
+  loadDash();
+});
+</script>
+</body>
+</html>

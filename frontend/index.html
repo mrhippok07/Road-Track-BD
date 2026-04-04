@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Track BD — জাতীয় রাস্তা পর্যবেক্ষণ প্ল্যাটফর্ম</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <style>
+        :root {
+            --green-neon: #00ff88;
+            --green-mid: #00cc6a;
+            --green-dark: #006a4e;
+            --red-neon: #ff1744;
+            --red-mid: #e53935;
+            --red-dark: #b71c1c;
+            --yellow-neon: #ffd600;
+            --blue-neon: #2196f3;
+            --bg-deep: #020a05;
+            --bg-panel: rgba(0, 15, 8, 0.85);
+            --glass-border: rgba(0, 255, 136, 0.15);
+            --glass-red: rgba(255, 23, 68, 0.15);
+            --text-primary: #e0fff0;
+            --text-muted: rgba(180, 255, 210, 0.6);
+            --glow-green: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.1);
+            --glow-red: 0 0 20px rgba(255, 23, 68, 0.4), 0 0 60px rgba(255, 23, 68, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', 'Exo 2', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(0, 106, 78, 0.12) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 80% 30%, rgba(244, 42, 65, 0.08) 0%, transparent 70%), repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(0, 255, 136, 0.02) 80px), repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(0, 255, 136, 0.02) 80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--green-neon), transparent);
+            opacity: 0.4;
+            animation: scanline 8s linear infinite;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100vh;
+            }
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 64px;
+            background: rgba(2, 10, 5, 0.92);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .flag-icon {
+            width: 36px;
+            height: 24px;
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow: var(--glow-green);
+            flex-shrink: 0;
+        }
+
+        .flag-bg {
+            width: 100%;
+            height: 100%;
+            background: #006a4e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flag-circle {
+            width: 13px;
+            height: 13px;
+            background: #f42a41;
+            border-radius: 50%;
+            margin-left: -2px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .brand-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--green-neon), #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+        }
+
+        .brand-sub {
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .nav-link {
+            padding: 6px 16px;
+            font-size: 0.78rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            color: var(--text-muted);
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: all 0.25s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--green-neon);
+            border-color: var(--glass-border);
+            background: rgba(0, 255, 136, 0.05);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .nav-btn {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--green-dark), #004d38);
+            border: 1px solid var(--green-neon);
+            border-radius: 4px;
+            color: var(--green-neon);
+            font-size: 0.78rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: var(--glow-green);
+        }
+
+        .nav-btn:hover {
+            background: var(--green-neon);
+            color: var(--bg-deep);
+            transform: translateY(-1px);
+        }
+
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: var(--green-neon);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green-neon);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 8px var(--green-neon);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 1.5rem 2rem;
+        }
+
+        .hero-top-badges {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hud-badge {
+            padding: 5px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            background: rgba(0, 255, 136, 0.04);
+            text-transform: uppercase;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .hero-title {
+            text-align: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .hero-title h1 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--green-neon) 0%, #00e8ff 50%, var(--red-neon) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from {
+                filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.2));
+            }
+
+            to {
+                filter: drop-shadow(0 0 40px rgba(0, 255, 136, 0.6));
+            }
+        }
+
+        .hero-title p {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            margin-top: 6px;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .motivation-strip {
+            display: flex;
+            gap: 12px;
+            margin: 1.2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        .moto-card {
+            flex: 1;
+            min-width: 180px;
+            max-width: 240px;
+            padding: 14px 16px;
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            transition: all 0.3s;
+        }
+
+        .moto-card:hover {
+            border-color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.07);
+            transform: translateY(-3px);
+            box-shadow: var(--glow-green);
+            color: var(--text-primary);
+        }
+
+        .moto-card .icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .map-hud-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .map-frame {
+            width: 100%;
+            height: 520px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.05), 0 0 40px rgba(0, 255, 136, 0.08);
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            background: #021008;
+        }
+
+        .map-overlay-tl,
+        .map-overlay-tr,
+        .map-overlay-bl,
+        .map-overlay-br {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            z-index: 500;
+            pointer-events: none;
+        }
+
+        .map-overlay-tl {
+            top: 10px;
+            left: 10px;
+            border-top: 2px solid var(--green-neon);
+            border-left: 2px solid var(--green-neon);
+        }
+
+        .map-overlay-tr {
+            top: 10px;
+            right: 10px;
+            border-top: 2px solid var(--green-neon);
+            border-right: 2px solid var(--green-neon);
+        }
+
+        .map-overlay-bl {
+            bottom: 10px;
+            left: 10px;
+            border-bottom: 2px solid var(--green-neon);
+            border-left: 2px solid var(--green-neon);
+        }
+
+        .map-overlay-br {
+            bottom: 10px;
+            right: 10px;
+            border-bottom: 2px solid var(--green-neon);
+            border-right: 2px solid var(--green-neon);
+        }
+
+        .map-hud-label {
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 500;
+            background: rgba(2, 10, 5, 0.85);
+            border: 1px solid var(--glass-border);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--green-neon);
+            font-family: 'Exo 2', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .map-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 10px 14px;
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            backdrop-filter: blur(16px);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        .hud-side-panels {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hud-panel {
+            flex: 1;
+            min-width: 160px;
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            backdrop-filter: blur(16px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hud-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--green-neon), transparent);
+        }
+
+        .panel-label {
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-family: 'Exo 2', sans-serif;
+            margin-bottom: 6px;
+        }
+
+        .panel-value {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+            line-height: 1;
+        }
+
+        .panel-value.red {
+            color: var(--red-neon);
+            text-shadow: var(--glow-red);
+        }
+
+        .panel-sub {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .panel-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .panel-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green-dark), var(--green-neon));
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        .awareness-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--green-neon), transparent);
+        }
+
+        .section-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: var(--green-neon);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .awareness-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
+        .awareness-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .awareness-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--green-dark), var(--green-neon), var(--green-dark));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .awareness-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: var(--glow-green);
+        }
+
+        .awareness-card:hover::after {
+            opacity: 1;
+        }
+
+        .awareness-card .aw-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .awareness-card h3 {
+            font-size: 0.85rem;
+            color: var(--green-neon);
+            margin-bottom: 8px;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .awareness-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .reports-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .report-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 14px;
+        }
+
+        .report-item {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 16px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .report-item:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .report-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .report-item-title {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .status-badge {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-family: 'Exo 2', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .status-pending {
+            background: rgba(255, 23, 68, 0.15);
+            border: 1px solid var(--red-neon);
+            color: var(--red-neon);
+        }
+
+        .status-under_repair {
+            background: rgba(33, 150, 243, 0.15);
+            border: 1px solid #2196f3;
+            color: #2196f3;
+        }
+
+        .status-repaired {
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid var(--green-neon);
+            color: var(--green-neon);
+        }
+
+        .status-rejected {
+            background: rgba(84, 110, 122, 0.15);
+            border: 1px solid #546e7a;
+            color: #546e7a;
+        }
+
+        .report-item-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            line-height: 1.6;
+        }
+
+        .report-type-chip {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            margin-top: 6px;
+            background: rgba(255, 23, 68, 0.12);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            color: var(--red-neon);
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 6px 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: transparent;
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.06);
+        }
+
+        .contractor-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .contractor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+        }
+
+        .contractor-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 18px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+        }
+
+        .contractor-card:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            transform: translateY(-3px);
+            box-shadow: var(--glow-green);
+        }
+
+        .contractor-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-dark), #004d38);
+            border: 1px solid var(--green-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .contractor-name {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            margin-bottom: 4px;
+        }
+
+        .contractor-role {
+            font-size: 0.7rem;
+            color: var(--green-neon);
+            font-family: 'Exo 2', sans-serif;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .contractor-contact {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            line-height: 1.6;
+        }
+
+        .contact-btn {
+            margin-top: 10px;
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .contact-btn:hover {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--green-dark) 0%, #005a40 100%);
+            border: 1px solid var(--green-neon);
+            border-radius: 8px;
+            color: var(--green-neon);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--glow-green);
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover {
+            background: var(--green-neon);
+            color: var(--bg-deep);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .guidelines-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 900;
+            background: rgba(2, 10, 5, 0.95);
+            border-top: 1px solid var(--glass-border);
+            padding: 8px 2rem;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        .guideline-icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .ticker-wrap {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .ticker-text {
+            white-space: nowrap;
+            font-size: 0.72rem;
+            color: var(--green-neon);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            animation: ticker 40s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(100vw);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #021008;
+            border: 1px solid var(--green-neon);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: var(--glow-green);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: scale(0.9) translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: none;
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+            color: var(--text-muted);
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            border-color: var(--red-neon);
+            color: var(--red-neon);
+        }
+
+        .modal-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: var(--green-neon);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+        }
+
+        .auth-tab.active {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--green-neon);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-size: 0.68rem;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        input,
+        select {
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 0.82rem;
+            outline: none;
+            transition: all 0.25s;
+            width: 100%;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.06);
+        }
+
+        select option {
+            background: #020a05;
+            color: var(--text-primary);
+        }
+
+        footer {
+            padding: 2rem 2rem 5rem;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 3rem;
+        }
+
+        .footer-brand {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--green-neon);
+            text-shadow: var(--glow-green);
+        }
+
+        footer p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            line-height: 1.8;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+        }
+
+        .loading-overlay.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-ring {
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(0, 255, 136, 0.1);
+            border-top: 2px solid var(--green-neon);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-bottom: 1rem;
+            box-shadow: var(--glow-green);
+            position: relative;
+        }
+
+        .loader-ring::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px; height: 24px;
+            background: #ff1744;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255,23,68,0.6);
+            animation: pulse-red 0.8s infinite alternate;
+        }
+
+        @keyframes pulse-red {
+            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+            to { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-text {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: var(--green-neon);
+            text-transform: uppercase;
+            animation: blink 1.2s ease infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .hud-corner {
+            position: fixed;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.6rem;
+            color: rgba(0, 255, 136, 0.25);
+            letter-spacing: 1px;
+            pointer-events: none;
+            z-index: 800;
+        }
+
+        .hud-corner.tl {
+            top: 70px;
+            left: 14px;
+        }
+
+        .hud-corner.tr {
+            top: 70px;
+            right: 14px;
+            text-align: right;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 20px;
+            background: rgba(2, 10, 5, 0.95);
+            border: 1px solid var(--green-neon);
+            border-radius: 8px;
+            color: var(--green-neon);
+            font-size: 0.82rem;
+            z-index: 9999;
+            display: none;
+            animation: slideUp 0.3s ease;
+            box-shadow: var(--glow-green);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.error {
+            border-color: var(--red-neon);
+            color: var(--red-neon);
+            box-shadow: var(--glow-red);
+        }
+
+        @media(max-width:768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .map-frame {
+                height: 350px;
+            }
+
+            .hud-side-panels {
+                flex-direction: column;
+            }
+            
+            #whiteboxTrigger span:last-child {
+                display: none;
+            }
+            #whiteboxTrigger {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scanline"></div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader-ring"></div>
+        <div class="loader-text">সিস্টেম লোড হচ্ছে...</div>
+    </div>
+    <div class="scanline"></div>
+    <div class="hud-corner tl" id="hudTL">SYS: ONLINE<br>NODE: BD-001</div>
+    <div class="hud-corner tr">VER: 2.0.0<br>SECURE: YES</div>
+
+    <nav>
+        <div class="nav-brand">
+            <div class="flag-icon">
+                <div class="flag-bg">
+                    <div class="flag-circle"></div>
+                </div>
+            </div>
+            <div class="brand-text">
+                <span class="brand-title">Road Track BD</span>
+                <span class="brand-sub">জাতীয় রাস্তা পর্যবেক্ষণ</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a class="nav-link active" href="/" data-i18n="nav.map">ম্যাপ</a>
+            <a class="nav-link" href="/report" data-i18n="nav.report">রিপোর্ট</a>
+            <a class="nav-link" href="/feed" data-i18n="nav.feed">ফিড</a>
+            <a class="nav-link" href="/dashboard" data-i18n="nav.dashboard">ড্যাশবোর্ড</a>
+            <a class="nav-link" href="/volunteer" data-i18n="nav.volunteer">স্বেচ্ছাসেবক</a>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+            <div id="whiteboxTrigger" onclick="openModal('whiteboxModal')" style="cursor:pointer; display:flex; align-items:center; gap:5px; padding:5px 10px; border:1px solid var(--green-neon); border-radius:4px; font-size:0.75rem; color:var(--green-neon); background:rgba(0,255,136,0.05);">
+                <span>ℹ️</span> <span>এটি কীভাবে কাজ করে?</span>
+            </div>
+            <div class="nav-status">
+                <div class="status-dot"></div><span id="liveCount">লাইভ</span>
+            </div>
+            <button class="nav-btn" id="authBtn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>
+        </div>
+    </nav>
+
+    <!-- Whitebox Modal -->
+    <div id="whiteboxModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(10px);">
+        <div class="modal-content" style="background:var(--bg-panel); border:1px solid var(--glass-border); padding:2rem; border-radius:16px; max-width:600px; width:90%; position:relative;">
+            <button onclick="closeModal('whiteboxModal')" style="position:absolute; top:15px; right:15px; background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
+            <div class="modal-title" style="font-family:'Exo 2',sans-serif; color:var(--green-neon); font-size:1.2rem; margin-bottom:1.5rem; text-transform:uppercase; letter-spacing:2px;">এটি কীভাবে কাজ করে? (How it Works)</div>
+            <div style="font-family:'Noto Sans Bengali',sans-serif; line-height:1.8; color:var(--text-primary); font-size:0.95rem;">
+                <div style="margin-bottom:1.2rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
+                    <strong style="color:var(--green-neon);">১. রিপোর্ট প্রদান:</strong> যেকোনো নাগরিক বা স্বেচ্ছাসেবক জিপিএস লোকেশন ও ছবির মাধ্যমে রাস্তার সমস্যা (যেমন: গর্ত, ভাঙা রাস্তা, চরে সংস্কার প্রয়োজন) রিপোর্ট করতে পারেন।
+                </div>
+                <div style="margin-bottom:1.2rem; background:rgba(255,23,68,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--red-neon);">
+                    <strong style="color:var(--red-neon);">২. জবাবদিহিতা:</strong> প্রতিটি রিপোর্ট ম্যাপে লাইভ দেখা যাবে। ডটের রং দেখে সংস্কারের অবস্থা বোঝা যাবে (লাল = বাকি, নীল = চলছে, সবুজ = সম্পন্ন)।
+                </div>
+                <div style="margin-bottom:1.2rem; background:rgba(0,176,255,0.05); padding:12px; border-radius:8px; border-left:4px solid #00b0ff;">
+                    <strong style="color:#00b0ff;">৩. ৩০ দিনের নিয়ম:</strong> সার্ভার ক্লিন রাখতে কোনো রিপোর্ট জমা হওয়ার পরবর্তী ৩০ দিন পর সেটি ম্যাপ থেকে স্বয়ংক্রিয়ভাবে মুছে যাবে।
+                </div>
+                <p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:1rem;">নিরাপত্তার স্বার্থে রেজিস্ট্রেশনে সঠিক ১০ সংখ্যার এনআইডি নম্বর ব্যবহার করুন।</p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-top-badges">
+                <span class="hud-badge">🇧🇩 বাংলাদেশ</span>
+                <span class="hud-badge">স্যাটেলাইট ট্র্যাকিং</span>
+                <span class="hud-badge">জনসেবা প্ল্যাটফর্ম</span>
+                <span class="hud-badge">রিয়েল-টাইম সিস্টেম</span>
+            </div>
+            <div class="hero-title">
+                <h1>ROAD TRACK BD</h1>
+                <p>ভাঙ্গা রাস্তা রিপোর্ট করুন — দেশ গড়ুন</p>
+            </div>
+            <div class="motivation-strip">
+                <div class="map-legend">
+                    <div class="legend-item"><div class="legend-dot" style="background:#ff1744"></div><span>বাকি (Pending)</span></div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#2196f3"></div><span>চলছে (Repairing)</span></div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#00ff88"></div><span>সম্পন্ন (Done)</span></div>
+                </div>
+                <div class="moto-card"><span class="icon">🛣️</span>Road Track BD-তে স্বাগতম। দেশের উন্নয়নে আপনার
+                    রিপোর্ট গুরুত্বপূর্ণ।</div>
+                <div class="moto-card"><span class="icon">🤝</span>একটি রিপোর্ট বদলে দিতে পারে হাজারো মানুষের জীবন।
+                </div>
+                <div class="moto-card"><span class="icon">🇧🇩</span>ভাঙ্গা রাস্তা নয়, নিরাপদ বাংলাদেশ — আমাদের লক্ষ্য।
+                </div>
+                <div class="moto-card"><span class="icon">🌱</span>রাস্তার পাশে গাছ লাগান, পরিবেশ বাঁচান, দেশ সাজান।
+                </div>
+            </div>
+
+            <div class="map-hud-wrapper" id="map-section">
+                <div class="map-frame">
+                    <div class="map-overlay-tl"></div>
+                    <div class="map-overlay-tr"></div>
+                    <div class="map-overlay-bl"></div>
+                    <div class="map-overlay-br"></div>
+                <div class="map-hud-label" data-i18n="map.liveLabel">LIVE SATELLITE MAP — BANGLADESH</div>
+                <div id="map"></div>
+                <div class="map-controls">
+                    <button class="map-btn" onclick="getGeoLocation()"><span data-i18n="map.myLocation">📍 আমার অবস্থান</span></button>
+                </div>
+            </div>
+            <div class="map-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#ff1744"></div><span data-i18n="type.broken">বাকি (Pending)</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#00b0ff"></div><span data-i18n="status.repair.dot">চলছে (Repairing)</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#00ff88"></div><span data-i18n="status.done.dot">সম্পন্ন (Done)</span></div>
+            </div>
+            <div class="hud-side-panels">
+                <div class="hud-panel">
+                    <div class="panel-label" data-i18n="map.totalRep">মোট রিপোর্ট</div>
+                        <div class="panel-value" id="totalCount">0</div>
+                    <div class="panel-sub" data-i18n="nav.report">সর্বমোট জমা রিপোর্ট</div>
+                    <div class="panel-bar">
+                        <div class="panel-bar-fill" id="totalBar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="hud-panel">
+                    <div class="panel-label" data-i18n="map.todayRep">আজকের রিপোর্ট</div>
+                    <div class="panel-value" id="todayCount">0</div>
+                    <div class="panel-sub" data-i18n="nav.report">আজ জমা পড়েছে</div>
+                    <div class="panel-bar">
+                        <div class="panel-bar-fill" id="todayBar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="hud-panel">
+                    <div class="panel-label" data-i18n="map.pendingRep">মেরামত বাকি</div>
+                    <div class="panel-value red" id="pendingCount">0</div>
+                    <div class="panel-sub" data-i18n="status.pending">Pending রাস্তা</div>
+                    <div class="panel-bar">
+                            <div class="panel-bar-fill"
+                                style="background:linear-gradient(90deg,#b71c1c,#ff1744);width:60%"></div>
+                        </div>
+                    </div>
+                    <div class="hud-panel">
+                        <div class="panel-label">সম্পন্ন মেরামত</div>
+                        <div class="panel-value" id="resolvedCount">0</div>
+                        <div class="panel-sub">সংস্কার হয়েছে</div>
+                        <div class="panel-bar">
+                            <div class="panel-bar-fill" style="width:40%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hud-side-panels" style="margin-top:12px;">
+                    <div class="hud-panel" style="flex:100%;">
+                        <div class="panel-label" data-i18n="map.types">সমস্যার ধরন অনুযায়ী রিপোর্ট</div>
+                        <div id="typeStatsContainer" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+                            <div style="color:var(--text-muted);font-size:0.75rem;">লোড হচ্ছে...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:2rem;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+                <a href="/report" class="submit-btn"
+                    style="width:auto;padding:12px 32px;text-decoration:none;display:inline-block;">➕ রাস্তার সমস্যা
+                    রিপোর্ট করুন</a>
+                <a href="/dashboard" class="submit-btn"
+                    style="width:auto;padding:12px 32px;text-decoration:none;display:inline-block;background:rgba(255,23,68,0.1);border-color:var(--red-neon);color:var(--red-neon);">📊
+                    ড্যাশবোর্ড দেখুন</a>
+                <a href="/feed" class="submit-btn"
+                    style="width:auto;padding:12px 32px;text-decoration:none;display:inline-block;background:rgba(0,176,255,0.1);border-color:#00b0ff;color:#00b0ff;">📰
+                    ফিড দেখুন</a>
+            </div>
+        </section>
+
+        <section class="awareness-section">
+            <div class="section-header">
+                <div class="section-line"></div>
+                <div class="section-title">সচেতনতা ও নীতিমালা</div>
+                <div class="section-line" style="background:linear-gradient(90deg,transparent,var(--green-neon));">
+                </div>
+            </div>
+            <div class="awareness-grid">
+                <div class="awareness-card"><span class="aw-icon">🔄</span>
+                    <h3>পরিবর্তন আপনার থেকেই শুরু</h3>
+                    <p>আপনি সভ্য হলে সভ্য হবে আপনার পরিবার, আপনার পরিবার সভ্য হলে সভ্য হবে আপনার প্রতিবেশী — এভাবেই
+                        পরিবর্তন হবে পুরো বাংলাদেশ।</p>
+                </div>
+                <div class="awareness-card"><span class="aw-icon">🌳</span>
+                    <h3>রাস্তার পাশে গাছ লাগান</h3>
+                    <p>রাস্তার দুই পাশে গাছ লাগানো শুধু পরিবেশ রক্ষা করে না, ছায়া দেয়, বন্যা ঠেকায়, মাটি আঁকড়ে রাখে।
+                    </p>
+                </div>
+                <div class="awareness-card"><span class="aw-icon">🧹</span>
+                    <h3>পরিষ্কার-পরিচ্ছন্নতা ইমানের অঙ্গ</h3>
+                    <p>রাস্তায় ময়লা না ফেলা, ড্রেন পরিষ্কার রাখা, পলিথিন ব্যবহার না করা — ছোট অভ্যাসেই গড়ে ওঠে সুন্দর
+                        জাতি।</p>
+                </div>
+                <div class="awareness-card"><span class="aw-icon">🚗</span>
+                    <h3>সঠিক লেনে গাড়ি চালান</h3>
+                    <p>যানজট এবং দুর্ঘটনার প্রধান কারণ বেপরোয়া গাড়ি চালানো। ট্রাফিক আইন মানুন, নিজে বাঁচুন, অন্যকে
+                        বাঁচান।</p>
+                </div>
+                <div class="awareness-card"><span class="aw-icon">📱</span>
+                    <h3>রিপোর্ট করুন, দায়িত্ব নিন</h3>
+                    <p>আপনার আশেপাশের ভাঙ্গা রাস্তা রিপোর্ট করুন। কর্তৃপক্ষের দৃষ্টি আকর্ষণ করুন।</p>
+                </div>
+                <div class="awareness-card"><span class="aw-icon">🏗️</span>
+                    <h3>দুর্নীতিমুক্ত নির্মাণ দাবি করুন</h3>
+                    <p>রাস্তা নির্মাণে দুর্নীতির বিরুদ্ধে সরব হন। মানসম্পন্ন নির্মাণ ও স্বচ্ছ বাজেট বাস্তবায়ন নিশ্চিত
+                        করুন।</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reports-section" id="reports-list">
+            <div class="section-header">
+                <div class="section-line"></div>
+                <div class="section-title">সাম্প্রতিক রিপোর্ট সমূহ</div>
+                <div class="section-line" style="background:linear-gradient(90deg,transparent,var(--green-neon));">
+                </div>
+            </div>
+            <div class="filter-row">
+                <button class="filter-chip active" onclick="filterReportsList('all',this)" data-i18n="feed.all">সব</button>
+                <button class="filter-chip" onclick="filterReportsList('broken',this)" data-i18n="type.broken">ভাঙা রাস্তা</button>
+                <button class="filter-chip" onclick="filterReportsList('pothole',this)" data-i18n="type.pothole">বড় গর্ত</button>
+                <button class="filter-chip" onclick="filterReportsList('waterlogged',this)" data-i18n="type.waterlogged">পানি জমা</button>
+                <button class="filter-chip" onclick="filterReportsList('dangerous',this)" data-i18n="type.dangerous">ঝুঁকিপূর্ণ</button>
+                <button class="filter-chip" onclick="filterReportsList('bridge_repair',this)" data-i18n="feed.bridge">ব্রিজ</button>
+                <button class="filter-chip" onclick="filterReportsList('canal_large',this)" data-i18n="feed.canal">খাল</button>
+                <button class="filter-chip" onclick="filterReportsList('tube_well_needed',this)" data-i18n="feed.tubewell">নলকূপ</button>
+            </div>
+            <div class="report-list" id="reportList">
+                <div style="color:var(--text-muted);font-size:0.8rem;grid-column:1/-1;text-align:center;padding:2rem;">
+                    রিপোর্ট লোড হচ্ছে...</div>
+            </div>
+            <div style="text-align:center;margin-top:1.5rem;">
+                <a href="/feed" class="submit-btn"
+                    style="width:auto;padding:10px 28px;text-decoration:none;display:inline-block;font-size:0.82rem;">সব
+                    রিপোর্ট দেখুন →</a>
+            </div>
+        </section>
+
+        <section class="contractor-section">
+            <div class="section-header">
+                <div class="section-line"></div>
+                <div class="section-title">স্বেচ্ছাসেবক ও ঠিকাদার ডিরেক্টরি</div>
+                <div class="section-line" style="background:linear-gradient(90deg,transparent,var(--green-neon));">
+                </div>
+            </div>
+            <div class="contractor-grid" id="volunteerGrid">
+                <div style="color:var(--text-muted);font-size:0.8rem;grid-column:1/-1;text-align:center;padding:2rem;">
+                    লোড হচ্ছে...</div>
+            </div>
+            <div style="text-align:center;margin-top:1.5rem;">
+                <a href="/volunteer" class="submit-btn"
+                    style="width:auto;padding:10px 28px;text-decoration:none;display:inline-block;font-size:0.82rem;">সব
+                    স্বেচ্ছাসেবক দেখুন →</a>
+            </div>
+        </section>
+    </main>
+
+    <div class="guidelines-bar">
+        <span class="guideline-icon">⚙️</span>
+        <div class="ticker-wrap">
+            <span class="ticker-text">🇧🇩 পরিবর্তন আপনার থেকেই শুরু হোক &nbsp;|&nbsp; 🌳 রাস্তার পাশে গাছ লাগান
+                &nbsp;|&nbsp; 🧹 রাস্তায় ময়লা ফেলবেন না &nbsp;|&nbsp; 🚗 ট্রাফিক আইন মানুন &nbsp;|&nbsp; 📱 ভাঙ্গা
+                রাস্তা দেখলে রিপোর্ট করুন &nbsp;|&nbsp; 🌉 ব্রিজ/কালভার্ট সমস্যা রিপোর্ট করুন &nbsp;|&nbsp; 🏗️
+                দুর্নীতিমুক্ত রাস্তা নির্মাণ দাবি করুন &nbsp;|&nbsp; 🌿 সবুজ বাংলাদেশ, নিরাপদ বাংলাদেশ</span>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-flag" style="display:inline-flex;align-items:center;gap:10px;margin-bottom:0.8rem;">
+            <div class="flag-icon" style="width:48px;height:32px;">
+                <div class="flag-bg">
+                    <div class="flag-circle" style="width:16px;height:16px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-brand">ROAD TRACK BD</div>
+        <p>জাতীয় রাস্তা পর্যবেক্ষণ ও রিপোর্টিং প্ল্যাটফর্ম<br>দেশের প্রতিটি ভাঙ্গা রাস্তার তথ্য সংগ্রহ, সংরক্ষণ এবং
+            সমাধানের পথ দেখানোর উদ্যোগ<br><br>একটি জাতীয় কল্যাণমূলক উদ্যোগ &nbsp;|&nbsp; বাংলাদেশ</p>
+    </footer>
+
+
+    <div class="toast" id="toast"></div>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let gMap = null, gInfoWindow = null, userMarker = null, userWatchId = null;
+        let mapMarkers = [];
+
+        window.initGoogleMap = function () {
+            gMap = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 23.685, lng: 90.356 }, zoom: 7,
+                mapTypeId: 'hybrid',
+                mapTypeControl: true,
+                mapTypeControlOptions: { mapTypeIds: ['hybrid', 'roadmap'], position: google.maps.ControlPosition.TOP_RIGHT },
+                streetViewControl: false, fullscreenControl: false,
+                zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM }
+            });
+            gInfoWindow = new google.maps.InfoWindow();
+            loadMarkersOnMap();
+
+            // Setup real-time user location
+            if (navigator.geolocation) {
+                userWatchId = navigator.geolocation.watchPosition(pos => {
+                    const lat = pos.coords.latitude, lng = pos.coords.longitude;
+                    if (!userMarker) {
+                        userMarker = new google.maps.Marker({
+                            position: {lat, lng}, map: gMap, title: typeof getLang === 'function' && getLang() === 'en' ? 'You are here' : 'আপনি এখানে আছেন',
+                            icon: { path: google.maps.SymbolPath.CIRCLE, scale: 9, fillColor: '#2196f3', fillOpacity: 1, strokeWeight: 2, strokeColor: '#ffffff' },
+                            zIndex: 9999
+                        });
+                    } else {
+                        userMarker.setPosition({lat, lng});
+                    }
+                }, () => {}, { enableHighAccuracy: true });
+            }
+        };
+
+        window.getGeoLocation = function() {
+            if (!userMarker || !gMap) return;
+            gMap.panTo(userMarker.getPosition());
+            gMap.setZoom(15);
+        };
+
+        function addMarkerOnMap(r) {
+            if (!r.lat || !r.lng || !gMap) return;
+            // Clear existing marker for this rep if exists
+            const existing = mapMarkers.find(mx => mx._id === r._id);
+            if (existing) existing.marker.setMap(null);
+
+            const color = getMarkerColor(r);
+            const m = new google.maps.Marker({
+                position: { lat: parseFloat(r.lat), lng: parseFloat(r.lng) },
+                map: gMap, title: r.roadName,
+                icon: { path: google.maps.SymbolPath.CIRCLE, scale: 12, fillColor: color, fillOpacity: 0.9, strokeWeight: 2, strokeColor: '#ffffff' },
+                animation: google.maps.Animation.DROP
+            });
+            m.addListener('click', () => {
+                gInfoWindow.setContent(`<div style="background:#021008;color:#e0fff0;padding:14px;border-radius:8px;min-width:220px;max-width:280px;font-family:'Noto Sans Bengali',sans-serif;">
+      <div style="color:#00ff88;font-weight:700;font-size:0.9rem;margin-bottom:6px;">${r.roadName}</div>
+      <div style="font-size:0.72rem;color:rgba(180,255,210,0.7);line-height:1.7;">
+        📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''}<br>
+        ⚠️ ${getProblemLabel(r.problemType)}<br>
+        🕒 ${formatTime(r.createdAt || r.updatedAt)}
+        ${r.description ? '<br>📝 ' + r.description.substring(0, 80) + '...' : ''}
+      </div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:6px;">
+        <span style="width:8px;height:8px;background:${color};border-radius:50%;display:inline-block;box-shadow:0 0 6px ${color}"></span>
+        <span style="font-size:0.65rem;color:${color};">${getStatusLabel(r.status)}</span>
+      </div>
+      <a href="/feed" style="display:block;margin-top:8px;padding:5px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:4px;color:#00ff88;font-size:0.65rem;text-decoration:none;text-align:center;">${typeof getLang==='function'&&getLang()==='en'?'View Details →':'বিস্তারিত দেখুন →'}</a>
+    </div>`);
+                gInfoWindow.open(gMap, m);
+            });
+            // store
+            if (existing) existing.marker = m;
+            else mapMarkers.push({ _id: r._id, marker: m, type: r.problemType });
+        }
+
+        async function loadMarkersOnMap() {
+            try {
+                const d = await apiFetch('/api/reports/markers');
+                if (d.success) d.data.forEach(addMarkerOnMap);
+            } catch (e) { }
+        }
+
+        async function loadHomeStats() {
+            try {
+                const d = await apiFetch('/api/reports/stats');
+                if (d.success) {
+                    animateCount('totalCount', d.data.total);
+                    animateCount('todayCount', d.data.today);
+                    animateCount('pendingCount', d.data.pending);
+                    animateCount('resolvedCount', d.data.resolved);
+                    const pct = d.data.total > 0 ? Math.min(100, Math.round(d.data.today / d.data.total * 100 + 20)) : 0;
+                    document.getElementById('totalBar').style.width = Math.min(pct + 50, 95) + '%';
+                    document.getElementById('todayBar').style.width = Math.min(pct, 90) + '%';
+
+                    const tEl = document.getElementById('typeStatsContainer');
+                    if (tEl && d.data.byType) {
+                        tEl.innerHTML = Object.entries(d.data.byType).map(([k, v]) => 
+                            `<div style="background:rgba(0,255,136,0.05);border:1px solid var(--glass-border);padding:4px 10px;border-radius:20px;font-size:0.7rem;color:var(--green-neon);">
+                                ${PROBLEM_LABELS[k] || k} : <strong style="color:#fff;">${v}</strong>
+                            </div>`
+                        ).join('');
+                    }
+                }
+            } catch (e) { }
+        }
+
+        async function loadHomeReports(type = 'all') {
+            const url = type === 'all' ? '/api/reports?limit=9' : `/api/reports?type=${type}&limit=9`;
+            try {
+                const d = await apiFetch(url);
+                const el = document.getElementById('reportList');
+                if (d.success && d.data.length) {
+                    el.innerHTML = d.data.map(r => {
+                        const sc = 'status-' + (r.status || 'pending');
+                        const sl = { pending: 'বাকি', under_repair: 'চলছে', repaired: 'সম্পন্ন', rejected: 'বাতিল' };
+                        return `<div class="report-item" onclick="focusMapAt(${r.lat},${r.lng})">
+          <div class="report-item-header">
+            <div class="report-item-title">${r.roadName}</div>
+            <div class="status-badge ${sc}">${sl[r.status] || r.status}</div>
+          </div>
+          <div class="report-item-meta">📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''}<br>📅 ${formatTime(r.createdAt || r.timestamp)}</div>
+          <div class="report-type-chip">${PROBLEM_LABELS[r.problemType] || r.problemType}</div>
+        </div>`;
+                    }).join('');
+                } else {
+                    el.innerHTML = '<div style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:2rem;">এখনো কোনো রিপোর্ট নেই</div>';
+                }
+            } catch (e) {
+                document.getElementById('reportList').innerHTML = '<div style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:2rem;">ডেটা লোড করতে সমস্যা হয়েছে</div>';
+            }
+        }
+
+        function filterReportsList(type, btn) {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            loadHomeReports(type);
+            // also filter markers on map!
+            if (mapMarkers && mapMarkers.length) {
+                mapMarkers.forEach(mx => {
+                    if (type === 'all' || mx.type === type) mx.marker.setMap(gMap);
+                    else mx.marker.setMap(null);
+                });
+            }
+        }
+
+        function focusMapAt(lat, lng) {
+            if (!lat || !lng || !gMap) return;
+            gMap.panTo({ lat: parseFloat(lat), lng: parseFloat(lng) });
+            gMap.setZoom(15);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function loadHomeVolunteers() {
+            try {
+                const d = await apiFetch('/api/volunteers?limit=6');
+                const g = document.getElementById('volunteerGrid');
+                if (d.success && d.data.length) {
+                    g.innerHTML = d.data.map(v => `
+        <div class="contractor-card">
+          <div class="contractor-avatar">${v.icon || '👤'}</div>
+          <div class="contractor-name">${v.name}</div>
+          <div class="contractor-role">${v.role}</div>
+          <div class="contractor-contact">📍 ${v.district || v.area || ''}<br>📞 ${v.phone || ''}</div>
+          <button class="contact-btn">যোগাযোগ করুন</button>
+        </div>`).join('');
+                } else {
+                    g.innerHTML = '<div style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:2rem;">স্বেচ্ছাসেবক তথ্য নেই</div>';
+                }
+            } catch (e) { }
+        }
+
+
+
+        const s = document.createElement('style');
+        s.textContent = '.gm-style .gm-style-iw-c{background:#021008!important;border:1px solid rgba(0,255,136,0.3)!important;border-radius:8px!important;box-shadow:0 0 20px rgba(0,255,136,0.3)!important;padding:0!important;}.gm-style .gm-style-iw-d{overflow:auto!important;padding:0!important;}.gm-style .gm-style-iw-t::after{background:transparent!important;}.gm-style button.gm-ui-hover-effect span{background-color:rgba(180,255,210,0.6)!important;}';
+        document.head.appendChild(s);
+
+        window.addEventListener('load', () => {
+            renderNavAuth(); injectLangToggle('nav'); applyLang();
+            initSocket(sk => {
+                sk.on('report_update', r => {
+                    if (r.lat && r.lng && gMap) addMarkerOnMap(r);
+                    loadHomeReports();
+                    loadHomeStats();
+                });
+                sk.on('active_users', n => { document.getElementById('liveCount').textContent = n + ' লাইভ'; });
+            });
+            loadHomeStats();
+            loadHomeReports();
+            loadHomeVolunteers();
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('hudTL').innerHTML = 'SYS: ONLINE<br>' + now.toLocaleTimeString('en-US', { hour12: false });
+            }, 1000);
+            fetch('/api/config').then(r => r.json()).then(cfg => {
+                const sc = document.createElement('script');
+                sc.src = `https://maps.googleapis.com/maps/api/js?key=${cfg.googleMapsKey}&callback=initGoogleMap&language=bn&region=BD`;
+                sc.async = true; sc.defer = true;
+                document.head.appendChild(sc);
+            }).catch(() => {
+                document.getElementById('map').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:2rem;padding-top:200px;">ম্যাপ লোড করতে .env-এ GOOGLE_MAPS_API_KEY সেট করুন</div>';
+            });
+            setTimeout(() => document.getElementById('loadingOverlay').classList.add('hide'), 1500);
+        });
+    </script>
+</body>
+
+</html>

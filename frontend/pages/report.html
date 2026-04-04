@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রিপোর্ট করুন — Road Track BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        :root{--green-neon:#00ff88;--green-mid:#00cc6a;--green-dark:#006a4e;--red-neon:#ff1744;--bg-deep:#020a05;--bg-panel:rgba(0,15,8,0.85);--glass-border:rgba(0,255,136,0.15);--text-primary:#e0fff0;--text-muted:rgba(180,255,210,0.6);--glow-green:0 0 20px rgba(0,255,136,0.4),0 0 60px rgba(0,255,136,0.1);--glow-red:0 0 20px rgba(255,23,68,0.4);}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        html,body{min-height:100%;background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans Bengali','Exo 2',sans-serif;}
+        body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 20% 50%,rgba(0,106,78,0.12) 0%,transparent 70%),repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(0,255,136,0.02) 80px);pointer-events:none;z-index:0;}
+        nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(2,10,5,0.92);border-bottom:1px solid var(--glass-border);backdrop-filter:blur(20px);}
+        .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+        .flag-icon{width:36px;height:24px;border-radius:3px;overflow:hidden;box-shadow:var(--glow-green);}
+        .flag-bg{width:100%;height:100%;background:#006a4e;display:flex;align-items:center;justify-content:center;}
+        .flag-circle{width:13px;height:13px;background:#f42a41;border-radius:50%;margin-left:-2px;}
+        .brand-title{font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,var(--green-neon),#00ccff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;}
+        .nav-links{display:flex;gap:0.3rem;}
+        .nav-link{padding:6px 16px;font-size:0.78rem;color:var(--text-muted);text-decoration:none;border:1px solid transparent;border-radius:4px;transition:all 0.25s;font-family:'Noto Sans Bengali',sans-serif;}
+        .nav-link:hover,.nav-link.active{color:var(--green-neon);border-color:var(--glass-border);background:rgba(0,255,136,0.05);}
+        .nav-btn{padding:8px 20px;background:linear-gradient(135deg,var(--green-dark),#004d38);border:1px solid var(--green-neon);border-radius:4px;color:var(--green-neon);font-size:0.78rem;font-family:'Noto Sans Bengali',sans-serif;cursor:pointer;transition:all 0.25s;box-shadow:var(--glow-green);}
+        .nav-btn:hover{background:var(--green-neon);color:var(--bg-deep);}
+        .status-dot{width:6px;height:6px;background:var(--green-neon);border-radius:50%;animation:pulse 2s infinite;}
+        .nav-status{display:flex;align-items:center;gap:6px;font-size:0.7rem;color:var(--green-neon);}
+        @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+        main{position:relative;z-index:1;padding:90px 1.5rem 6rem;max-width:820px;margin:0 auto;}
+        .page-header{margin-bottom:2rem;}
+        .page-header h1{font-family:'Exo 2',sans-serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:900;letter-spacing:3px;text-transform:uppercase;background:linear-gradient(135deg,var(--green-neon),#00ccff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .page-header p{font-size:0.8rem;color:var(--text-muted);margin-top:6px;}
+        .report-card{background:var(--bg-panel);border:1px solid var(--glass-border);border-radius:16px;padding:2rem;backdrop-filter:blur(20px);position:relative;overflow:hidden;}
+        .report-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green-neon),var(--red-neon),var(--green-neon));}
+        .section-label{font-family:'Exo 2',sans-serif;font-size:0.65rem;letter-spacing:2px;color:var(--green-neon);text-transform:uppercase;margin-bottom:1rem;padding-bottom:6px;border-bottom:1px solid var(--glass-border);}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+        .form-group{display:flex;flex-direction:column;gap:6px;}
+        .form-group.full{grid-column:1/-1;}
+        label{font-size:0.68rem;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;font-family:'Exo 2',sans-serif;}
+        input,select,textarea{background:rgba(0,255,136,0.03);border:1px solid var(--glass-border);border-radius:6px;padding:10px 14px;color:var(--text-primary);font-family:'Noto Sans Bengali',sans-serif;font-size:0.82rem;outline:none;transition:all 0.25s;width:100%;}
+        input:focus,select:focus,textarea:focus{border-color:var(--green-neon);background:rgba(0,255,136,0.06);box-shadow:0 0 0 2px rgba(0,255,136,0.1);}
+        select option{background:#020a05;}
+        textarea{resize:vertical;min-height:80px;}
+        .type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin-top:4px;}
+        .type-btn{padding:10px 12px;background:rgba(0,255,136,0.03);border:1px solid var(--glass-border);border-radius:8px;color:var(--text-muted);font-size:0.72rem;font-family:'Noto Sans Bengali',sans-serif;cursor:pointer;transition:all 0.2s;text-align:left;line-height:1.4;}
+        .type-btn:hover{border-color:rgba(0,255,136,0.4);color:var(--text-primary);}
+        .type-btn.selected{border-color:var(--green-neon);background:rgba(0,255,136,0.1);color:var(--green-neon);box-shadow:0 0 10px rgba(0,255,136,0.15);}
+        .type-btn.bridge.selected{border-color:#ff6d00;background:rgba(255,109,0,0.1);color:#ff6d00;}
+        .type-btn.water.selected{border-color:#00bcd4;background:rgba(0,188,212,0.1);color:#00bcd4;}
+        .upload-area{border:2px dashed var(--glass-border);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:all 0.25s;background:rgba(0,255,136,0.02);}
+        .upload-area:hover{border-color:var(--green-neon);background:rgba(0,255,136,0.05);}
+        .upload-icon{font-size:2rem;display:block;margin-bottom:6px;}
+        .upload-area p{font-size:0.72rem;color:var(--text-muted);}
+        .geo-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(0,255,136,0.05);border:1px solid var(--glass-border);border-radius:6px;color:var(--text-muted);cursor:pointer;font-size:0.78rem;font-family:'Noto Sans Bengali',sans-serif;transition:all 0.25s;width:100%;}
+        .geo-btn:hover{border-color:var(--green-neon);color:var(--green-neon);}
+        .geo-status{font-size:0.7rem;color:var(--green-neon);margin-top:4px;display:none;padding:4px 8px;background:rgba(0,255,136,0.08);border-radius:4px;}
+        .section-sep{margin:1.5rem 0;border:none;border-top:1px solid var(--glass-border);}
+        .img-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+        .img-thumb{width:70px;height:70px;object-fit:cover;border-radius:6px;border:1px solid var(--glass-border);}
+        #miniMap{width:100%;height:160px;border-radius:8px;border:1px solid var(--glass-border);margin-top:10px;display:none;background:#021008;}
+        @media(max-width:600px){.form-grid{grid-template-columns:1fr;}nav{padding:0 1rem;}.nav-links{display:none;}}
+    </style>
+</head>
+<body>
+    <nav>
+        <a class="nav-brand" href="/"><div class="flag-icon"><div class="flag-bg"><div class="flag-circle"></div></div></div><span class="brand-title">Road Track BD</span></a>
+        <div class="nav-links">
+            <a class="nav-link" href="/" data-i18n="nav.map">ম্যাপ</a>
+            <a class="nav-link active" href="/report" data-i18n="nav.report">রিপোর্ট</a>
+            <a class="nav-link" href="/feed" data-i18n="nav.feed">ফিড</a>
+            <a class="nav-link" href="/dashboard" data-i18n="nav.dashboard">ড্যাশবোর্ড</a>
+            <a class="nav-link" href="/volunteer" data-i18n="nav.volunteer">স্বেচ্ছাসেবক</a>
+        </div>
+        <div id="navRight" style="display:flex;gap:10px;align-items:center;">
+            <div class="nav-status"><div class="status-dot"></div></div>
+            <button class="nav-btn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>
+        </div>
+    </nav>
+    <main>
+        <div class="page-header">
+            <h1 data-i18n="report.title">📍 রাস্তার সমস্যা রিপোর্ট করুন</h1>
+            <p data-i18n="report.subtitle">আপনার একটি রিপোর্ট অনেক বড় দুর্ঘটনা রুখে দিতে পারে।</p>
+        </div>
+        <div class="report-card">
+            <div class="section-label" data-i18n="report.typeLabel">▸ সমস্যার ধরন নির্বাচন করুন</div>
+            <div class="type-grid" id="typeGrid">
+                <button class="type-btn" data-value="broken" onclick="selectType(this)" data-i18n="type.broken">🚧 ভাঙা রাস্তা</button>
+                <button class="type-btn" data-value="pothole" onclick="selectType(this)" data-i18n="type.pothole">🕳️ বড় গর্ত</button>
+                <button class="type-btn" data-value="waterlogged" onclick="selectType(this)" data-i18n="type.waterlogged">🌊 পানি জমা</button>
+                <button class="type-btn" data-value="dangerous" onclick="selectType(this)" data-i18n="type.dangerous">⚠️ ঝুঁকিপূর্ণ</button>
+                <button class="type-btn" data-value="unpaved" onclick="selectType(this)" data-i18n="type.unpaved">🪨 কাঁচা রাস্তা</button>
+                <button class="type-btn" data-value="narrow" onclick="selectType(this)" data-i18n="type.narrow">↔️ সংকীর্ণ রাস্তা</button>
+                <button class="type-btn" data-value="nolight" onclick="selectType(this)" data-i18n="type.nolight">🔦 আলো নেই</button>
+                <button class="type-btn" data-value="erosion" onclick="selectType(this)" data-i18n="type.erosion">🌧️ মাটি ক্ষয়</button>
+                <button class="type-btn bridge" data-value="bridge_repair" onclick="selectType(this)" data-i18n="type.bridge_repair">🌉 ব্রিজ সংস্কার</button>
+                <button class="type-btn bridge" data-value="bridge_new" onclick="selectType(this)" data-i18n="type.bridge_new">🌉 নতুন ব্রিজ</button>
+                <button class="type-btn bridge" data-value="road_bridge_new" onclick="selectType(this)" data-i18n="type.road_bridge_new">🛣️ নতুন রাস্তা ও ব্রিজ</button>
+                <button class="type-btn bridge" data-value="culvert_new" onclick="selectType(this)" data-i18n="type.culvert_new">🔧 কালভার্ট প্রয়োজন</button>
+                <button class="type-btn bridge" data-value="culvert_repair" onclick="selectType(this)" data-i18n="type.culvert_repair">🔧 কালভার্ট সংস্কার</button>
+                <button class="type-btn bridge" data-value="embankment_new" onclick="selectType(this)" data-i18n="type.embankment_new">🏞️ বেড়িবাঁধ প্রয়োজন</button>
+                <button class="type-btn bridge" data-value="embankment_repair" onclick="selectType(this)" data-i18n="type.embankment_repair">🏞️ বেড়িবাঁধ সংস্কার</button>
+                <button class="type-btn bridge" data-value="canal_small" onclick="selectType(this)" data-i18n="type.canal_small">💧 ছোট খাল খনন</button>
+                <button class="type-btn bridge" data-value="canal_large" onclick="selectType(this)" data-i18n="type.canal_large">💧 বড় খাল খনন</button>
+                <button class="type-btn water" data-value="tube_well_needed" onclick="selectType(this)" data-i18n="type.tube_well_needed">🚰 নলকূপ প্রয়োজন</button>
+                <button class="type-btn water" data-value="tube_well_repair" onclick="selectType(this)" data-i18n="type.tube_well_repair">🔧 নলকূপ মেরামত</button>
+                <button class="type-btn chor" data-value="chor_development" onclick="selectType(this)">🌾 চর এলাকায় সংস্কার</button>
+            </div>
+            
+            <div id="chorNeeds" style="display:none; margin-top:1.5rem; background:rgba(0,255,136,0.05); padding:1.5rem; border-radius:12px; border:1px solid var(--glass-border);">
+                <div class="section-label" style="margin-bottom:1rem;">▸ চরে কী কী সংস্কার প্রয়োজন? (একাধিক সিলেক্ট করুন)</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary);"><input type="checkbox" class="chor-opt" value="স্কুল"> স্কুল</label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary);"><input type="checkbox" class="chor-opt" value="উপাসনালয়"> উপাসনালয়</label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary);"><input type="checkbox" class="chor-opt" value="চর বাঁধ"> চর বাঁধ</label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary);"><input type="checkbox" class="chor-opt" value="চরের রাস্তা"> চরের রাস্তা</label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary);"><input type="checkbox" class="chor-opt" value="সরকারি অফিস"> সরকারি অফিস</label>
+                </div>
+            </div>
+            <input type="hidden" id="selectedType">
+            <hr class="section-sep">
+            <div class="section-label" data-i18n="report.statusLabel">▸ অবস্থা নির্বাচন করুন</div>
+            <div class="form-group">
+                <select id="reportStatus">
+                    <option value="pending" data-i18n="status.pending.dot">মেরামত বাকি (লাল ডট)</option>
+                    <option value="under_repair" data-i18n="status.repair.dot">সংস্কার কাজ চলছে (নীল ডট)</option>
+                    <option value="repaired" data-i18n="status.done.dot">সংস্কার সম্পন্ন (সবুজ ডট)</option>
+                </select>
+            </div>
+            <hr class="section-sep">
+            <div class="section-label" data-i18n="report.roadInfo">▸ রাস্তার তথ্য</div>
+            <div class="form-grid">
+                <div class="form-group"><label data-i18n="report.roadName">রাস্তার নাম *</label><input type="text" id="roadName" placeholder="যেমন: মিরপুর রোড"></div>
+                <div class="form-group"><label data-i18n="report.roadNum">রোড নম্বর</label><input type="text" id="roadNumber" placeholder="যেমন: N-1"></div>
+                <div class="form-group"><label data-i18n="report.district">জেলা *</label>
+                    <select id="district"><option value="">— জেলা নির্বাচন করুন —</option>
+                    <option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option><option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option><option>রংপুর</option><option>ময়মনসিংহ</option><option>কুমিল্লা</option><option>নারায়ণগঞ্জ</option><option>গাজীপুর</option><option>টাঙ্গাইল</option><option>ফরিদপুর</option><option>মাদারীপুর</option><option>শরীয়তপুর</option><option>রাজবাড়ী</option><option>মানিকগঞ্জ</option><option>নরসিংদী</option><option>কিশোরগঞ্জ</option><option>মুন্সীগঞ্জ</option><option>নেত্রকোনা</option><option>জামালপুর</option><option>শেরপুর</option><option>পাবনা</option><option>সিরাজগঞ্জ</option><option>নওগাঁ</option><option>নাটোর</option><option>জয়পুরহাট</option><option>চাঁপাইনবাবগঞ্জ</option><option>বগুড়া</option><option>যশোর</option><option>সাতক্ষীরা</option><option>মাগুরা</option><option>নড়াইল</option><option>বাগেরহাট</option><option>মেহেরপুর</option><option>চুয়াডাঙ্গা</option><option>ঝিনাইদহ</option><option>কুষ্টিয়া</option><option>পটুয়াখালী</option><option>বরগুনা</option><option>পিরোজপুর</option><option>ঝালকাঠি</option><option>ভোলা</option><option>হবিগঞ্জ</option><option>মৌলভীবাজার</option><option>সুনামগঞ্জ</option><option>কক্সবাজার</option><option>ফেনী</option><option>নোয়াখালী</option><option>লক্ষ্মীপুর</option><option>চাঁদপুর</option><option>ব্রাহ্মণবাড়িয়া</option><option>পঞ্চগড়</option><option>ঠাকুরগাঁও</option><option>দিনাজপুর</option><option>নীলফামারী</option><option>গাইবান্ধা</option><option>কুড়িগ্রাম</option><option>লালমনিরহাট</option><option>বান্দরবান</option><option>রাঙ্গামাটি</option><option>খাগড়াছড়ি</option></select>
+                </div>
+                <div class="form-group"><label data-i18n="report.area">উপজেলা / এলাকা *</label><input type="text" id="area" placeholder="উপজেলা বা মহল্লার নাম"></div>
+                <div class="form-group full"><label data-i18n="report.desc">বিস্তারিত বিবরণ</label><textarea id="description" placeholder="সমস্যার বিস্তারিত বর্ণনা দিন..."></textarea></div>
+            </div>
+            <hr class="section-sep">
+            <div class="section-label" data-i18n="report.locPhoto">▸ লোকেশন ও ছবি</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>অটো লোকেশন</label>
+                    <button class="geo-btn" type="button" onclick="getGeo()">📍 <span data-i18n="report.gps">GPS থেকে লোকেশন নিন</span></button>
+                    <div class="geo-status" id="geoStatus" data-i18n="report.gpsOk">✅ লোকেশন পাওয়া গেছে</div>
+                    <input type="hidden" id="latVal"><input type="hidden" id="lngVal">
+                    <div id="miniMap"></div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="report.photo">ছবি আপলোড (সর্বোচ্চ ৩টি)</label>
+                    <div class="upload-area" onclick="document.getElementById('photoInput').click()">
+                        <span class="upload-icon">📸</span>
+                        <p id="uploadText" data-i18n="report.clickPhoto">ছবি আপলোড করতে ক্লিক করুন</p>
+                        <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="handlePhoto(event)">
+                    </div>
+                    <div class="img-preview" id="imgPreview"></div>
+                </div>
+            </div>
+            <button class="submit-btn" id="submitBtn" onclick="submitReport()"><span data-i18n="report.submit">📤 রিপোর্ট জমা দিন</span></button>
+        </div>
+    </main>
+    <div id="toast"></div>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let geoLat=23.8103, geoLng=90.4125, selectedFiles=[], map, marker;
+        window.addEventListener('DOMContentLoaded', async ()=>{
+            renderNavAuth(); injectLangToggle('nav'); applyLang(); initSocket(()=>{});
+            if(!getUser()) {
+                setTimeout(() => {
+                    openAuthModal();
+                    showToast(typeof getLang==='function' && getLang()==='en' ? 'Please log in to report' : 'রিপোর্ট করতে লগইন করুন', 'error');
+                }, 800);
+            }
+            // Load Google Maps for Mini-Map
+            try {
+                const conf = await fetch('/api/config').then(r=>r.json());
+                if(conf.googleMapsKey) {
+                    const script = document.createElement('script');
+                    script.src = `https://maps.googleapis.com/maps/api/js?key=${conf.googleMapsKey}&callback=initMiniMap`;
+                    script.async = true;
+                    document.head.appendChild(script);
+                }
+            } catch(e) { console.error('Map Load Error', e); }
+        });
+
+        window.initMiniMap = function() {
+            const mapEl = document.getElementById('miniMap');
+            mapEl.style.display = 'block';
+            mapEl.style.height = '200px';
+            mapEl.style.border = '1px solid var(--green-neon)';
+            mapEl.style.borderRadius = '8px';
+            mapEl.style.marginTop = '10px';
+
+            map = new google.maps.Map(mapEl, {
+                center: { lat: geoLat, lng: geoLng },
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.HYBRID,
+                mapTypeControl: false,
+                streetViewControl: false,
+                styles: [] // Remove dark styles for clear satellite view
+            });
+
+            marker = new google.maps.Marker({
+                position: { lat: geoLat, lng: geoLng },
+                map: map,
+                draggable: true,
+                icon: { path: google.maps.SymbolPath.CIRCLE, scale: 7, fillOpacity: 1, fillColor: '#ff1744', strokeColor: '#fff', strokeWeight: 2 }
+            });
+
+            google.maps.event.addListener(map, 'click', (e) => {
+                updateCoords(e.latLng.lat(), e.latLng.lng());
+            });
+
+            google.maps.event.addListener(marker, 'dragend', (e) => {
+                updateCoords(e.latLng.lat(), e.latLng.lng());
+            });
+        };
+
+        function selectType(btn){
+            document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const val = btn.dataset.value;
+            document.getElementById('selectedType').value = val;
+            document.getElementById('chorNeeds').style.display = (val === 'chor_development') ? 'block' : 'none';
+        }
+
+        function updateCoords(lat, lng) {
+            geoLat = lat.toFixed(7);
+            geoLng = lng.toFixed(7);
+            document.getElementById('latVal').value = geoLat;
+            document.getElementById('lngVal').value = geoLng;
+            marker.setPosition({ lat: parseFloat(geoLat), lng: parseFloat(geoLng) });
+            document.getElementById('geoStatus').style.display = 'block';
+        }
+
+        function getGeo(){
+            if(!navigator.geolocation){showToast('GPS সমর্থিত নয়','error');return;}
+            navigator.geolocation.getCurrentPosition(pos=>{
+                updateCoords(pos.coords.latitude, pos.coords.longitude);
+                if(map) map.setCenter({ lat: parseFloat(geoLat), lng: parseFloat(geoLng) });
+                showToast('✅ সঠিক লোকেশন পাওয়া গেছে');
+            },err=>showToast('লোকেশন পেতে ব্যর্থ','error'),
+            {enableHighAccuracy:true,timeout:15000,maximumAge:0});
+        }
+        function handlePhoto(e){
+            selectedFiles=Array.from(e.target.files).slice(0,3);
+            document.getElementById('uploadText').textContent=selectedFiles.length+'টি ছবি নির্বাচিত ✅';
+            const prev=document.getElementById('imgPreview'); prev.innerHTML='';
+            selectedFiles.forEach(f=>{const r=new FileReader();r.onload=ev=>{const img=document.createElement('img');img.src=ev.target.result;img.className='img-thumb';prev.appendChild(img);};r.readAsDataURL(f);});
+        }
+        async function submitReport(){
+            const u = getUser();
+            if (!u) {
+                openAuthModal();
+                showToast(typeof getLang==='function' && getLang()==='en' ? 'Please log in to report' : 'রিপোর্ট করতে লগইন করুন', 'error');
+                return;
+            }
+            const type=document.getElementById('selectedType').value;
+            const road=document.getElementById('roadName').value.trim();
+            const dist=document.getElementById('district').value;
+            const area=document.getElementById('area').value.trim();
+            let desc=document.getElementById('description').value.trim();
+
+            if(type === 'chor_development') {
+                const checked = Array.from(document.querySelectorAll('.chor-opt:checked')).map(c=>c.value);
+                if(checked.length > 0) {
+                    desc = `সংস্কার তালিকা: ${checked.join(', ')}। ${desc}`;
+                }
+            }
+
+            if(!type){showToast('সমস্যার ধরন নির্বাচন করুন','error');return;}
+            if(!road||!dist||!area){showToast('রাস্তার নাম, জেলা ও এলাকা অবশ্যই দিন','error');return;}
+            const btn=document.getElementById('submitBtn');
+            btn.disabled=true; btn.querySelector('span').textContent='জমা হচ্ছে...';
+            const fd=new FormData();
+            fd.append('problemType',type);fd.append('status',document.getElementById('reportStatus').value);
+            fd.append('roadName',road);fd.append('roadNumber',document.getElementById('roadNumber').value.trim());
+            fd.append('district',dist);fd.append('area',area);
+            fd.append('description',document.getElementById('description').value.trim());
+            // backend uses req.user.id to map automatically
+            if(geoLat){fd.append('lat',geoLat);fd.append('lng',geoLng);}
+            selectedFiles.forEach(f=>fd.append('photos',f));
+            try{
+                const d=await apiFormPost('/api/reports',fd);
+                if(d.success){if(window._socket)window._socket.emit('report_new',d.data);showToast('✅ রিপোর্ট সফলভাবে জমা হয়েছে!');setTimeout(()=>window.location.href='/feed',1800);}
+                else showToast(d.message||'রিপোর্ট জমা ব্যর্থ','error');
+            }catch(e){showToast('সার্ভার সমস্যা','error');}
+            btn.disabled=false; btn.querySelector('span').textContent='📤 রিপোর্ট জমা দিন';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ফিড — Road Track BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <style>
+        :root {
+            --green-neon: #00ff88;
+            --green-dark: #006a4e;
+            --red-neon: #ff1744;
+            --yellow-neon: #ffd600;
+            --blue-neon: #2196f3;
+            --bg-deep: #020a05;
+            --bg-panel: rgba(0, 15, 8, 0.85);
+            --glass-border: rgba(0, 255, 136, 0.15);
+            --text-primary: #e0fff0;
+            --text-muted: rgba(180, 255, 210, 0.6);
+            --glow-green: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.1);
+            --glow-red: 0 0 20px rgba(255, 23, 68, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', 'Exo 2', sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(0, 106, 78, 0.12) 0%, transparent 70%), repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(0, 255, 136, 0.02) 80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 64px;
+            background: rgba(2, 10, 5, 0.92);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .flag-icon {
+            width: 36px;
+            height: 24px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .flag-bg {
+            width: 100%;
+            height: 100%;
+            background: #006a4e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flag-circle {
+            width: 13px;
+            height: 13px;
+            background: #f42a41;
+            border-radius: 50%;
+            margin-left: -2px;
+        }
+
+        .brand-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--green-neon), #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .nav-link {
+            padding: 6px 16px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: all 0.25s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--green-neon);
+            border-color: var(--glass-border);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: var(--green-neon);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green-neon);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            padding: 90px 1.5rem 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-header h1 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--green-neon);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+
+        .filter-chip {
+            padding: 6px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.06);
+        }
+
+        .new-report-btn {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--green-dark), #005a40);
+            border: 1px solid var(--green-neon);
+            border-radius: 6px;
+            color: var(--green-neon);
+            font-size: 0.78rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+
+        .new-report-btn:hover {
+            background: var(--green-neon);
+            color: var(--bg-deep);
+        }
+
+        .feed-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feed-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feed-card:hover {
+            border-color: rgba(0, 255, 136, 0.25);
+        }
+
+        .feed-card-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px 10px;
+        }
+
+        .feed-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        .feed-meta {
+            flex: 1;
+        }
+
+        .feed-road {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .feed-loc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .feed-badge {
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-family: 'Exo 2', sans-serif;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .feed-type-chip {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.62rem;
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid rgba(255, 23, 68, 0.25);
+            color: var(--red-neon);
+            font-family: 'Exo 2', sans-serif;
+            margin: 0 16px 6px;
+        }
+
+        .feed-desc {
+            padding: 0 16px 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .feed-photos {
+            display: flex;
+            gap: 6px;
+            padding: 0 16px 10px;
+            flex-wrap: wrap;
+        }
+
+        .feed-photo {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+        }
+
+        .feed-actions {
+            display: flex;
+            gap: 4px;
+            padding: 8px 12px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .action-btn:hover {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+        }
+
+        .action-btn.liked {
+            border-color: var(--red-neon);
+            color: var(--red-neon);
+        }
+
+        .action-btn.reacted {
+            border-color: #ffd600;
+            color: #ffd600;
+        }
+
+        .feed-comments {
+            padding: 10px 16px;
+            border-top: 1px solid var(--glass-border);
+            display: none;
+        }
+
+        .feed-comments.open {
+            display: block;
+        }
+
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .comment-item {
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+
+        .comment-author {
+            font-size: 0.65rem;
+            color: var(--green-neon);
+            font-family: 'Exo 2', sans-serif;
+            margin-bottom: 3px;
+        }
+
+        .comment-text {
+            font-size: 0.75rem;
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .comment-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .comment-input {
+            flex: 1;
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 0.78rem;
+            outline: none;
+        }
+
+        .comment-input:focus {
+            border-color: var(--green-neon);
+        }
+
+        .comment-send {
+            padding: 8px 14px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--green-neon);
+            border-radius: 6px;
+            color: var(--green-neon);
+            font-size: 0.72rem;
+            cursor: pointer;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .comment-send:hover {
+            background: var(--green-neon);
+            color: var(--bg-deep);
+        }
+
+        .update-btn {
+            padding: 6px 12px;
+            background: rgba(33, 150, 243, 0.1);
+            border: 1px solid #2196f3;
+            border-radius: 6px;
+            color: #2196f3;
+            font-size: 0.7rem;
+            cursor: pointer;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .update-btn:hover {
+            background: #2196f3;
+            color: #fff;
+        }
+
+        .status-update-form {
+            margin-top: 8px;
+            display: none;
+            background: rgba(0, 255, 136, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .status-update-form.open {
+            display: block;
+        }
+
+        .status-update-form select {
+            background: #021008;
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 0.8rem;
+            width: 100%;
+            margin-bottom: 8px;
+            outline: none;
+        }
+
+        .status-update-form button {
+            padding: 7px 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--green-neon);
+            border-radius: 6px;
+            color: var(--green-neon);
+            font-size: 0.72rem;
+            cursor: pointer;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .load-more-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 255, 136, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.25s;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .load-more-btn:hover {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+        }
+
+        .share-popup {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+
+        .share-popup.open {
+            display: flex;
+        }
+
+        .share-box {
+            background: #021008;
+            border: 1px solid var(--green-neon);
+            border-radius: 12px;
+            padding: 1.5rem;
+            min-width: 300px;
+            max-width: 420px;
+            width: 90%;
+        }
+
+        .share-box h3 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.85rem;
+            color: var(--green-neon);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .share-url {
+            width: 100%;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
+        .share-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .share-opt {
+            padding: 8px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            cursor: pointer;
+            background: transparent;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .share-opt:hover {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 20px;
+            background: rgba(2, 10, 5, 0.95);
+            border: 1px solid var(--green-neon);
+            border-radius: 8px;
+            color: var(--green-neon);
+            font-size: 0.82rem;
+            z-index: 9999;
+            display: none;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .toast.error {
+            border-color: var(--red-neon);
+            color: var(--red-neon);
+        }
+
+        @media(max-width:600px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .feed-actions {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a class="nav-brand" href="/"><div class="flag-icon"><div class="flag-bg"><div class="flag-circle"></div></div></div><span class="brand-title">Road Track BD</span></a>
+        <div class="nav-links">
+            <a class="nav-link" href="/" data-i18n="nav.map">ম্যাপ</a>
+            <a class="nav-link" href="/report" data-i18n="nav.report">রিপোর্ট</a>
+            <a class="nav-link active" href="/feed" data-i18n="nav.feed">ফিড</a>
+            <a class="nav-link" href="/dashboard" data-i18n="nav.dashboard">ড্যাশবোর্ড</a>
+            <a class="nav-link" href="/volunteer" data-i18n="nav.volunteer">স্বেচ্ছাসেবক</a>
+        </div>
+        <div id="navRight" style="display:flex;gap:10px;align-items:center;">
+            <div class="nav-status"><div class="status-dot"></div><span data-i18n="nav.live">লাইভ</span></div>
+            <button class="nav-btn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1>📰 লাইভ রিপোর্ট ফিড</h1>
+            <a href="/report" class="new-report-btn">➕ নতুন রিপোর্ট</a>
+        </div>
+        <div class="filter-row">
+            <button class="filter-chip active" onclick="filterFeed('all',this)" data-i18n="feed.all">সব</button>
+            <button class="filter-chip" onclick="filterFeed('pending',this)" data-i18n="feed.pending">মেরামত বাকি</button>
+            <button class="filter-chip" onclick="filterFeed('under_repair',this)" data-i18n="feed.repair">সংস্কার চলছে</button>
+            <button class="filter-chip" onclick="filterFeed('repaired',this)" data-i18n="feed.repaired">সংস্কার সম্পন্ন</button>
+            <button class="filter-chip" onclick="filterFeed('bridge_repair',this)" data-i18n="feed.bridge">ব্রিজ</button>
+            <button class="filter-chip" onclick="filterFeed('canal_large',this)" data-i18n="feed.canal">খাল</button>
+            <button class="filter-chip" onclick="filterFeed('tube_well_needed',this)" data-i18n="feed.tubewell">নলকূপ</button>
+        </div>
+        <div class="feed-list" id="feedList">
+            <div style="color:var(--text-muted);text-align:center;padding:3rem;">লোড হচ্ছে...</div>
+        </div>
+        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">আরও দেখুন ↓</button>
+    </main>
+
+    <div class="share-popup" id="sharePopup">
+        <div class="share-box">
+            <h3>🔗 শেয়ার করুন</h3>
+            <input class="share-url" type="text" id="shareUrl" readonly>
+            <div class="share-btns">
+                <button class="share-opt" onclick="copyShareUrl()">📋 কপি করুন</button>
+                <button class="share-opt" onclick="shareWhatsApp()">💬 WhatsApp</button>
+                <button class="share-opt" onclick="shareFacebook()">📘 Facebook</button>
+                <button class="share-opt" onclick="closeShare()">✕ বন্ধ করুন</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let currentPage = 1, currentFilter = 'all', allDone = false;
+        let currentShareUrl = '';
+
+        function statusColor(s) {
+            return { pending: '#ff1744', under_repair: '#2196f3', repaired: '#00ff88', rejected: '#546e7a' }[s] || '#ff1744';
+        }
+        function statusLabel(s) { return STATUS_LABELS[s] || s; }
+
+        function buildCard(r) {
+            const color = getMarkerColor(r);
+            const sColor = statusColor(r.status);
+            const sLabel = statusLabel(r.status);
+            const hasPhotos = r.photos && r.photos.length > 0;
+            const photosHtml = hasPhotos ? `<div class="feed-photos">${r.photos.map(p => `<img class="feed-photo" src="${p}" onclick="openPhoto('${p}')">`).join('')}</div>` : '';
+            const typeLabel = PROBLEM_LABELS[r.problemType] || r.problemType;
+            const u = getUser();
+            const isOwner = u && (u.id === r.userId || u.role === 'সরকারিকর্মকর্তা');
+            const updateBtnHtml = isOwner ? `<button class="update-btn" onclick="toggleUpdate('${r._id}')">🔄 অবস্থা আপডেট</button>` : '';
+
+            return `<div class="feed-card" id="card-${r._id}">
+    <div class="feed-card-top">
+      <div class="feed-dot" style="background:${color};box-shadow:0 0 8px ${color}"></div>
+      <div class="feed-meta">
+        <div class="feed-road">${r.roadName}</div>
+        <div class="feed-loc">📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''} &nbsp;·&nbsp; 🕒 ${formatTime(r.createdAt)}</div>
+      </div>
+      <div class="feed-badge" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">${sLabel}</div>
+    </div>
+    <span class="feed-type-chip">${typeLabel}</span>
+    ${r.description ? `<div class="feed-desc">${r.description}</div>` : ''}
+    ${photosHtml}
+    <div class="feed-actions">
+      <button class="action-btn ${(r.userLiked)?'liked':''}" onclick="toggleLike('${r._id}',this)">❤️ <span id="like-${r._id}">${r.likes||0}</span></button>
+      <button class="action-btn ${(r.userReacted)?'reacted':''}" onclick="toggleReact('${r._id}',this)">${getReactionEmoji(r.problemType)} <span id="react-${r._id}">${r.reactions||0}</span></button>
+      <button class="action-btn" onclick="toggleComments('${r._id}')">💬 <span id="cmtCount-${r._id}">${r.commentCount||0}</span></button>
+      <button class="action-btn" onclick="openShare('${r._id}')">🔗 <span data-i18n="feed.share">শেয়ার</span></button>
+      ${updateBtnHtml}
+    </div>
+    <div class="feed-comments" id="comments-${r._id}">
+      <div class="comment-list" id="commentList-${r._id}"></div>
+      <div class="comment-input-row">
+        <input class="comment-input" id="cmtInput-${r._id}" placeholder="মন্তব্য লিখুন..." onkeydown="if(event.key==='Enter')sendComment('${r._id}')">
+        <button class="comment-send" onclick="sendComment('${r._id}')">পাঠান</button>
+      </div>
+    </div>
+    <div class="status-update-form" id="updateForm-${r._id}">
+      <select id="updateStatus-${r._id}">
+        <option value="pending">মেরামত বাকি (লাল ডট)</option>
+        <option value="under_repair">সংস্কার চলছে (নীল ডট)</option>
+        <option value="repaired">সংস্কার সম্পন্ন (সবুজ ডট)</option>
+        <option value="rejected">বাতিল</option>
+      </select>
+      <button onclick="submitStatusUpdate('${r._id}')">✅ আপডেট করুন</button>
+    </div>
+  </div>`;
+        }
+
+        async function loadFeed(reset = false) {
+            if (reset) { currentPage = 1; allDone = false; document.getElementById('feedList').innerHTML = ''; }
+            if (allDone) return;
+            try {
+                let url = `/api/reports?page=${currentPage}&limit=10`;
+                if (currentFilter !== 'all') {
+                    if (['pending', 'under_repair', 'repaired', 'rejected'].includes(currentFilter)) url += `&status=${currentFilter}`;
+                    else url += `&type=${currentFilter}`;
+                }
+                const d = await apiFetch(url);
+                if (d.success) {
+                    const list = document.getElementById('feedList');
+                    if (reset || currentPage === 1) list.innerHTML = '';
+                    if (!d.data.length && currentPage === 1) { list.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:3rem;">কোনো রিপোর্ট নেই</div>'; return; }
+                    d.data.forEach(r => { list.insertAdjacentHTML('beforeend', buildCard(r)); });
+                    if (d.data.length < 10) allDone = true;
+                    document.getElementById('loadMoreBtn').style.display = allDone ? 'none' : 'block';
+                }
+            } catch (e) { document.getElementById('feedList').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:3rem;">ডেটা লোড ব্যর্থ</div>'; }
+        }
+
+        function filterFeed(f, btn) {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = f;
+            loadFeed(true);
+        }
+
+        function loadMore() { currentPage++; loadFeed(); }
+
+        function toggleComments(id) {
+            const el = document.getElementById('comments-' + id);
+            const isOpen = el.classList.contains('open');
+            el.classList.toggle('open');
+            if (!isOpen) loadComments(id);
+        }
+
+        async function loadComments(id) {
+            try {
+                const d = await apiFetch(`/api/feed/${id}/comments`);
+                const list = document.getElementById('commentList-' + id);
+                if (d.success && d.data.length) {
+                    list.innerHTML = d.data.map(c => `<div class="comment-item"><div class="comment-author">${c.authorName || 'অজ্ঞাত'}</div><div class="comment-text">${c.text}</div></div>`).join('');
+                } else { list.innerHTML = '<div style="font-size:0.72rem;color:var(--text-muted);text-align:center;padding:6px;">কোনো মন্তব্য নেই</div>'; }
+            } catch (e) { }
+        }
+
+        async function sendComment(id) {
+            const inp = document.getElementById('cmtInput-' + id);
+            const text = inp.value.trim();
+            if (!text) return;
+            const u = getUser();
+            if (!u) { showToast('মন্তব্য করতে লগইন করুন', 'error'); return; }
+            try {
+                const d = await apiPost(`/api/feed/${id}/comments`, { text });
+                if (d.success) { inp.value = ''; loadComments(id); const span = document.getElementById('cmtCount-' + id); if (span) span.textContent = parseInt(span.textContent || 0) + 1; }
+                else showToast(d.message || 'মন্তব্য পাঠাতে সমস্যা', 'error');
+            } catch (e) { showToast('সার্ভার সমস্যা', 'error'); }
+        }
+
+        async function toggleLike(id, btn) {
+            const u = getUser(); if (!u) { showToast('লাইক দিতে লগইন করুন', 'error'); return; }
+            try {
+                const d = await apiPost(`/api/feed/${id}/like`, {});
+                if (d.success) {
+                    document.getElementById('like-' + id).textContent = d.likes;
+                    btn.classList.toggle('liked', d.liked);
+                }
+            } catch (e) { }
+        }
+
+        async function toggleReact(id, btn) {
+            const u = getUser(); if (!u) { showToast('রিঅ্যাক্ট করতে লগইন করুন', 'error'); return; }
+            try {
+                const d = await apiPost(`/api/feed/${id}/react`, {});
+                if (d.success) {
+                    document.getElementById('react-' + id).textContent = d.reactions;
+                    btn.classList.toggle('reacted', d.reacted);
+                }
+            } catch (e) { }
+        }
+
+        function toggleUpdate(id) { document.getElementById('updateForm-' + id).classList.toggle('open'); }
+
+        async function submitStatusUpdate(id) {
+            const status = document.getElementById('updateStatus-' + id).value;
+            try {
+                const d = await apiPut(`/api/reports/${id}/status`, { status });
+                if (d.success) { showToast('✅ অবস্থা আপডেট হয়েছে'); loadFeed(true); }
+                else showToast(d.message || 'আপডেট ব্যর্থ', 'error');
+            } catch (e) { showToast('সার্ভার সমস্যা', 'error'); }
+        }
+
+        function openShare(id) {
+            currentShareUrl = window.location.origin + '/feed?report=' + id;
+            document.getElementById('shareUrl').value = currentShareUrl;
+            document.getElementById('sharePopup').classList.add('open');
+        }
+        function closeShare() { document.getElementById('sharePopup').classList.remove('open'); }
+        function copyShareUrl() { navigator.clipboard.writeText(currentShareUrl); showToast('✅ লিংক কপি হয়েছে'); }
+        function shareWhatsApp() { window.open('https://wa.me/?text=' + encodeURIComponent('Road Track BD — রিপোর্ট দেখুন: ' + currentShareUrl)); }
+        function shareFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(currentShareUrl)); }
+        function openPhoto(src) { window.open(src, '_blank'); }
+
+        document.getElementById('sharePopup').addEventListener('click', function (e) { if (e.target === this) closeShare(); });
+
+        initSocket(sk=>{
+            sk.on('report_update',r=>{
+                const existing=document.getElementById('card-'+r._id);
+                if(existing){existing.outerHTML=buildCard(r);}
+                else{const list=document.getElementById('feedList');list.insertAdjacentHTML('afterbegin',buildCard(r));showToast('📍 নতুন রিপোর্ট: '+r.roadName,'');}
+            });
+            // ✅ Real-time comment updates
+            sk.on('comment_new',({reportId,comment})=>{
+                const list=document.getElementById('commentList-'+reportId);
+                if(list){
+                    const noMsg=list.querySelector('[data-no-comment]');
+                    if(noMsg)noMsg.remove();
+                    list.insertAdjacentHTML('beforeend',`<div class="comment-item"><div class="comment-author">${comment.authorName||'ব্যবহারকারী'}</div><div class="comment-text">${comment.text}</div></div>`);
+                    list.scrollTop=list.scrollHeight;
+                    const cnt=document.getElementById('cmtCount-'+reportId);
+                    if(cnt)cnt.textContent=parseInt(cnt.textContent||0)+1;
+                }
+            });
+        });
+
+        window.addEventListener('DOMContentLoaded',()=>{
+            renderNavAuth(); injectLangToggle('nav'); applyLang();
+            loadFeed(true);
+        });
+    </script>
+</body>
+
+</html>
