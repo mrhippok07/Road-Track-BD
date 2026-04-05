@@ -46,7 +46,6 @@ const uploadAvatar = multer({
     }
 });
 
-// Validation
 const validateRegister = [
     body('name').trim().notEmpty().withMessage('নাম দিতে হবে').isLength({ max: 100 }),
     body('phone').matches(/^01[3-9]\d{8}$/).withMessage('সঠিক বাংলাদেশি ফোন নম্বর দিন'),
@@ -58,7 +57,6 @@ const validateRegister = [
 
 function makeToken(user) {
     const JWT_SECRET = process.env.JWT_SECRET || 'rtbd-secret-key-change-in-production';
-    // ✅ Include name and role in JWT so comments/features can use it
     return jwt.sign({ id: user.id, name: user.name, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
 }
 
@@ -67,8 +65,6 @@ function safeUser(user) {
     return safe;
 }
 
-// Routes
-// POST /api/auth/register
 router.post('/register', validateRegister, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -90,11 +86,9 @@ router.post('/register', validateRegister, async (req, res) => {
     };
     users.push(user);
     saveUsers(users);
-    const token = makeToken(user);
-    res.status(201).json({ success: true, message: 'নিবন্ধন সফল হয়েছে', token, user: safeUser(user) });
+    res.json({ success: true, token: makeToken(user), user: safeUser(user) });
 });
 
-// POST /api/auth/login
 router.post('/login', async (req, res) => {
     const { phone, password } = req.body;
     if (!phone || !password) {
@@ -115,22 +109,6 @@ router.get('/me', requireAuth, (req, res) => {
     res.json({ success: true, user: safeUser(user) });
 });
 
-// PATCH /api/auth/profile — update name
-router.patch('/profile', requireAuth, (req, res) => {
-    const idx = users.findIndex(u => u.id === req.user.id);
-    if (idx === -1) return res.status(404).json({ success: false, message: 'ব্যবহারকারী পাওয়া যায়নি' });
-    const { name } = req.body;
-    if (name && name.trim()) {
-        users[idx].name = name.trim();
-    }
-    // Mark first login as done
-    users[idx].isFirstLogin = false;
-    saveUsers(users);
-    // Re-issue token with updated name
-    const token = makeToken(users[idx]);
-    res.json({ success: true, message: 'প্রোফাইল আপডেট হয়েছে', token, user: safeUser(users[idx]) });
-});
-
 // POST /api/auth/avatar — upload profile picture
 router.post('/avatar', requireAuth, uploadAvatar.single('avatar'), (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'ছবি আপলোড করুন' });
@@ -140,19 +118,26 @@ router.post('/avatar', requireAuth, uploadAvatar.single('avatar'), (req, res) =>
     saveUsers(users);
     res.json({ success: true, avatar: users[idx].avatar });
 });
+
 // PUT /api/auth/profile — update profile data
 router.put('/profile', requireAuth, (req, res) => {
     const idx = users.findIndex(u => u.id === req.user.id);
     if (idx === -1) return res.status(404).json({ success: false, message: 'ব্যবহারকারী পাওয়া যায়নি' });
 
-    const { name, nid, job, address } = req.body;
-    if (name) users[idx].name = name.trim();
+    const { name, nid, job, address, dob } = req.body;
+    if (name && name.trim()) users[idx].name = name.trim();
     if (nid !== undefined) users[idx].nid = nid.trim();
     if (job !== undefined) users[idx].job = job.trim();
     if (address !== undefined) users[idx].address = address.trim();
+    if (dob !== undefined) users[idx].dob = dob.trim();
 
+    // Mark first login as done
+    users[idx].isFirstLogin = false;
     saveUsers(users);
-    res.json({ success: true, user: safeUser(users[idx]) });
+    
+    // Re-issue token with updated info
+    const token = makeToken(users[idx]);
+    res.json({ success: true, message: 'প্রোফাইল আপডেট হয়েছে', token, user: safeUser(users[idx]) });
 });
 
 // DELETE /api/auth/profile — delete user account

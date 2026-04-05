@@ -2,14 +2,19 @@
 node_modules/
 npm-debug.log*
 
-# Environment Variables
+# Environment Variables — NEVER commit these
 .env
 .env.local
+.env.production
 
 # Operating System Files
 .DS_Store
 Thumbs.db
 
 # Logs
-logs
+logs/
 *.log
+
+# Uploaded user files — don't commit but keep folder
+backend/uploads/*
+!backend/uploads/.gitkeep

@@ -638,14 +638,19 @@
         </div>
         <div id="navRight" style="display:flex;gap:10px;align-items:center;">
             <div class="nav-status"><div class="status-dot"></div><span data-i18n="nav.live">লাইভ</span></div>
-            <button class="nav-btn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>
+            <div class="profile-btn" id="authBtn" onclick="openAuthModal()" title="লগইন / প্রোফাইল">
+                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+            </div>
         </div>
     </nav>
 
     <main>
         <div class="page-header">
             <h1>📰 লাইভ রিপোর্ট ফিড</h1>
-            <a href="/report" class="new-report-btn">➕ নতুন রিপোর্ট</a>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a href="/report" class="new-report-btn">➕ নতুন রিপোর্ট</a>
+                <button onclick="openOpinionModal()" class="new-report-btn" style="background:transparent; border-color:var(--blue-neon); color:var(--text-primary); cursor:pointer;">💬 জনমতামত দিন</button>
+            </div>
         </div>
         <div class="filter-row">
             <button class="filter-chip active" onclick="filterFeed('all',this)" data-i18n="feed.all">সব</button>
@@ -655,6 +660,7 @@
             <button class="filter-chip" onclick="filterFeed('bridge_repair',this)" data-i18n="feed.bridge">ব্রিজ</button>
             <button class="filter-chip" onclick="filterFeed('canal_large',this)" data-i18n="feed.canal">খাল</button>
             <button class="filter-chip" onclick="filterFeed('tube_well_needed',this)" data-i18n="feed.tubewell">নলকূপ</button>
+            <button class="filter-chip" onclick="filterFeed('opinion',this)" style="border-color:var(--blue-neon); color:var(--blue-neon);">💬 মতামত ট্যাগ</button>
         </div>
         <div class="feed-list" id="feedList">
             <div style="color:var(--text-muted);text-align:center;padding:3rem;">লোড হচ্ছে...</div>
@@ -674,6 +680,16 @@
             </div>
         </div>
     </div>
+    <div class="share-popup" id="opinionPopup">
+        <div class="share-box">
+            <h3>💬 জনমতামত দিন</h3>
+            <textarea id="opinionText" style="width:100%; min-height:100px; background:rgba(0,255,136,0.05); border:1px solid var(--glass-border); border-radius:6px; padding:10px; color:var(--text-primary); font-size:0.8rem; margin-bottom:10px; resize:vertical;" placeholder="আপনার মতামত বা পরামর্শ লিখুন..."></textarea>
+            <div class="share-btns">
+                <button class="share-opt" style="border-color:var(--green-neon); color:var(--green-neon);" onclick="submitOpinion()">📤 প্রকাশ করুন</button>
+                <button class="share-opt" onclick="closeOpinionModal()">✕ বন্ধ করুন</button>
+            </div>
+        </div>
+    </div>
     <div class="toast" id="toast"></div>
 
     <script src="/assets/js/main.js"></script>
@@ -681,14 +697,15 @@
         let currentPage = 1, currentFilter = 'all', allDone = false;
         let currentShareUrl = '';
 
-        function statusColor(s) {
+        function statusColor(s, type) {
+            if (type === 'opinion') return '#00f2ff';
             return { pending: '#ff1744', under_repair: '#2196f3', repaired: '#00ff88', rejected: '#546e7a' }[s] || '#ff1744';
         }
         function statusLabel(s) { return STATUS_LABELS[s] || s; }
 
         function buildCard(r) {
             const color = getMarkerColor(r);
-            const sColor = statusColor(r.status);
+            const sColor = statusColor(r.status, r.problemType);
             const sLabel = statusLabel(r.status);
             const hasPhotos = r.photos && r.photos.length > 0;
             const photosHtml = hasPhotos ? `<div class="feed-photos">${r.photos.map(p => `<img class="feed-photo" src="${p}" onclick="openPhoto('${p}')">`).join('')}</div>` : '';
@@ -704,7 +721,7 @@
         <div class="feed-road">${r.roadName}</div>
         <div class="feed-loc">📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''} &nbsp;·&nbsp; 🕒 ${formatTime(r.createdAt)}</div>
       </div>
-      <div class="feed-badge" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">${sLabel}</div>
+      ${r.problemType !== 'opinion' ? `<div class="feed-badge" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">${sLabel}</div>` : ''}
     </div>
     <span class="feed-type-chip">${typeLabel}</span>
     ${r.description ? `<div class="feed-desc">${r.description}</div>` : ''}
@@ -712,9 +729,9 @@
     <div class="feed-actions">
       <button class="action-btn ${(r.userLiked)?'liked':''}" onclick="toggleLike('${r._id}',this)">❤️ <span id="like-${r._id}">${r.likes||0}</span></button>
       <button class="action-btn ${(r.userReacted)?'reacted':''}" onclick="toggleReact('${r._id}',this)">${getReactionEmoji(r.problemType)} <span id="react-${r._id}">${r.reactions||0}</span></button>
-      <button class="action-btn" onclick="toggleComments('${r._id}')">💬 <span id="cmtCount-${r._id}">${r.commentCount||0}</span></button>
+      <button class="action-btn" onclick="toggleComments('${r._id}')">💬 মতামত <span id="cmtCount-${r._id}">${r.commentCount||0}</span></button>
       <button class="action-btn" onclick="openShare('${r._id}')">🔗 <span data-i18n="feed.share">শেয়ার</span></button>
-      ${updateBtnHtml}
+      ${r.problemType !== 'opinion' ? updateBtnHtml : ''}
     </div>
     <div class="feed-comments" id="comments-${r._id}">
       <div class="comment-list" id="commentList-${r._id}"></div>
@@ -840,6 +857,43 @@
         function openPhoto(src) { window.open(src, '_blank'); }
 
         document.getElementById('sharePopup').addEventListener('click', function (e) { if (e.target === this) closeShare(); });
+        document.getElementById('opinionPopup').addEventListener('click', function (e) { if (e.target === this) closeOpinionModal(); });
+
+        function openOpinionModal() {
+            const u = getUser();
+            if (!u) { showToast('মতামত দিতে লগইন করুন', 'error'); return; }
+            document.getElementById('opinionText').value = '';
+            document.getElementById('opinionPopup').classList.add('open');
+        }
+
+        function closeOpinionModal() {
+            document.getElementById('opinionPopup').classList.remove('open');
+        }
+
+        async function submitOpinion() {
+            const text = document.getElementById('opinionText').value.trim();
+            if (!text) { showToast('কিছু লিখুন', 'error'); return; }
+            try {
+                const d = await apiPost('/api/reports', {
+                    problemType: 'opinion',
+                    description: text,
+                    roadName: 'সাধারণ মতামত',
+                    district: '-',
+                    area: '-'
+                });
+                if (d.success) {
+                    showToast('✅ মতামত প্রকাশিত হয়েছে');
+                    closeOpinionModal();
+                    if (currentFilter === 'all' || currentFilter === 'opinion') {
+                        loadFeed(true);
+                    }
+                } else {
+                    showToast(d.message || 'ব্যর্থ হয়েছে', 'error');
+                }
+            } catch (e) {
+                showToast('সার্ভার সমস্যা', 'error');
+            }
+        }
 
         initSocket(sk=>{
             sk.on('report_update',r=>{

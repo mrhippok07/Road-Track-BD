@@ -2,7 +2,31 @@
 //  Road Track BD — main.js  (Shared Utilities v3.0)
 // ════════════════════════════════════════════════════════════════════
 
+// ─── Crash Monitoring ────────────────────────────────────────────────────────
+window.onerror = function(msg, url, line, col, error) {
+    console.error("SYS_CRASH:", { msg, url, line, col, error });
+    // In a real app, you'd send this to a logging server like Sentry/LogDNA
+};
+window.onunhandledrejection = function(event) {
+    console.error("SYS_UNHANDLED_PROMISE:", event.reason);
+};
+
 const API_BASE = window.location.origin;
+
+// ─── Problem Type Colors (Consistent across Map & Dashboard) ─────────────────
+const PROBLEM_COLORS = {
+    broken: '#ff1744', pothole: '#ff1744', dangerous: '#ffd600',
+    waterlogged: '#00b0ff', narrow: '#ffd600', nolight: '#ffd600',
+    erosion: '#ff6d00', unpaved: '#ff6d00',
+    bridge_repair: '#ff6d00', bridge_new: '#9c27b0', road_bridge_new: '#9c27b0',
+    culvert_new: '#00e5ff', culvert_repair: '#00e5ff',
+    embankment_new: '#795548', embankment_repair: '#795548',
+    canal_small: '#00bfa5', canal_large: '#00bfa5', under_repair: '#2196f3',
+    tube_well_needed: '#00bcd4', tube_well_repair: '#4fc3f7',
+    railway_repair: '#ff6d00', railway_new: '#9c27b0', railway_station_new: '#9c27b0',
+    bus_station_repair: '#ff6d00', bus_station_new: '#9c27b0',
+    opinion: '#00f2ff'
+};
 
 // ─── Problem Type Labels (bilingual handled via i18n.js) ─────────────────────
 const PROBLEM_LABELS = {
@@ -14,8 +38,14 @@ const PROBLEM_LABELS = {
     culvert_repair: '🔧 কালভার্ট সংস্কার', embankment_new: '🏞️ বেড়িবাঁধ প্রয়োজন',
     embankment_repair: '🏞️ বেড়িবাঁধ সংস্কার', canal_small: '💧 ছোট খাল খনন',
     canal_large: '💧 বড় খাল খনন', under_repair: 'সংস্কার কাজ চলছে',
-    tube_well_needed: '🚰 নলকূপ প্রয়োজন',  // ← NEW
-    tube_well_repair: '🔧 নলকূপ মেরামত'      // ← NEW
+    tube_well_needed: '🚰 নলকূপ প্রয়োজন',
+    tube_well_repair: '🔧 নলকূপ মেরামত',
+    railway_repair: '🚂 রেললাইন মেরামত',
+    railway_new: '🚂 নতুন রেললাইন',
+    railway_station_new: '🚉 নতুন রেল স্টেশন',
+    bus_station_repair: '🚌 বাস স্টেশন মেরামত',
+    bus_station_new: '🚏 নতুন বাস স্টেশন',
+    opinion: '💬 জনমতামত'
 };
 
 const PROBLEM_LABELS_EN = {
@@ -28,7 +58,13 @@ const PROBLEM_LABELS_EN = {
     embankment_repair: '🏞️ Embankment Repair', canal_small: '💧 Small Canal',
     canal_large: '💧 Large Canal', under_repair: 'Repair In Progress',
     tube_well_needed: '🚰 Tube Well Needed',
-    tube_well_repair: '🔧 Tube Well Repair'
+    tube_well_repair: '🔧 Tube Well Repair',
+    railway_repair: '🚂 Railway Repair',
+    railway_new: '🚂 New Railway',
+    railway_station_new: '🚉 New Railway Station',
+    bus_station_repair: '🚌 Bus Station Repair',
+    bus_station_new: '🚏 New Bus Station',
+    opinion: '💬 Public Opinion'
 };
 
 function getProblemLabel(type) {
@@ -51,20 +87,11 @@ function getStatusLabel(status) {
 
 // ─── Map Marker Colors ────────────────────────────────────────────────────────
 function getMarkerColor(r) {
-    const typeColors = {
-        broken: '#ff1744', pothole: '#ff1744', dangerous: '#ffd600',
-        waterlogged: '#00b0ff', narrow: '#ffd600', nolight: '#ffd600',
-        erosion: '#ff6d00', unpaved: '#ff6d00',
-        bridge_repair: '#ff6d00', bridge_new: '#9c27b0', road_bridge_new: '#9c27b0',
-        culvert_new: '#00e5ff', culvert_repair: '#00e5ff',
-        embankment_new: '#795548', embankment_repair: '#795548',
-        canal_small: '#00bfa5', canal_large: '#00bfa5', under_repair: '#2196f3',
-        tube_well_needed: '#00bcd4', tube_well_repair: '#4fc3f7'  // ← NEW
-    };
+    if (r.problemType === 'opinion') return '#00f2ff';
     if (r.status === 'under_repair') return '#2196f3';
     if (r.status === 'repaired') return '#00ff88';
     if (r.status === 'rejected') return '#546e7a';
-    return typeColors[r.problemType] || '#ff1744';
+    return PROBLEM_COLORS[r.problemType] || '#ff1744';
 }
 
 // ─── Type-specific Reaction Emoji ────────────────────────────────────────────
@@ -73,6 +100,7 @@ function getReactionEmoji(problemType) {
     const bridgeTypes = ['bridge_repair', 'bridge_new', 'road_bridge_new', 'culvert_new', 'culvert_repair'];
     const earthTypes  = ['embankment_new', 'embankment_repair', 'erosion'];
     const roadTypes   = ['broken', 'pothole', 'dangerous', 'unpaved', 'narrow', 'nolight', 'under_repair'];
+    if (problemType === 'opinion') return '💡';
     if (waterTypes.includes(problemType)) return '🚰';
     if (bridgeTypes.includes(problemType)) return '🌉';
     if (earthTypes.includes(problemType)) return '⛏️';
@@ -209,14 +237,16 @@ function renderNavAuth() {
             : (user.icon || '👤');
         navRight.innerHTML = `
             <div class="nav-status"><div class="status-dot"></div><span id="liveCount" data-i18n="nav.live">লাইভ</span></div>
-            <button class="profile-btn" id="profileNavBtn" onclick="openProfileModal()" title="${user.name}">
+            <div class="profile-btn" id="profileNavBtn" title="${user.name}" onclick="openProfileModal()">
                 <div class="profile-avatar-mini">${avatarSrc}</div>
                 <span class="profile-name-mini">${user.name.split(' ')[0]}</span>
-            </button>`;
+            </div>`;
     } else {
         navRight.innerHTML = `
             <div class="nav-status"><div class="status-dot"></div><span id="liveCount" data-i18n="nav.live">লাইভ</span></div>
-            <button class="nav-btn" id="authBtn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>`;
+            <div class="profile-btn" onclick="openAuthModal()" title="${typeof getLang==='function'&&getLang()==='en'?'Login / Profile':'লগইন / প্রোফাইল'}">
+                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+            </div>`;
     }
     if (typeof applyLang === 'function') applyLang();
 }
@@ -250,31 +280,28 @@ window.openWhiteboxModal = function() {
     }
     const lang = typeof getLang === 'function' ? getLang() : 'bn';
     modal.innerHTML = `
-    <div class="modal-box" style="max-width:600px;">
+    <div class="modal-box" style="max-width:650px;">
         <button class="modal-close" onclick="document.getElementById('whiteboxModal').classList.remove('open')">✕</button>
-        <div class="modal-title" style="text-align:center;font-size:1.2rem;margin-bottom:1.5rem;border-bottom:1px solid var(--green-neon);padding-bottom:10px;">
-            ${lang === 'en' ? '🔍 HOW IT WORKS' : '🔍 সিস্টেমটি কীভাবে কাজ করে?'}
+        <div class="modal-title" style="text-align:center;font-size:1.2rem;margin-bottom:1rem;border-bottom:1px solid var(--green-neon);padding-bottom:10px;">
+            ${lang === 'en' ? '🔍 USER GUIDE & RULES' : '🔍 প্রকল্প গাইডলাইন ও নিয়মকানুন'}
         </div>
-        <div style="font-family:'Noto Sans Bengali',sans-serif; line-height:1.8; color:var(--text-primary); font-size:0.95rem;">
-            <div style="margin-bottom:1.5rem; background:rgba(0,255,136,0.05); padding:15px; border-radius:8px; border-left:4px solid var(--green-neon);">
-                <strong style="color:var(--green-neon); display:block; margin-bottom:5px;">১. রির্পোট প্রদান (নাগরিক/স্বেচ্ছাসেবক):</strong>
-                যে কোনো নাগরিক জিপিএস লোকেশনের মাধ্যমে রাস্তাঘাটের সমস্যা রিপোর্ট করতে পারেন। যা সাথে সাথেই ম্যাপে দৃশ্যমান হবে।
+        <div style="font-family:'Noto Sans Bengali',sans-serif; line-height:1.6; color:var(--text-primary); font-size:0.9rem;">
+            <div style="margin-bottom:1rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
+                <strong style="color:var(--green-neon); display:block;">১. উদ্যোগ ও লক্ষ্য:</strong>
+                বাংলাদেশের ১৮ কোটি জনগনের মানুষের কল্যাণে এই উদ্যোগটি গ্রহন করা হয়েছে। আপনার আশেপাশে যত ভাঙা রাস্তায় বড় গর্ত, পানি জমা, ঝুঁকিপূর্ণ, কাঁচা রাস্তা, সংকীর্ণ রাস্তা ইত্যাদি রয়েছে তা এখানে রিপোর্ট করুন।
             </div>
-            <div style="margin-bottom:1.5rem; background:rgba(0,255,136,0.05); padding:15px; border-radius:8px; border-left:4px solid var(--green-neon);">
-                <strong style="color:var(--green-neon); display:block; margin-bottom:5px;">২. যাচাই ও পরিদর্শন (সরকারি কর্মকর্তা):</strong>
-                প্রশাসনের দায়িত্বপ্রাপ্ত কর্মকর্তারা ম্যাপের মাধ্যমে এলাকা ভিত্তিক সমস্যার গুরুত্ব যাচাই করবেন।
+            <div style="margin-bottom:1rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
+                <strong style="color:var(--green-neon); display:block;">২. সমস্যার সমাধান পদ্ধতি:</strong>
+                এই স্থানে সমস্যার রিপোর্ট করলে, সরকারি কর্মকর্তারা তা যাচাই করে ঠিকাদারদের নির্দেশ দিতে পারবেন, অথবা জনগণ নিজ উদ্যোগে ঠিকাদারদের কন্টাক্ট নিয়ে সমস্যা সমাধান করতে পারবে। স্বেচ্ছাসেবকরা লাইভ লোকেশন মার্ক করে সমস্যাগুলো রিপোর্ট করবেন।
             </div>
-            <div style="margin-bottom:1.5rem; background:rgba(0,255,136,0.05); padding:15px; border-radius:8px; border-left:4px solid var(--green-neon);">
-                <strong style="color:var(--green-neon); display:block; margin-bottom:5px;">৩. কাজ শুরু ও আপডেট (ঠিকাদার):</strong>
-                ঠিকাদাররা নির্দিষ্ট সমস্যা সমাধানের দায়িত্ব নেবেন এবং কাজের অগ্রগতি (সংস্কার চলছে/সম্পন্ন) আপডেট করবেন।
+            <div style="margin-bottom:1rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
+                <strong style="color:var(--green-neon); display:block;">৩. ব্যবহারকারী একাউন্ট ও সুরক্ষা:</strong>
+                অ্যাপের উপরে থাকা ইউনিভার্সাল প্রোফাইল আইকনে ক্লিক করে ব্যবহারকারীরা তাদের সঠিক তথ্য দিয়ে একাউন্ট খুলতে পারবেন ও কাজ করতে পারবেন। তাদের তথ্য সম্পূর্ণ সুরক্ষিত থাকবে।
             </div>
-            <div style="margin-bottom:1.5rem; border:1px dashed var(--red-neon); padding:10px; border-radius:8px; background:rgba(244,42,65,0.05);">
-                <strong style="color:var(--red-neon);">⚠️ ৭ দিনের নিয়ম:</strong> 
-                রিপোর্ট করার ৭ দিনের মধ্যে যদি কোনো আপডেট না আসে, তবে সিস্টেম স্বয়ংক্রিয়ভাবে সেই রিপোর্ট ম্যাপ থেকে মুছে ফেলবে।
+            <div style="margin-bottom:1rem; border:1px solid var(--red-neon); padding:10px; border-radius:8px; background:rgba(244,42,65,0.07);">
+                <strong style="color:var(--red-neon);">⚠️ সতর্কতা (নকল রিপোর্ট):</strong> 
+                কেউ ফেক বা ভুয়া রিপোর্ট করতে পারবে না। যদি কেউ এমনটা করে, তবে তাদের যাবতীয় তথ্য যাচাই করে আইনগত ব্যবস্থা নেওয়া হবে।
             </div>
-            <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-top:10px;">
-                জবাবদিহিতা নিশ্চিত করতে সকল ইউজারের NID তথ্য সংরক্ষিত থাকে।
-            </p>
         </div>
     </div>`;
     modal.classList.add('open');
@@ -332,9 +359,15 @@ function openProfileModal() {
         </div>
 
         <div id="profTabSettings" style="display:none; max-height:400px; overflow-y:auto; padding-right:5px;">
-            <div class="form-group" style="margin-bottom:14px;">
-                <label data-i18n="profile.name">${lang === 'en' ? 'Your Name' : 'আপনার নাম'}</label>
-                <input type="text" id="profileNameInput" value="${user.name}" style="background:rgba(0,255,136,0.03);border:1px solid var(--glass-border);border-radius:6px;padding:10px 14px;color:var(--text-primary);font-family:'Noto Sans Bengali',sans-serif;font-size:0.85rem;outline:none;width:100%;">
+            <div style="display:flex; gap:10px; margin-bottom:14px;">
+                <div class="form-group" style="flex:1;">
+                    <label data-i18n="profile.name">${lang === 'en' ? 'Your Name' : 'আপনার নাম'}</label>
+                    <input type="text" id="profileNameInput" value="${user.name}" style="background:rgba(0,255,136,0.03);border:1px solid var(--glass-border);border-radius:6px;padding:10px 14px;color:var(--text-primary);font-family:'Noto Sans Bengali',sans-serif;font-size:0.85rem;outline:none;width:100%;">
+                </div>
+                <div class="form-group" style="flex:1;">
+                    <label data-i18n="auth.dob">${lang === 'en' ? 'Date of Birth' : 'জন্ম তারিখ'}</label>
+                    <input type="date" id="profileDobInput" value="${user.dob || ''}" style="background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);border-radius:6px;padding:10px 14px;color:var(--text-primary);font-family:'Noto Sans Bengali',sans-serif;font-size:0.85rem;outline:none;width:100%; color-scheme: dark;">
+                </div>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:14px;">
                 <div class="form-group" style="flex:1;">
@@ -372,22 +405,35 @@ function openProfileModal() {
 }
 
 window.saveProfile = async function() {
-    const name = document.getElementById('profileNameInput').value.trim();
-    const nid = document.getElementById('profileNidInput').value.trim();
-    const job = document.getElementById('profileJobInput').value.trim();
-    const address = document.getElementById('profileAddressInput').value.trim();
-    if (!name) return showToast('নাম প্রদান করুন', 'error');
+    const nameInput = document.getElementById('profileNameInput');
+    if (!nameInput) return;
+    const name = nameInput.value.trim();
+    const nid = document.getElementById('profileNidInput') ? document.getElementById('profileNidInput').value.trim() : '';
+    const job = document.getElementById('profileJobInput') ? document.getElementById('profileJobInput').value.trim() : '';
+    const address = document.getElementById('profileAddressInput') ? document.getElementById('profileAddressInput').value.trim() : '';
+    const dob = document.getElementById('profileDobInput') ? document.getElementById('profileDobInput').value : '';
+    
+    if (!name) { 
+        showToast(typeof getLang === 'function' && getLang() === 'en' ? 'Name required' : 'নাম প্রদান করুন', 'error'); 
+        return; 
+    }
 
     try {
         const d = await apiFetch('/api/auth/profile', {
             method: 'PUT',
-            body: JSON.stringify({ name, nid, job, address })
+            body: JSON.stringify({ name, nid, job, address, dob })
         });
         if (d.success) {
-            saveAuth(localStorage.getItem('token'), d.user);
-            showToast('✅ প্রোফাইল আপডেট করা হয়েছে');
-        } else showToast(d.message || 'ব্যর্থ হয়েছে', 'error');
-    } catch(e) { showToast('সার্ভার সমস্যা', 'error'); }
+            saveAuth(localStorage.getItem('rtbd_token'), d.user);
+            showToast('✅ ' + (typeof getLang === 'function' && getLang() === 'en' ? 'Profile saved' : 'প্রোফাইল আপডেট করা হয়েছে'));
+            closeProfileModal();
+            renderNavAuth();
+        } else {
+            showToast(d.message || 'ব্যর্থ হয়েছে', 'error');
+        }
+    } catch(e) { 
+        showToast('সার্ভার সমস্যা', 'error'); 
+    }
 };
 
 window.switchProfileTab = function(tab, btn) {
@@ -452,26 +498,6 @@ function closeProfileModal() {
     if (modal) modal.classList.remove('open');
 }
 
-async function saveProfile() {
-    const nameInput = document.getElementById('profileNameInput');
-    if (!nameInput) return;
-    const name = nameInput.value.trim();
-    if (!name) { showToast(typeof t === 'function' ? 'নাম দিতে হবে' : 'Name required', 'error'); return; }
-    try {
-        const d = await apiPatch('/api/auth/profile', { name });
-        if (d.success) {
-            saveAuth(d.token, d.user);
-            showToast('✅ ' + (typeof getLang === 'function' && getLang() === 'en' ? 'Profile saved' : 'প্রোফাইল সংরক্ষিত হয়েছে'));
-            closeProfileModal();
-            renderNavAuth();
-        } else {
-            showToast(d.message || 'সমস্যা হয়েছে', 'error');
-        }
-    } catch (e) {
-        showToast('সার্ভার সমস্যা', 'error');
-    }
-}
-
 async function uploadAvatar(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -508,30 +534,47 @@ function openAuthModal() {
         <div class="modal-title" data-i18n="auth.title">${lang === 'en' ? '🔐 Account Access' : '🔐 অ্যাকাউন্টে প্রবেশ'}</div>
         <div class="auth-tabs">
             <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login',this)" data-i18n="auth.login">${lang === 'en' ? 'Login' : 'লগইন'}</button>
-            <button class="auth-tab" id="tabReg" onclick="switchAuthTab('register',this)" data-i18n="auth.register">${lang === 'en' ? 'New Account' : 'নতুন অ্যাকাউন্ট'}</button>
+            <button class="auth-tab" id="tabReg" onclick="switchAuthTab('register',this)" data-i18n="auth.register">${lang === 'en' ? 'New Account' : 'একাউন্ট খুলুন'}</button>
+            <button class="auth-tab" id="tabReset" onclick="switchAuthTab('reset',this)" data-i18n="auth.reset">${lang === 'en' ? 'Forgot Pass' : 'পাসওয়ার্ড ভুলে গেছেন?'}</button>
         </div>
         <div id="loginFormModal">
             <div class="form-group"><label data-i18n="auth.phone">${lang === 'en' ? 'Phone' : 'ফোন নম্বর'}</label><input type="tel" id="loginPhone" placeholder="01XXXXXXXXX"></div>
             <div class="form-group"><label data-i18n="auth.password">${lang === 'en' ? 'Password' : 'পাসওয়ার্ড'}</label><input type="password" id="loginPass" placeholder="••••••"></div>
             <button class="submit-btn" onclick="doLogin()" data-i18n="auth.doLogin">${lang === 'en' ? 'Sign In' : 'লগইন করুন'}</button>
         </div>
-        <div id="registerFormModal" style="display:none;">
+        <div id="registerFormModal" style="display:none; max-height: 480px; overflow-y: auto; padding-right: 5px;">
             <div class="form-group"><label data-i18n="auth.name">${lang === 'en' ? 'Full Name' : 'পূর্ণ নাম'}</label><input type="text" id="regName" placeholder="${lang === 'en' ? 'Your name' : 'আপনার নাম'}"></div>
             <div class="form-group"><label data-i18n="auth.phone">${lang === 'en' ? 'Phone' : 'ফোন নম্বর'}</label><input type="tel" id="regPhone" placeholder="01XXXXXXXXX"></div>
             <div class="form-group"><label data-i18n="auth.password">${lang === 'en' ? 'Password' : 'পাসওয়ার্ড'}</label><input type="password" id="regPass" placeholder="${lang === 'en' ? 'Min 6 characters' : 'কমপক্ষে ৬ অক্ষর'}"></div>
-            <div class="form-group"><label data-i18n="auth.nid">${lang === 'en' ? 'National ID (NID)' : 'জাতীয় পরিচয়পত্র (NID)'}</label><input type="text" id="regNid" placeholder="${lang === 'en' ? 'NID Number' : 'NID নম্বর'}"></div>
+            <div style="display:flex; gap:10px;">
+                <div class="form-group" style="flex:1;"><label data-i18n="auth.nid">${lang === 'en' ? 'National ID (NID)' : 'এনআইডি (১০ ডিজিট)'}</label><input type="text" id="regNid" placeholder="10 Digit NID" maxlength="10"></div>
+                <div class="form-group" style="flex:1;"><label data-i18n="auth.dob">${lang === 'en' ? 'Date of Birth' : 'জন্ম তারিখ'}</label><input type="date" id="regDob"></div>
+            </div>
             <div style="display:flex; gap:10px;">
                 <div class="form-group" style="flex:1;"><label data-i18n="auth.occ">${lang === 'en' ? 'Occupation' : 'পেশা'}</label><input type="text" id="regJob" placeholder="${lang === 'en' ? 'Your Occupation' : 'আপনার পেশা'}"></div>
                 <div class="form-group" style="flex:1;"><label data-i18n="auth.address">${lang === 'en' ? 'Address' : 'ঠিকানা'}</label><input type="text" id="regAddress" placeholder="${lang === 'en' ? 'District & Area' : 'জেলা ও এলাকা'}"></div>
             </div>
             <div class="form-group"><label data-i18n="auth.role">${lang === 'en' ? 'Role' : 'ভূমিকা'}</label>
                 <select id="regRole" style="background:#020a05;border:1px solid var(--glass-border);border-radius:6px;padding:10px 14px;color:var(--text-primary);font-family:'Noto Sans Bengali',sans-serif;outline:none;width:100%;">
+                    <option value="সাধারণ">${lang === 'en' ? 'Citizen' : 'সাধারণ নাগরিক'}</option>
                     <option value="স্বেচ্ছাসেবক">${lang === 'en' ? 'Volunteer' : 'স্বেচ্ছাসেবক'}</option>
                     <option value="ঠিকাদার">${lang === 'en' ? 'Contractor' : 'ঠিকাদার'}</option>
                     <option value="সরকারিকর্মকর্তা">${lang === 'en' ? 'Govt. Official' : 'সরকারি কর্মকর্তা'}</option>
                 </select>
             </div>
-            <button class="submit-btn" onclick="doRegister()" data-i18n="auth.doRegister">${lang === 'en' ? 'Register' : 'নিবন্ধন করুন'}</button>
+            <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:10px; line-height: 1.4;">
+                ${lang === 'en' ? 'Note: Fake reports will lead to legal action after verification.' : 'নোট: কোনো ফেক রিপোর্ট করলে তথ্য যাচাই করে আইনগত ব্যবস্থা নেওয়া হবে।'}
+            </div>
+            <button class="submit-btn" onclick="doRegister()" data-i18n="auth.doRegister">${lang === 'en' ? 'Register' : 'একাউন্ট খুলুন'}</button>
+        </div>
+        <div id="resetFormModal" style="display:none;">
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px; line-height:1.5;">
+                ${lang === 'en' ? 'Verify via Phone and NID to reset your password.' : 'আপনার ফোন নম্বর ও ১০ ডিজিটের NID ব্যবহার করে পাসওয়ার্ড রিসেট করুন।'}
+            </div>
+            <div class="form-group"><label data-i18n="auth.phone">${lang === 'en' ? 'Phone' : 'ফোন নম্বর'}</label><input type="tel" id="resetPhone" placeholder="01XXXXXXXXX"></div>
+            <div class="form-group"><label data-i18n="auth.nid">${lang === 'en' ? 'National ID (NID)' : 'এনআইডি নম্বর (১০ ডিজিট)'}</label><input type="text" id="resetNid" placeholder="10 Digit NID" maxlength="10"></div>
+            <div class="form-group"><label data-i18n="auth.newPassword">${lang === 'en' ? 'New Password' : 'নতুন পাসওয়ার্ড'}</label><input type="password" id="resetPass" placeholder="••••••"></div>
+            <button class="submit-btn" onclick="doResetPassword()" data-i18n="auth.doReset">${lang === 'en' ? 'Reset Password' : 'পাসওয়ার্ড সেট করুন'}</button>
         </div>
     </div>`;
     modal.classList.add('open');
@@ -543,6 +586,7 @@ function switchAuthTab(tab, btn) {
     btn.classList.add('active');
     document.getElementById('loginFormModal').style.display = tab === 'login' ? 'block' : 'none';
     document.getElementById('registerFormModal').style.display = tab === 'register' ? 'block' : 'none';
+    document.getElementById('resetFormModal').style.display = tab === 'reset' ? 'block' : 'none';
 }
 
 async function doLogin() {
@@ -566,19 +610,42 @@ async function doRegister() {
     const pass = document.getElementById('regPass').value;
     const role = document.getElementById('regRole').value;
     const nid = document.getElementById('regNid').value.trim();
+    const dob = document.getElementById('regDob').value;
     const job = document.getElementById('regJob').value.trim();
     const address = document.getElementById('regAddress').value.trim();
     
-    if (!name || !phone || !pass) { showToast('নাম, ফোন ও পাসওয়ার্ড দিন', 'error'); return; }
+    if (!name || !phone || !pass || !nid || !dob) { showToast('নাম, ফোন, পাসওয়ার্ড, NID এবং জন্ম তারিখ দিন', 'error'); return; }
+    if (nid.length !== 10) { showToast('NID অবশ্যই ১০ ডিজিটের হতে হবে', 'error'); return; }
     try {
-        const d = await apiPost('/api/auth/register', { name, phone, password: pass, role, nid, job, address });
+        const d = await apiPost('/api/auth/register', { name, phone, password: pass, role, nid, dob, job, address });
         if (d.success) {
             saveAuth(d.token, d.user);
             document.getElementById('authModal').classList.remove('open');
-            showToast('✅ নিবন্ধন সফল হয়েছে!');
+            showToast('✅ একাউন্ট তৈরি সফল হয়েছে!');
             renderNavAuth();
-        } else showToast(d.message || 'নিবন্ধন ব্যর্থ', 'error');
+        } else showToast(d.message || 'রেজিস্ট্রেশন ব্যর্থ', 'error');
     } catch (e) { showToast('সার্ভার সমস্যা', 'error'); }
+}
+
+async function doResetPassword() {
+    const phone = document.getElementById('resetPhone').value.trim();
+    const nid = document.getElementById('resetNid').value.trim();
+    const newPass = document.getElementById('resetPass').value;
+
+    if (!phone || !nid || !newPass) { showToast('সবগুলো তথ্য পূরণ করুন', 'error'); return; }
+    if (nid.length !== 10) { showToast('NID অবশ্যই ১০ ডিজিটের হতে হবে', 'error'); return; }
+
+    try {
+        const d = await apiPost('/api/auth/reset-password', { phone, nid, newPassword: newPass });
+        if (d.success) {
+            showToast('✅ পাসওয়ার্ড সফলভাবে আপডেট করা হয়েছে! লগইন করুন');
+            switchAuthTab('login', document.getElementById('tabLogin'));
+        } else {
+            showToast(d.message || 'পাসওয়ার্ড রিসেট ব্যর্থ (তথ্য মেলেনি)', 'error');
+        }
+    } catch (e) { 
+        showToast('UI Demo: Password reset API might not be configured, but UI is ready.', 'error');
+    }
 }
 
 // ─── Injected Global Styles ───────────────────────────────────────────────────
@@ -622,8 +689,26 @@ _globalStyle.textContent = `
 .submit-btn:hover{background:var(--green-neon);color:var(--bg-deep);transform:translateY(-2px);}
 .submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 
-/* Toast */
-.toast{position:fixed;bottom:30px;right:30px;padding:12px 20px;background:rgba(2,10,5,0.97);border:1px solid var(--green-neon);border-radius:8px;color:var(--green-neon);font-size:0.82rem;z-index:9999;display:none;animation:slideUp 0.3s ease;box-shadow:var(--glow-green);font-family:'Noto Sans Bengali',sans-serif;max-width:320px;}
-.toast.error{border-color:var(--red-neon);color:var(--red-neon);box-shadow:var(--glow-red);}
+/* Global Input Theme Fix (No White Boxes) */
+input, select, textarea {
+    background: rgba(0, 255, 136, 0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-primary) !important;
+    border-radius: 8px;
+    padding: 10px;
+    outline: none;
+    transition: all 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+    border-color: var(--green-neon) !important;
+    box-shadow: 0 0 10px rgba(0,255,136,0.2) !important;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(2);
+}
+select option {
+    background: #021008;
+    color: var(--text-primary);
+}
 `;
 document.head.appendChild(_globalStyle);

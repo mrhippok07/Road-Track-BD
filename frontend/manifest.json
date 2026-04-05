@@ -1,0 +1,21 @@
+{
+  "name": "Road Track BD",
+  "short_name": "RoadTrack",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020a05",
+  "theme_color": "#00ff88",
+  "description": "বাংলাদেশের সকল রাস্তার লাইভ আপডেট এবং সমস্যা রিপোর্ট করার প্ল্যাটফর্ম।",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

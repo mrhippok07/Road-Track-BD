@@ -1,51 +1,32 @@
 # Road Track BD 🛣️🇧🇩
 
-[English Version Below]
-
 ## বাংলা বিবরণ (Bengali Description)
 
-**Road Track BD** একটি নাগরিক সেবা প্ল্যাটফর্ম যা বাংলাদেশের রাস্তাঘাট, ব্রিজ এবং অন্যান্য অবকাঠামোগত সমস্যা সরাসরি ম্যাপে রিপোর্ট করার সুবিধা দেয়। এটি সাধারণ নাগরিক, স্বেচ্ছাসেবক এবং সরকারি কর্তৃপক্ষের মধ্যে একটি স্বচ্ছ সেতু হিসেবে কাজ করে।
+**Road Track BD** একটি নাগরিক সেবা প্ল্যাটফর্ম যা বাংলাদেশের ১৮ কোটি জনগণের কল্যাণে এই উদ্যোগটি গ্রহণ করা হয়েছে। আপনার আশেপাশে যত ভাঙা রাস্তা, বড় গর্ত, পানি জমা, ঝুঁকিপূর্ণ, কাঁচা রাস্তা, সংকীর্ণ রাস্তা (যেখানে গাড়ি ঘোড়া চলাচল সমস্যা) ইত্যাদি রয়েছে — তা এই প্ল্যাটফর্মে রিপোর্ট করতে পারবেন।
 
-### 🌟 প্রধান বৈশিষ্ট্যসমূহ:
-- **লাইভ স্যাটেলাইট ম্যাপ:** রিয়েল-টাইম গুগল ম্যাপে সব রিপোর্ট লাল (বাকি), নীল (চলছে) এবং সবুজ (সম্পন্ন) ডট হিসেবে দেখা যায়।
-- **৩০ দিনের অটো-ডিলিট:** সিস্টেমকে সচল ও পরিষ্কার রাখতে যেকোনো রিপোর্ট ৩০ দিন পর স্বয়ংক্রিয়ভাবে মুছে যায়।
-- **নিরাপদ রেজিস্ট্রেশন:** স্প্যাম রোধে ১০ সংখ্যার এনআইডি (NID) নম্বর ও জন্ম তারিখ ব্যবহার বাধ্যতামূলক।
-- **চর এলাকা উন্নয়ন:** বিশেষ করে চরাঞ্চলের জন্য আলাদা রিপোর্টিং ব্যবস্থা (স্কুল, রাস্তা, বাঁধ ইত্যাদি)।
-- **পাসওয়ার্ড রিসেট:** ফোন নম্বর ও এনআইডি ভেরিফিকেশনের মাধ্যমে সহজেই পাসওয়ার্ড পরিবর্তন করা সম্ভব।
+### 🌟 প্রধান বৈশিষ্ট্য ও গাইডলাইন:
+- **রিপোর্টের সুফল:** এই স্থানে সমস্যার রিপোর্ট করলে, সরকারি কর্মকর্তারা তা যাচাই করে ঠিকাদারদের নির্দেশ দিতে পারবেন। অথবা জনগণ নিজ উদ্যোগে ঠিকাদারদের কন্টাক্ট নিয়ে তাদের সমস্যা সমাধান করতে পারবেন।
+- **স্বেচ্ছাসেবক ও লাইভ লোকেশন:** স্বেচ্ছাসেবকরা রাস্তার সমস্যাগুলো নিয়ে রিপোর্ট করবেন এবং ম্যাপে লাইভ লোকেশন মার্ক করে দেবেন।
+- **অ্যাকাউন্ট ও সুরক্ষিত তথ্য:** একটি ইউনিভার্সাল প্রোফাইল আইকনের মাধ্যমে ব্যবহারকারীরা তাদের তথ্য পূরণ করে অ্যাকাউন্ট খুলবেন। তাদের সম্পূর্ণ তথ্য সুরক্ষিত থাকবে।
+- **আইনি ব্যবস্থা (সতর্কতা):** কেউ ফেক রিপোর্ট করতে পারবে না। ফেক রিপোর্ট প্রমাণিত হলে তাদের যাবতীয় তথ্য যাচাই করে যথাযথ আইনগত ব্যবস্থা নেওয়া হবে।
+- **৩০ দিনের অটো-ডিলিট:** সিস্টেমকে পরিষ্কার রাখতে কোনো রিপোর্ট সমাধান ছাড়া ৩০ দিন ফেলে রাখা হলে তা মুছে যাবে।
 
-### 🛠️ টেকনিক্যাল সেটআপ (ম্যানুয়াল)
-১. `npm install` দিয়ে প্যাকেজগুলো ইন্সটল করুন।
-২. একটি `.env` ফাইল তৈরি করুন এবং নিচের তথ্যগুলো দিন:
-   ```env
-   PORT=3000
-   GOOGLE_MAPS_API_KEY=YOUR_KEY_HERE
-   JWT_SECRET=any_strong_key_here
-   ```
-৩. `npm start` দিয়ে প্রজেক্ট রান করুন।
+### সাপোর্ট (Support the Project) ☕
+এ প্রজেক্টটি আপনার উপকারে আসলে আপনি চাইলে সাহায্যের জন্য আমার বাইন্যান্স ওয়ালেটে ডোনেট করতে পারেন:
 
----
+| Asset | Network | Wallet Address |
+| :--- | :--- | :--- |
+| **USDT** | TRC20 / BEP20 | `0x148e2e6c1cb0f318a896521200a7d03e0ce6ba31` |
+| **BTC** | Bitcoin | `1G3u8LQiYiigS9PANuYk6QdVVTZbGVQAsC` |
+| **BNB** | BEP20 | `0x148e2e6c1cb0f318a896521200a7d03e0ce6ba31` |
+| **ETH** | ERC20 | `0x148e2e6c1cb0f318a896521200a7d03e0ce6ba31` |
+| **SOL** | Solana | `2cH9yq4nTtDMEWNtc6jxywPyjiDqx87MUuMQPdfZzZ5p` |
 
-## English Description
+*পড়াশোনা ও প্রজেক্টটির অগ্রগতির জন্য আপনার সমর্থন আমার অনেক কাম্য!* 🇧🇩
 
-**Road Track BD** is a citizen service platform designed to monitor and report road damages, broken bridges, and other infrastructure issues in Bangladesh. It bridges the gap between citizens, volunteers, and government authorities.
+website is: https://roadtrackbd.com  
+facebook: https://www.facebook.com/mr.hippok07  
+facebook page: https://www.facebook.com/HippoksF&HBT Ecosystem  
 
-### 🌟 Key Features:
-- **Live Satellite Map:** Real-time visualization of reports using Red (Pending), Blue (Repairing), and Green (Done) markers.
-- **30-Day Auto-Cleanup:** Reports are automatically cleared after 30 days to keep the system updated.
-- **Verified Registration:** Mandatory 10-digit NID and Date of Birth to prevent fake reports.
-- **Chor Area Focus:** Dedicated reporting category for remote "Chor" areas (Schools, Embankments, Roads, etc.).
-- **NID-based Password Reset:** Secure account recovery using Phone & NID verification.
-
-### 🛠️ Manual Setup
-1. Run `npm install` to set up dependencies.
-2. Create a `.env` file and add:
-   ```env
-   PORT=3000
-   GOOGLE_MAPS_API_KEY=YOUR_KEY_HERE
-   JWT_SECRET=any_strong_key_here
-   ```
-3. Run `npm start` to launch the application.
-
----
-**Developed by: Mr. Hippok07** 🇧🇩  
-[Support the Project](https://www.buymeacoffee.com/YOUR_USERNAME)
+*Built for a better Bangladesh.* 🇧🇩  
+**Developed by: Mr. Hippok07 Founder Of HippoksF&HBT Ecosystem** 🇧🇩

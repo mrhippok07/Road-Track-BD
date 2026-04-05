@@ -357,14 +357,15 @@
         </div>
         <div id="navRight" style="display:flex;gap:10px;align-items:center;">
             <div class="nav-status"><div class="status-dot"></div><span data-i18n="nav.live">লাইভ</span></div>
-            <button class="nav-btn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>
+            <div class="profile-btn" id="authBtn" onclick="openAuthModal()" title="লগইন / প্রোফাইল">
+                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+            </div>
         </div>
     </nav>
 
     <main>
         <div class="page-header">
             <h1 data-i18n="vol.title">🤝 স্বেচ্ছাসেবক ও ঠিকাদার</h1>
-            <a id="joinBannerBtn" href="javascript:void(0)" onclick="openAuthModal()" class="join-btn" data-i18n="vol.join">➕ যোগ দিন</a>
         </div>
         <div class="filter-row">
             <button class="filter-chip active" onclick="filterVols('all',this)">সবাই</button>
@@ -422,10 +423,6 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             renderNavAuth(); injectLangToggle('nav'); applyLang();
-            if (getUser()) {
-                const btn = document.getElementById('joinBannerBtn');
-                if (btn) btn.style.display = 'none';
-            }
             loadVols();
         });
     </script>

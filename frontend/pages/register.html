@@ -323,24 +323,28 @@
             font-family: 'Exo 2', sans-serif;
         }
 
-        input,
-        select {
-            background: rgba(0, 255, 136, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
+        input, select, textarea {
+            background: rgba(0, 255, 136, 0.05) !important;
+            border: 1px solid var(--glass-border) !important;
+            color: var(--text-primary) !important;
+            border-radius: 8px;
             padding: 10px 14px;
-            color: var(--text-primary);
-            font-family: 'Noto Sans Bengali', sans-serif;
-            font-size: 0.82rem;
-            outline: none;
-            transition: all 0.25s;
+            font-size: 0.85rem;
             width: 100%;
+            outline: none;
+            transition: all 0.2s;
         }
-
-        input:focus,
-        select:focus {
-            border-color: var(--green-neon);
-            background: rgba(0, 255, 136, 0.06);
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--green-neon) !important;
+            background: rgba(0, 255, 136, 0.08) !important;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(2);
+            cursor: pointer;
+        }
+        .modal-box, #registerPanel, #loginPanel, #resetPanel {
+            background: #021008 !important;
+            color: var(--text-primary) !important;
         }
 
         select option {
@@ -445,8 +449,8 @@
         <div class="right-col">
             <div class="auth-card">
                 <div class="auth-tabs">
-                    <button class="auth-tab active" onclick="switchTab('register',this)">নিবন্ধন করুন</button>
-                    <button class="auth-tab" onclick="switchTab('login',this)">লগইন করুন</button>
+                    <button class="auth-tab active" onclick="switchAuthTabPage('register',this)">নিবন্ধন করুন</button>
+                    <button class="auth-tab" onclick="switchAuthTabPage('login',this)">লগইন করুন</button>
                 </div>
 
                 <div id="registerPanel">
@@ -477,8 +481,8 @@
                         <div class="form-group"><label>পাসওয়ার্ড নিশ্চিত *</label><input type="password" id="regPass2"
                                 placeholder="পুনরায় লিখুন"></div>
                     </div>
-                    <button class="submit-btn" id="regBtn" onclick="doRegister()">সাবমিট করুন</button>
-                    <div class="switch-link">ইতিমধ্যে অ্যাকাউন্ট আছে? <button onclick="switchTab('login',null)">লগইন
+                    <button class="submit-btn" id="regBtn" onclick="doRegisterPage()">সাবমিট করুন</button>
+                    <div class="switch-link">ইতিমধ্যে অ্যাকাউন্ট আছে? <button onclick="switchAuthTabPage('login',null)">লগইন
                             করুন</button></div>
                 </div>
 
@@ -490,8 +494,8 @@
                     <div style="text-align:right; margin-bottom:16px;">
                         <button onclick="openResetModal()" style="background:none; border:none; color:var(--text-muted); font-size:0.7rem; cursor:pointer; text-decoration:underline;">পাসওয়ার্ড ভুলে গেছেন?</button>
                     </div>
-                    <button class="submit-btn" id="loginBtn" onclick="doLogin()">লগইন করুন</button>
-                    <div class="switch-link">নতুন ব্যবহারকারী? <button onclick="switchTab('register',null)">নিবন্ধন
+                    <button class="submit-btn" id="loginBtn" onclick="doLoginPage()">লগইন করুন</button>
+                    <div class="switch-link">নতুন ব্যবহারকারী? <button onclick="switchAuthTabPage('register',null)">নিবন্ধন
                             করুন</button></div>
                 </div>
 
@@ -500,8 +504,8 @@
                     <div class="form-group"><label>ফোন নম্বর</label><input type="tel" id="resetPhone" placeholder="০১৮XXXXXXXX"></div>
                     <div class="form-group"><label>এনআইডি নম্বর</label><input type="text" id="resetNid" placeholder="১০ সংখ্যার এনআইডি"></div>
                     <div class="form-group"><label>নতুন পাসওয়ার্ড</label><input type="password" id="resetPass" placeholder="কমপক্ষে ৬ অক্ষর"></div>
-                    <button class="submit-btn" id="resetBtn" onclick="doReset()">পাসওয়ার্ড পরিবর্তন করুন</button>
-                    <div class="switch-link"><button onclick="switchTab('login',null)">লগইন পেজে ফিরুন</button></div>
+                    <button class="submit-btn" id="resetBtn" onclick="doResetPage()">পাসওয়ার্ড পরিবর্তন করুন</button>
+                    <div class="switch-link"><button onclick="switchAuthTabPage('login',null)">লগইন পেজে ফিরুন</button></div>
                 </div>
             </div>
         </div>
@@ -510,7 +514,7 @@
     <div class="toast" id="toast"></div>
     <script src="/assets/js/main.js"></script>
     <script>
-        function switchTab(tab, btn) {
+        function switchAuthTabPage(tab, btn) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             if (btn) btn.classList.add('active');
             else if (tab === 'register' || tab === 'login') document.querySelectorAll('.auth-tab')[tab === 'register' ? 0 : 1].classList.add('active');
@@ -521,7 +525,7 @@
         }
 
         function openResetModal() {
-            switchTab('reset', null);
+            switchAuthTabPage('reset', null);
         }
 
         function selectRole(btn) {
@@ -530,7 +534,7 @@
             document.getElementById('selectedRole').value = btn.dataset.role;
         }
 
-        async function doRegister() {
+        async function doRegisterPage() {
             const name = document.getElementById('regName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
             const dob = document.getElementById('regDob').value;
@@ -540,7 +544,7 @@
             const role = document.getElementById('selectedRole').value;
             
             if (!name || !phone || !pass || !dob || !nid) { showToast('সব বাধ্যতামূলক তথ্য দিন', 'error'); return; }
-            if (nid.length !== 10) { showToast('আপনার ১০ সংখ্যার সঠিক এনআইডি নাম্বার দিন', 'error'); return; }
+            if (nid.length !== 10 || isNaN(nid)) { showToast('আপনার ১০ সংখ্যার সঠিক এনআইডি নাম্বার দিন', 'error'); return; }
             if (pass !== pass2) { showToast('পাসওয়ার্ড মিলছে না', 'error'); return; }
             if (pass.length < 6) { showToast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error'); return; }
             
@@ -562,7 +566,7 @@
             btn.disabled = false; btn.textContent = 'সাবমিট করুন';
         }
 
-        async function doReset() {
+        async function doResetPage() {
             const phone = document.getElementById('resetPhone').value.trim();
             const nid = document.getElementById('resetNid').value.trim();
             const newPassword = document.getElementById('resetPass').value;
@@ -575,7 +579,7 @@
                 const d = await apiPost('/api/auth/reset-password', { phone, nid, newPassword });
                 if (d.success) {
                     showToast('✅ পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে। লগইন করুন।');
-                    setTimeout(() => switchTab('login', null), 2000);
+                    setTimeout(() => switchAuthTabPage('login', null), 2000);
                 } else {
                     showToast(d.message || 'রিসেট ব্যর্থ হয়েছে', 'error');
                 }
@@ -583,7 +587,7 @@
             btn.disabled = false; btn.textContent = 'পাসওয়ার্ড পরিবর্তন করুন';
         }
 
-        async function doLogin() {
+        async function doLoginPage() {
             const phone = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value;
             if (!phone || !pass) { showToast('ফোন ও পাসওয়ার্ড দিন', 'error'); return; }

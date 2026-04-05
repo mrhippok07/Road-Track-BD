@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Road Track BD — জাতীয় রাস্তা পর্যবেক্ষণ প্ল্যাটফর্ম</title>
+    <meta name="theme-color" content="#020a05">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <title>Road Track BD — বাংলাদেশের সকল রাস্তার লাইভ আপডেট</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap"
@@ -1074,18 +1077,27 @@
         .loader-ring::after {
             content: '';
             position: absolute;
-            top: 50%; left: 50%;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            width: 24px; height: 24px;
+            width: 24px;
+            height: 24px;
             background: #ff1744;
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255,23,68,0.6);
+            box-shadow: 0 0 10px rgba(255, 23, 68, 0.6);
             animation: pulse-red 0.8s infinite alternate;
         }
 
         @keyframes pulse-red {
-            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
-            to { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            from {
+                transform: translate(-50%, -50%) scale(0.9);
+                opacity: 0.8;
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
         }
 
         @keyframes spin {
@@ -1191,10 +1203,11 @@
             .hud-side-panels {
                 flex-direction: column;
             }
-            
+
             #whiteboxTrigger span:last-child {
                 display: none;
             }
+
             #whiteboxTrigger {
                 padding: 8px;
             }
@@ -1232,35 +1245,20 @@
             <a class="nav-link" href="/volunteer" data-i18n="nav.volunteer">স্বেচ্ছাসেবক</a>
         </div>
         <div style="display:flex;gap:10px;align-items:center;">
-            <div id="whiteboxTrigger" onclick="openModal('whiteboxModal')" style="cursor:pointer; display:flex; align-items:center; gap:5px; padding:5px 10px; border:1px solid var(--green-neon); border-radius:4px; font-size:0.75rem; color:var(--green-neon); background:rgba(0,255,136,0.05);">
+            <div id="whiteboxTrigger" onclick="openWhiteboxModal()"
+                style="cursor:pointer; display:flex; align-items:center; gap:5px; padding:5px 10px; border:1px solid var(--green-neon); border-radius:4px; font-size:0.75rem; color:var(--green-neon); background:rgba(0,255,136,0.05);">
                 <span>ℹ️</span> <span>এটি কীভাবে কাজ করে?</span>
             </div>
-            <div class="nav-status">
-                <div class="status-dot"></div><span id="liveCount">লাইভ</span>
+            <div id="navRight" style="display:flex;gap:10px;align-items:center;">
+                <div class="nav-status">
+                    <div class="status-dot"></div><span id="liveCount">লাইভ</span>
+                </div>
+                <div class="profile-btn" id="authBtn" onclick="openAuthModal()" title="লগইন / প্রোফাইল">
+                    <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+                </div>
             </div>
-            <button class="nav-btn" id="authBtn" onclick="openAuthModal()" data-i18n="nav.login">প্রবেশ করুন</button>
         </div>
     </nav>
-
-    <!-- Whitebox Modal -->
-    <div id="whiteboxModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(10px);">
-        <div class="modal-content" style="background:var(--bg-panel); border:1px solid var(--glass-border); padding:2rem; border-radius:16px; max-width:600px; width:90%; position:relative;">
-            <button onclick="closeModal('whiteboxModal')" style="position:absolute; top:15px; right:15px; background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
-            <div class="modal-title" style="font-family:'Exo 2',sans-serif; color:var(--green-neon); font-size:1.2rem; margin-bottom:1.5rem; text-transform:uppercase; letter-spacing:2px;">এটি কীভাবে কাজ করে? (How it Works)</div>
-            <div style="font-family:'Noto Sans Bengali',sans-serif; line-height:1.8; color:var(--text-primary); font-size:0.95rem;">
-                <div style="margin-bottom:1.2rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
-                    <strong style="color:var(--green-neon);">১. রিপোর্ট প্রদান:</strong> যেকোনো নাগরিক বা স্বেচ্ছাসেবক জিপিএস লোকেশন ও ছবির মাধ্যমে রাস্তার সমস্যা (যেমন: গর্ত, ভাঙা রাস্তা, চরে সংস্কার প্রয়োজন) রিপোর্ট করতে পারেন।
-                </div>
-                <div style="margin-bottom:1.2rem; background:rgba(255,23,68,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--red-neon);">
-                    <strong style="color:var(--red-neon);">২. জবাবদিহিতা:</strong> প্রতিটি রিপোর্ট ম্যাপে লাইভ দেখা যাবে। ডটের রং দেখে সংস্কারের অবস্থা বোঝা যাবে (লাল = বাকি, নীল = চলছে, সবুজ = সম্পন্ন)।
-                </div>
-                <div style="margin-bottom:1.2rem; background:rgba(0,176,255,0.05); padding:12px; border-radius:8px; border-left:4px solid #00b0ff;">
-                    <strong style="color:#00b0ff;">৩. ৩০ দিনের নিয়ম:</strong> সার্ভার ক্লিন রাখতে কোনো রিপোর্ট জমা হওয়ার পরবর্তী ৩০ দিন পর সেটি ম্যাপ থেকে স্বয়ংক্রিয়ভাবে মুছে যাবে।
-                </div>
-                <p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:1rem;">নিরাপত্তার স্বার্থে রেজিস্ট্রেশনে সঠিক ১০ সংখ্যার এনআইডি নম্বর ব্যবহার করুন।</p>
-            </div>
-        </div>
-    </div>
 
     <main>
         <section class="hero-section">
@@ -1275,11 +1273,6 @@
                 <p>ভাঙ্গা রাস্তা রিপোর্ট করুন — দেশ গড়ুন</p>
             </div>
             <div class="motivation-strip">
-                <div class="map-legend">
-                    <div class="legend-item"><div class="legend-dot" style="background:#ff1744"></div><span>বাকি (Pending)</span></div>
-                    <div class="legend-item"><div class="legend-dot" style="background:#2196f3"></div><span>চলছে (Repairing)</span></div>
-                    <div class="legend-item"><div class="legend-dot" style="background:#00ff88"></div><span>সম্পন্ন (Done)</span></div>
-                </div>
                 <div class="moto-card"><span class="icon">🛣️</span>Road Track BD-তে স্বাগতম। দেশের উন্নয়নে আপনার
                     রিপোর্ট গুরুত্বপূর্ণ।</div>
                 <div class="moto-card"><span class="icon">🤝</span>একটি রিপোর্ট বদলে দিতে পারে হাজারো মানুষের জীবন।
@@ -1296,49 +1289,74 @@
                     <div class="map-overlay-tr"></div>
                     <div class="map-overlay-bl"></div>
                     <div class="map-overlay-br"></div>
-                <div class="map-hud-label" data-i18n="map.liveLabel">LIVE SATELLITE MAP — BANGLADESH</div>
-                <div id="map"></div>
-                <div class="map-controls">
-                    <button class="map-btn" onclick="getGeoLocation()"><span data-i18n="map.myLocation">📍 আমার অবস্থান</span></button>
+                    <div class="map-hud-label" data-i18n="map.liveLabel">LIVE SATELLITE MAP — BANGLADESH</div>
+                    <div id="map"></div>
+                    <div class="map-controls">
+                        <button class="map-btn" onclick="getGeoLocation()"><span data-i18n="map.myLocation">📍 আমার
+                                অবস্থান</span></button>
+                    </div>
                 </div>
-            </div>
-            <div class="map-legend">
-                <div class="legend-item"><div class="legend-dot" style="background:#ff1744"></div><span data-i18n="type.broken">বাকি (Pending)</span></div>
-                <div class="legend-item"><div class="legend-dot" style="background:#00b0ff"></div><span data-i18n="status.repair.dot">চলছে (Repairing)</span></div>
-                <div class="legend-item"><div class="legend-dot" style="background:#00ff88"></div><span data-i18n="status.done.dot">সম্পন্ন (Done)</span></div>
-            </div>
-            <div class="hud-side-panels">
-                <div class="hud-panel">
-                    <div class="panel-label" data-i18n="map.totalRep">মোট রিপোর্ট</div>
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:#ff1744"></div><span data-i18n="type.broken">বাকি
+                            (Pending)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:#00b0ff"></div><span
+                            data-i18n="status.repair.dot">চলছে (Repairing)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:#00ff88"></div><span
+                            data-i18n="status.done.dot">সম্পন্ন (Done)</span>
+                    </div>
+                </div>
+                <div class="hud-side-panels" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; width:100%;">
+                    <div class="hud-panel">
+                        <div class="panel-label" data-i18n="map.totalRep">মোট রিপোর্ট</div>
                         <div class="panel-value" id="totalCount">0</div>
-                    <div class="panel-sub" data-i18n="nav.report">সর্বমোট জমা রিপোর্ট</div>
-                    <div class="panel-bar">
-                        <div class="panel-bar-fill" id="totalBar" style="width:0%"></div>
-                    </div>
-                </div>
-                <div class="hud-panel">
-                    <div class="panel-label" data-i18n="map.todayRep">আজকের রিপোর্ট</div>
-                    <div class="panel-value" id="todayCount">0</div>
-                    <div class="panel-sub" data-i18n="nav.report">আজ জমা পড়েছে</div>
-                    <div class="panel-bar">
-                        <div class="panel-bar-fill" id="todayBar" style="width:0%"></div>
-                    </div>
-                </div>
-                <div class="hud-panel">
-                    <div class="panel-label" data-i18n="map.pendingRep">মেরামত বাকি</div>
-                    <div class="panel-value red" id="pendingCount">0</div>
-                    <div class="panel-sub" data-i18n="status.pending">Pending রাস্তা</div>
-                    <div class="panel-bar">
-                            <div class="panel-bar-fill"
-                                style="background:linear-gradient(90deg,#b71c1c,#ff1744);width:60%"></div>
+                        <div class="panel-sub" data-i18n="nav.report">সর্বমোট জমা রিপোর্ট</div>
+                        <div class="panel-bar">
+                            <div class="panel-bar-fill" id="totalBar" style="width:0%"></div>
                         </div>
                     </div>
                     <div class="hud-panel">
-                        <div class="panel-label">সম্পন্ন মেরামত</div>
-                        <div class="panel-value" id="resolvedCount">0</div>
-                        <div class="panel-sub">সংস্কার হয়েছে</div>
+                        <div class="panel-label" data-i18n="map.todayRep">আজকের রিপোর্ট</div>
+                        <div class="panel-value" id="todayCount">0</div>
+                        <div class="panel-sub" data-i18n="nav.report">আজ জমা পড়েছে</div>
                         <div class="panel-bar">
-                            <div class="panel-bar-fill" style="width:40%"></div>
+                            <div class="panel-bar-fill" id="todayBar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="hud-panel">
+                        <div class="panel-label" data-i18n="map.pendingRep">মেরামত বাকি</div>
+                        <div class="panel-value" id="pendingCount" style="color:var(--red-neon);">0</div>
+                        <div class="panel-sub" data-i18n="status.pending">পেন্ডিং কাজ</div>
+                        <div class="panel-bar">
+                            <div class="panel-bar-fill" id="pendingBar" style="background:linear-gradient(90deg,#b71c1c,#ff1744);width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="hud-panel">
+                        <div class="panel-label" style="color:#2196f3;">মেরামত চলছে</div>
+                        <div class="panel-value" id="underRepairCount" style="color:#2196f3;">0</div>
+                        <div class="panel-sub">সংস্কার কাজ চলমান</div>
+                        <div class="panel-bar" style="background:rgba(33, 150, 243, 0.1);">
+                            <div class="panel-bar-fill" id="underRepairBar" style="background:linear-gradient(90deg, #1976d2, #2196f3); width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="hud-panel">
+                        <div class="panel-label" style="color:var(--green-neon);">সম্পন্ন মেরামত</div>
+                        <div class="panel-value" id="resolvedCount" style="color:var(--green-neon);">0</div>
+                        <div class="panel-sub">কাজ সম্পন্ন হয়েছে</div>
+                        <div class="panel-bar">
+                            <div class="panel-bar-fill" id="resolvedBar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="hud-panel">
+                        <div class="panel-label" style="color:#00f2ff;">মোট জনমতামত</div>
+                        <div class="panel-value" id="opinionCount" style="color:#00f2ff;">0</div>
+                        <div class="panel-sub">পাবলিক ফিডব্যাক</div>
+                        <div class="panel-bar" style="background:rgba(0, 242, 255, 0.1);">
+                            <div class="panel-bar-fill" id="opinionBar" style="background:linear-gradient(90deg, #00acc1, #00f2ff); width:0%"></div>
                         </div>
                     </div>
                 </div>
@@ -1413,14 +1431,22 @@
                 </div>
             </div>
             <div class="filter-row">
-                <button class="filter-chip active" onclick="filterReportsList('all',this)" data-i18n="feed.all">সব</button>
-                <button class="filter-chip" onclick="filterReportsList('broken',this)" data-i18n="type.broken">ভাঙা রাস্তা</button>
-                <button class="filter-chip" onclick="filterReportsList('pothole',this)" data-i18n="type.pothole">বড় গর্ত</button>
-                <button class="filter-chip" onclick="filterReportsList('waterlogged',this)" data-i18n="type.waterlogged">পানি জমা</button>
-                <button class="filter-chip" onclick="filterReportsList('dangerous',this)" data-i18n="type.dangerous">ঝুঁকিপূর্ণ</button>
-                <button class="filter-chip" onclick="filterReportsList('bridge_repair',this)" data-i18n="feed.bridge">ব্রিজ</button>
-                <button class="filter-chip" onclick="filterReportsList('canal_large',this)" data-i18n="feed.canal">খাল</button>
-                <button class="filter-chip" onclick="filterReportsList('tube_well_needed',this)" data-i18n="feed.tubewell">নলকূপ</button>
+                <button class="filter-chip active" onclick="filterReportsList('all',this)"
+                    data-i18n="feed.all">সব</button>
+                <button class="filter-chip" onclick="filterReportsList('broken',this)" data-i18n="type.broken">ভাঙা
+                    রাস্তা</button>
+                <button class="filter-chip" onclick="filterReportsList('pothole',this)" data-i18n="type.pothole">বড়
+                    গর্ত</button>
+                <button class="filter-chip" onclick="filterReportsList('waterlogged',this)"
+                    data-i18n="type.waterlogged">পানি জমা</button>
+                <button class="filter-chip" onclick="filterReportsList('dangerous',this)"
+                    data-i18n="type.dangerous">ঝুঁকিপূর্ণ</button>
+                <button class="filter-chip" onclick="filterReportsList('bridge_repair',this)"
+                    data-i18n="feed.bridge">ব্রিজ</button>
+                <button class="filter-chip" onclick="filterReportsList('canal_large',this)"
+                    data-i18n="feed.canal">খাল</button>
+                <button class="filter-chip" onclick="filterReportsList('tube_well_needed',this)"
+                    data-i18n="feed.tubewell">নলকূপ</button>
             </div>
             <div class="report-list" id="reportList">
                 <div style="color:var(--text-muted);font-size:0.8rem;grid-column:1/-1;text-align:center;padding:2rem;">
@@ -1472,7 +1498,9 @@
         </div>
         <div class="footer-brand">ROAD TRACK BD</div>
         <p>জাতীয় রাস্তা পর্যবেক্ষণ ও রিপোর্টিং প্ল্যাটফর্ম<br>দেশের প্রতিটি ভাঙ্গা রাস্তার তথ্য সংগ্রহ, সংরক্ষণ এবং
-            সমাধানের পথ দেখানোর উদ্যোগ<br><br>একটি জাতীয় কল্যাণমূলক উদ্যোগ &nbsp;|&nbsp; বাংলাদেশ</p>
+            সমাধানের পথ দেখানোর উদ্যোগ<br><br>একটি জাতীয় কল্যাণমূলক উদ্যোগ &nbsp;|&nbsp; Developed by: Mr. Hippok07
+            Founder Of HippoksF&HBT Ecosystem বাংলাদেশ
+        </p>
     </footer>
 
 
@@ -1482,37 +1510,64 @@
     <script>
         let gMap = null, gInfoWindow = null, userMarker = null, userWatchId = null;
         let mapMarkers = [];
+        let _mapInitialized = false;
 
         window.initGoogleMap = function () {
-            gMap = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 23.685, lng: 90.356 }, zoom: 7,
-                mapTypeId: 'hybrid',
-                mapTypeControl: true,
-                mapTypeControlOptions: { mapTypeIds: ['hybrid', 'roadmap'], position: google.maps.ControlPosition.TOP_RIGHT },
-                streetViewControl: false, fullscreenControl: false,
-                zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM }
-            });
-            gInfoWindow = new google.maps.InfoWindow();
-            loadMarkersOnMap();
+            if (_mapInitialized) {
+                // Already init — just trigger resize to fix blank tiles on navigation
+                if (gMap) {
+                    google.maps.event.trigger(gMap, 'resize');
+                    gMap.setCenter({ lat: 23.685, lng: 90.356 });
+                }
+                return;
+            }
+            _mapInitialized = true;
 
-            // Setup real-time user location
-            if (navigator.geolocation) {
-                userWatchId = navigator.geolocation.watchPosition(pos => {
-                    const lat = pos.coords.latitude, lng = pos.coords.longitude;
-                    if (!userMarker) {
-                        userMarker = new google.maps.Marker({
-                            position: {lat, lng}, map: gMap, title: typeof getLang === 'function' && getLang() === 'en' ? 'You are here' : 'আপনি এখানে আছেন',
-                            icon: { path: google.maps.SymbolPath.CIRCLE, scale: 9, fillColor: '#2196f3', fillOpacity: 1, strokeWeight: 2, strokeColor: '#ffffff' },
-                            zIndex: 9999
-                        });
-                    } else {
-                        userMarker.setPosition({lat, lng});
-                    }
-                }, () => {}, { enableHighAccuracy: true });
+            const mapEl = document.getElementById('map');
+            if (!mapEl) { _mapInitialized = false; return; }
+
+            try {
+                gMap = new google.maps.Map(mapEl, {
+                    center: { lat: 23.685, lng: 90.356 }, zoom: 7,
+                    mapTypeId: 'hybrid',
+                    mapTypeControl: true,
+                    mapTypeControlOptions: { mapTypeIds: ['hybrid', 'roadmap'], position: google.maps.ControlPosition.TOP_RIGHT },
+                    streetViewControl: false, fullscreenControl: false,
+                    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM }
+                });
+                gInfoWindow = new google.maps.InfoWindow();
+
+                // Force map tile refresh after brief delay (fixes blank tiles after navigation)
+                setTimeout(() => {
+                    google.maps.event.trigger(gMap, 'resize');
+                    gMap.setCenter({ lat: 23.685, lng: 90.356 });
+                }, 250);
+
+                loadMarkersOnMap();
+
+                // Setup real-time user location
+                if (navigator.geolocation) {
+                    userWatchId = navigator.geolocation.watchPosition(pos => {
+                        const lat = pos.coords.latitude, lng = pos.coords.longitude;
+                        if (!userMarker) {
+                            userMarker = new google.maps.Marker({
+                                position: { lat, lng }, map: gMap, title: typeof getLang === 'function' && getLang() === 'en' ? 'You are here' : 'আপনি এখানে আছেন',
+                                icon: { path: google.maps.SymbolPath.CIRCLE, scale: 9, fillColor: '#2196f3', fillOpacity: 1, strokeWeight: 2, strokeColor: '#ffffff' },
+                                zIndex: 9999
+                            });
+                        } else {
+                            userMarker.setPosition({ lat, lng });
+                        }
+                    }, () => { }, { enableHighAccuracy: true });
+                }
+            } catch(err) {
+                console.error('Map init error:', err);
+                _mapInitialized = false;
+                mapEl.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:2rem;padding-top:200px;">ম্যাপ লোড ব্যর্থ হয়েছে - পেজটি রিফ্রেশ করুন</div>';
             }
         };
 
-        window.getGeoLocation = function() {
+        window.getGeoLocation = function () {
             if (!userMarker || !gMap) return;
             gMap.panTo(userMarker.getPosition());
             gMap.setZoom(15);
@@ -1544,7 +1599,7 @@
         <span style="width:8px;height:8px;background:${color};border-radius:50%;display:inline-block;box-shadow:0 0 6px ${color}"></span>
         <span style="font-size:0.65rem;color:${color};">${getStatusLabel(r.status)}</span>
       </div>
-      <a href="/feed" style="display:block;margin-top:8px;padding:5px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:4px;color:#00ff88;font-size:0.65rem;text-decoration:none;text-align:center;">${typeof getLang==='function'&&getLang()==='en'?'View Details →':'বিস্তারিত দেখুন →'}</a>
+      <a href="/feed" style="display:block;margin-top:8px;padding:5px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:4px;color:#00ff88;font-size:0.65rem;text-decoration:none;text-align:center;">${typeof getLang === 'function' && getLang() === 'en' ? 'View Details →' : 'বিস্তারিত দেখুন →'}</a>
     </div>`);
                 gInfoWindow.open(gMap, m);
             });
@@ -1567,16 +1622,27 @@
                     animateCount('totalCount', d.data.total);
                     animateCount('todayCount', d.data.today);
                     animateCount('pendingCount', d.data.pending);
+                    animateCount('underRepairCount', d.data.underRepair || 0);
                     animateCount('resolvedCount', d.data.resolved);
-                    const pct = d.data.total > 0 ? Math.min(100, Math.round(d.data.today / d.data.total * 100 + 20)) : 0;
-                    document.getElementById('totalBar').style.width = Math.min(pct + 50, 95) + '%';
-                    document.getElementById('todayBar').style.width = Math.min(pct, 90) + '%';
+                    animateCount('opinionCount', d.data.totalOpinions || 0);
+
+                    const total = d.data.total || 1;
+                    document.getElementById('totalBar').style.width = '100%';
+                    document.getElementById('todayBar').style.width = Math.min(100, (d.data.today / total * 100) + 10) + '%';
+                    document.getElementById('pendingBar').style.width = Math.min(100, (d.data.pending / total * 100)) + '%';
+                    document.getElementById('underRepairBar').style.width = Math.min(100, (d.data.underRepair / total * 100)) + '%';
+                    document.getElementById('resolvedBar').style.width = Math.min(100, (d.data.resolved / total * 100)) + '%';
+                    
+                    const opTotal = d.data.totalOpinions || 1;
+                    if(document.getElementById('opinionBar')) {
+                        document.getElementById('opinionBar').style.width = '100%';
+                    }
 
                     const tEl = document.getElementById('typeStatsContainer');
                     if (tEl && d.data.byType) {
-                        tEl.innerHTML = Object.entries(d.data.byType).map(([k, v]) => 
+                        tEl.innerHTML = Object.entries(d.data.byType).map(([k, v]) =>
                             `<div style="background:rgba(0,255,136,0.05);border:1px solid var(--glass-border);padding:4px 10px;border-radius:20px;font-size:0.7rem;color:var(--green-neon);">
-                                ${PROBLEM_LABELS[k] || k} : <strong style="color:#fff;">${v}</strong>
+                                ${getProblemLabel(k)} : <strong style="color:#fff;">${v}</strong>
                             </div>`
                         ).join('');
                     }
@@ -1591,15 +1657,18 @@
                 const el = document.getElementById('reportList');
                 if (d.success && d.data.length) {
                     el.innerHTML = d.data.map(r => {
+                        const isOp = r.problemType === 'opinion';
+                        const color = isOp ? '#00f2ff' : (PROBLEM_COLORS[r.problemType] || '#ff1744');
                         const sc = 'status-' + (r.status || 'pending');
                         const sl = { pending: 'বাকি', under_repair: 'চলছে', repaired: 'সম্পন্ন', rejected: 'বাতিল' };
-                        return `<div class="report-item" onclick="focusMapAt(${r.lat},${r.lng})">
+                        
+                        return `<div class="report-item" onclick="focusMapAt(${r.lat},${r.lng})" style="${isOp ? 'border-color:rgba(0,242,255,0.3);box-shadow:0 0 10px rgba(0,242,255,0.05);' : ''}">
           <div class="report-item-header">
-            <div class="report-item-title">${r.roadName}</div>
-            <div class="status-badge ${sc}">${sl[r.status] || r.status}</div>
+            <div class="report-item-title" style="${isOp ? 'color:#00f2ff;' : ''}">${r.roadName}</div>
+            ${!isOp ? `<div class="status-badge ${sc}">${sl[r.status] || r.status}</div>` : `<div style="font-size:0.6rem;color:#00f2ff;border:1px solid rgba(0,242,255,0.3);padding:2px 6px;border-radius:4px;">পাবলিক অভিমত</div>`}
           </div>
           <div class="report-item-meta">📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''}<br>📅 ${formatTime(r.createdAt || r.timestamp)}</div>
-          <div class="report-type-chip">${PROBLEM_LABELS[r.problemType] || r.problemType}</div>
+          <div class="report-type-chip" style="${isOp ? 'background:rgba(0,242,255,0.1);color:#00f2ff;border-color:rgba(0,242,255,0.2);' : ''}">${getProblemLabel(r.problemType)}</div>
         </div>`;
                     }).join('');
                 } else {
@@ -1663,25 +1732,72 @@
                     loadHomeReports();
                     loadHomeStats();
                 });
-                sk.on('active_users', n => { document.getElementById('liveCount').textContent = n + ' লাইভ'; });
+                sk.on('active_users', n => {
+                    const el = document.getElementById('liveCount');
+                    if (el) el.textContent = n + ' লাইভ';
+                });
             });
             loadHomeStats();
             loadHomeReports();
             loadHomeVolunteers();
             setInterval(() => {
                 const now = new Date();
-                document.getElementById('hudTL').innerHTML = 'SYS: ONLINE<br>' + now.toLocaleTimeString('en-US', { hour12: false });
+                const el = document.getElementById('hudTL');
+                if (el) el.innerHTML = 'SYS: ONLINE<br>' + now.toLocaleTimeString('en-US', { hour12: false });
             }, 1000);
-            fetch('/api/config').then(r => r.json()).then(cfg => {
+
+            // Load Google Maps — with double-load protection
+            function loadGoogleMapsScript(cfg) {
+                if (!cfg.googleMapsKey || cfg.googleMapsKey.trim() === '') {
+                    document.getElementById('map').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:2rem;padding-top:200px;">ম্যাপ লোড করতে .env-এ GOOGLE_MAPS_API_KEY সেট করুন</div>';
+                    return;
+                }
+                // Check if already loaded (browser cache / SPA navigation)
+                if (document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
+                    // Script exists — call initGoogleMap if google is ready
+                    if (typeof google !== 'undefined' && google.maps) {
+                        window.initGoogleMap();
+                    }
+                    // else the callback will fire naturally
+                    return;
+                }
                 const sc = document.createElement('script');
-                sc.src = `https://maps.googleapis.com/maps/api/js?key=${cfg.googleMapsKey}&callback=initGoogleMap&language=bn&region=BD`;
-                sc.async = true; sc.defer = true;
+                sc.src = `https://maps.googleapis.com/maps/api/js?key=${cfg.googleMapsKey}&callback=initGoogleMap&language=bn&region=BD&loading=async`;
+                sc.async = true;
+                sc.defer = true;
+                sc.onerror = () => {
+                    document.getElementById('map').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:2rem;padding-top:200px;">ম্যাপ লোড ব্যর্থ — API Key যাচাই করুন</div>';
+                };
                 document.head.appendChild(sc);
-            }).catch(() => {
-                document.getElementById('map').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:2rem;padding-top:200px;">ম্যাপ লোড করতে .env-এ GOOGLE_MAPS_API_KEY সেট করুন</div>';
+            }
+
+            fetch('/api/config')
+                .then(r => r.json())
+                .then(cfg => loadGoogleMapsScript(cfg))
+                .catch(() => {
+                    document.getElementById('map').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:2rem;padding-top:200px;">ম্যাপ লোড করতে .env-এ GOOGLE_MAPS_API_KEY সেট করুন</div>';
+                });
+
+            // Hide loading overlay — wait a bit longer to ensure map starts
+            setTimeout(() => document.getElementById('loadingOverlay').classList.add('hide'), 1800);
+
+            // Register PWA Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW Registered', reg.scope))
+                    .catch(err => console.log('SW Failed', err));
+            }
+
+            // Visibility change: re-trigger map resize when tab becomes active
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden && gMap && typeof google !== 'undefined' && google.maps) {
+                    setTimeout(() => {
+                        google.maps.event.trigger(gMap, 'resize');
+                    }, 200);
+                }
             });
-            setTimeout(() => document.getElementById('loadingOverlay').classList.add('hide'), 1500);
         });
+
     </script>
 </body>
 

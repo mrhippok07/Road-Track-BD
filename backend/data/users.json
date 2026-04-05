@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "50af6c77-b7b5-45bf-a13b-11cb26302834",
+    "name": "Mr Hippok07",
+    "phone": "01828301170",
+    "password": "$2a$12$zK5.gRZOpCM0AxmvuJ3b9uwKb2DaT3yAjLgOP2E5moZ5Y3ymVBEOW",
+    "role": "স্বেচ্ছাসেবক",
+    "nid": "1719271662",
+    "dob": "2000-01-05",
+    "job": "founder",
+    "address": "madaripur Dhaka bangladesh",
+    "points": 0,
+    "reportCount": 0,
+    "avatar": null,
+    "icon": "🤝",
+    "isFirstLogin": true,
+    "createdAt": "2026-04-05T17:13:29.763Z"
+  }
+]
