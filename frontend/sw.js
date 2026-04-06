@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rtbd-cache-v2';
+const CACHE_NAME = 'rtbd-cache-v3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -12,6 +12,7 @@ const ASSETS = [
   '/volunteer.html',
   '/assets/js/main.js',
   '/assets/js/i18n.js',
+  '/assets/logo.png',
   'https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap'
 ];
 
