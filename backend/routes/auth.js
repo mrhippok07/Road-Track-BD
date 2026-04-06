@@ -50,7 +50,7 @@ const validateRegister = [
     body('name').trim().notEmpty().withMessage('নাম দিতে হবে').isLength({ max: 100 }),
     body('phone').matches(/^01[3-9]\d{8}$/).withMessage('সঠিক বাংলাদেশি ফোন নম্বর দিন'),
     body('password').isLength({ min: 6 }).withMessage('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর'),
-    body('role').isIn(['স্বেচ্ছাসেবক', 'ঠিকাদার', 'সরকারিকর্মকর্তা']).withMessage('ভূমিকা সঠিক নয়'),
+    body('role').isIn(['সাধারণ', 'স্বেচ্ছাসেবক', 'ঠিকাদার', 'সরকারিকর্মকর্তা']).withMessage('ভূমিকা সঠিক নয়'),
     body('nid').isLength({ min: 10, max: 10 }).withMessage('আপনার ১০ সংখ্যার সঠিক এনআইডি নাম্বার দিন'),
     body('dob').notEmpty().withMessage('জন্ম তারিখ দিতে হবে')
 ];
