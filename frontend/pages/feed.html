@@ -820,7 +820,7 @@
       <div class="feed-dot" style="background:${color};box-shadow:0 0 8px ${color}"></div>
       <div class="feed-meta">
         <div class="feed-road">${r.roadName}</div>
-        <div class="feed-loc">📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''} &nbsp;·&nbsp; 🕒 ${formatTime(r.createdAt)}</div>
+        <div class="feed-loc">${r.problemType !== 'opinion' ? `📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''} &nbsp;·&nbsp; ` : ''}🕒 ${formatTime(r.createdAt)}</div>
       </div>
       ${r.problemType !== 'opinion' ? `<div class="feed-badge" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">${sLabel}</div>` : ''}
     </div>

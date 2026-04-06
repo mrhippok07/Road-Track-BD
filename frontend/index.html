@@ -1754,12 +1754,12 @@
                         const sc = 'status-' + (r.status || 'pending');
                         const sl = { pending: 'বাকি', under_repair: 'চলছে', repaired: 'সম্পন্ন', rejected: 'বাতিল' };
                         
-                        return `<div class="report-item" onclick="focusMapAt(${r.lat},${r.lng})" style="${isOp ? 'border-color:rgba(0,242,255,0.3);box-shadow:0 0 10px rgba(0,242,255,0.05);' : ''}">
+                        return `<div class="report-item" ${!isOp ? `onclick="focusMapAt(${r.lat},${r.lng})"` : ''} style="${isOp ? 'border-color:rgba(0,242,255,0.3);box-shadow:0 0 10px rgba(0,242,255,0.05);' : ''}">
           <div class="report-item-header">
             <div class="report-item-title" style="${isOp ? 'color:#00f2ff;' : ''}">${r.roadName}</div>
             ${!isOp ? `<div class="status-badge ${sc}">${sl[r.status] || r.status}</div>` : `<div style="font-size:0.6rem;color:#00f2ff;border:1px solid rgba(0,242,255,0.3);padding:2px 6px;border-radius:4px;">পাবলিক অভিমত</div>`}
           </div>
-          <div class="report-item-meta">📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''}<br>📅 ${formatTime(r.createdAt || r.timestamp)}</div>
+          <div class="report-item-meta">${!isOp ? `📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''}<br>` : ''}📅 ${formatTime(r.createdAt || r.timestamp)}</div>
           <div class="report-type-chip" style="${isOp ? 'background:rgba(0,242,255,0.1);color:#00f2ff;border-color:rgba(0,242,255,0.2);' : ''}">${getProblemLabel(r.problemType)}</div>
         </div>`;
                     }).join('');
