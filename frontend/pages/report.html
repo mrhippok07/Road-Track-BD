@@ -430,9 +430,11 @@
             
         }
     
+/* ═══════════════════════════════════════════════════
+   HAMBURGER MENU — MOBILE NAV (Road Track BD)
+   ═══════════════════════════════════════════════════ */
 
-
-
+/* Hamburger button — hidden on desktop */
 .hamburger-btn {
   display: none;
   flex-direction: column;
@@ -453,12 +455,12 @@
   border-radius: 2px;
   transition: all 0.3s ease;
 }
-
+/* Animated X when open */
 .hamburger-btn.open .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
 .hamburger-btn.open .bar:nth-child(2) { opacity: 0; }
 .hamburger-btn.open .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-
+/* Mobile drawer */
 .mobile-drawer {
   display: none;
   position: fixed;
@@ -509,7 +511,7 @@
 }
 .mobile-drawer .drawer-close:hover { color: #00ff88; }
 
-
+/* ─── @media: Switch to mobile layout at 768px ─── */
 @media screen and (max-width: 768px) {
   nav {
     padding: 0 1rem !important;
@@ -519,35 +521,35 @@
     justify-content: space-between !important;
   }
 
-  
+  /* Hide desktop nav links completely */
   
 
-  
+  /* Show hamburger */
   .hamburger-btn { display: flex !important; }
 
-  
+  /* Brand: show logo small, hide subtitle text */
   .brand-title { font-size: 0.9rem !important; letter-spacing: 1px !important; }
   .brand-sub { display: none !important; }
   .brand-logo { height: 30px !important; }
 
-  
+  /* Right nav buttons: shrink */
   #whiteboxTrigger span:last-child { display: none !important; }
   #whiteboxTrigger { padding: 6px 8px !important; }
 
-  
+  /* Page wrappers */
   .dash-wrap { padding: 75px 0.8rem 2rem !important; }
   .main-container, .page-wrap { padding-top: 75px !important; }
 
-  
+  /* Grids: single column */
   .kpi-grid,
   .charts-grid,
   .form-grid,
   .vol-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
 
-  
+  /* Inputs: prevent iOS auto-zoom */
   input, select, textarea { font-size: 16px !important; }
 
-  
+  /* Modals: full width */
   .modal-box, .auth-modal-inner { width: 94% !important; padding: 1.4rem !important; max-height: 90vh !important; overflow-y: auto !important; }
 }
 
@@ -584,56 +586,56 @@
         <div class="report-card">
             <div class="section-label" data-i18n="report.typeLabel">▸ সমস্যার ধরন নির্বাচন করুন</div>
             <div class="type-grid" id="typeGrid">
-                <button class="type-btn" data-value="broken" onclick="selectType(this)" data-i18n="type.broken">🚧 ভাঙা
+                <button class="type-btn" data-value="broken" onclick="selectType(this)" data-i18n="type.broken"><i class="fa-solid fa-traffic-cone"></i> ভাঙা
                     রাস্তা</button>
-                <button class="type-btn" data-value="pothole" onclick="selectType(this)" data-i18n="type.pothole">🕳️
+                <button class="type-btn" data-value="pothole" onclick="selectType(this)" data-i18n="type.pothole"><i class="fa-solid fa-road-spikes"></i>
                     বড় গর্ত</button>
                 <button class="type-btn" data-value="waterlogged" onclick="selectType(this)"
-                    data-i18n="type.waterlogged">🌊 পানি জমা</button>
-                <button class="type-btn" data-value="dangerous" onclick="selectType(this)" data-i18n="type.dangerous">⚠️
+                    data-i18n="type.waterlogged"><i class="fa-solid fa-water"></i> পানি জমা</button>
+                <button class="type-btn" data-value="dangerous" onclick="selectType(this)" data-i18n="type.dangerous"><i class="fa-solid fa-triangle-exclamation"></i>
                     ঝুঁকিপূর্ণ</button>
                 <button class="type-btn" data-value="unpaved" onclick="selectType(this)" data-i18n="type.unpaved">🪨
                     কাঁচা রাস্তা</button>
-                <button class="type-btn" data-value="narrow" onclick="selectType(this)" data-i18n="type.narrow">↔️
+                <button class="type-btn" data-value="narrow" onclick="selectType(this)" data-i18n="type.narrow"><i class="fa-solid fa-compress"></i>
                     সংকীর্ণ রাস্তা</button>
-                <button class="type-btn" data-value="nolight" onclick="selectType(this)" data-i18n="type.nolight">🔦 আলো
+                <button class="type-btn" data-value="nolight" onclick="selectType(this)" data-i18n="type.nolight"><i class="fa-solid fa-lightbulb"></i> আলো
                     নেই</button>
-                <button class="type-btn" data-value="erosion" onclick="selectType(this)" data-i18n="type.erosion">🌧️
+                <button class="type-btn" data-value="erosion" onclick="selectType(this)" data-i18n="type.erosion"><i class="fa-solid fa-cloud-showers-heavy"></i>
                     মাটি ক্ষয়</button>
                 <button class="type-btn bridge" data-value="bridge_repair" onclick="selectType(this)"
-                    data-i18n="type.bridge_repair">🌉 ব্রিজ সংস্কার</button>
+                    data-i18n="type.bridge_repair"><i class="fa-solid fa-bridge"></i> ব্রিজ সংস্কার</button>
                 <button class="type-btn bridge" data-value="bridge_new" onclick="selectType(this)"
-                    data-i18n="type.bridge_new">🌉 নতুন ব্রিজ</button>
+                    data-i18n="type.bridge_new"><i class="fa-solid fa-bridge"></i> নতুন ব্রিজ</button>
                 <button class="type-btn bridge" data-value="road_bridge_new" onclick="selectType(this)"
-                    data-i18n="type.road_bridge_new">🛣️ নতুন রাস্তা ও ব্রিজ</button>
+                    data-i18n="type.road_bridge_new"><i class="fa-solid fa-road"></i> নতুন রাস্তা ও ব্রিজ</button>
                 <button class="type-btn bridge" data-value="culvert_new" onclick="selectType(this)"
-                    data-i18n="type.culvert_new">🔧 কালভার্ট প্রয়োজন</button>
+                    data-i18n="type.culvert_new"><i class="fa-solid fa-screwdriver-wrench"></i> কালভার্ট প্রয়োজন</button>
                 <button class="type-btn bridge" data-value="culvert_repair" onclick="selectType(this)"
-                    data-i18n="type.culvert_repair">🔧 কালভার্ট সংস্কার</button>
+                    data-i18n="type.culvert_repair"><i class="fa-solid fa-screwdriver-wrench"></i> কালভার্ট সংস্কার</button>
                 <button class="type-btn bridge" data-value="embankment_new" onclick="selectType(this)"
-                    data-i18n="type.embankment_new">🏞️ বেড়িবাঁধ প্রয়োজন</button>
+                    data-i18n="type.embankment_new"><i class="fa-solid fa-mountain"></i> বেড়িবাঁধ প্রয়োজন</button>
                 <button class="type-btn bridge" data-value="embankment_repair" onclick="selectType(this)"
-                    data-i18n="type.embankment_repair">🏞️ বেড়িবাঁধ সংস্কার</button>
+                    data-i18n="type.embankment_repair"><i class="fa-solid fa-mountain"></i> বেড়িবাঁধ সংস্কার</button>
                 <button class="type-btn bridge" data-value="canal_small" onclick="selectType(this)"
-                    data-i18n="type.canal_small">💧 ছোট খাল খনন</button>
+                    data-i18n="type.canal_small"><i class="fa-solid fa-droplet"></i> ছোট খাল খনন</button>
                 <button class="type-btn bridge" data-value="canal_large" onclick="selectType(this)"
-                    data-i18n="type.canal_large">💧 বড় খাল খনন</button>
+                    data-i18n="type.canal_large"><i class="fa-solid fa-droplet"></i> বড় খাল খনন</button>
                 <button class="type-btn water" data-value="tube_well_needed" onclick="selectType(this)"
-                    data-i18n="type.tube_well_needed">🚰 নলকূপ প্রয়োজন</button>
+                    data-i18n="type.tube_well_needed"><i class="fa-solid fa-faucet"></i> নলকূপ প্রয়োজন</button>
                 <button class="type-btn water" data-value="tube_well_repair" onclick="selectType(this)"
-                    data-i18n="type.tube_well_repair">🔧 নলকূপ মেরামত</button>
+                    data-i18n="type.tube_well_repair"><i class="fa-solid fa-screwdriver-wrench"></i> নলকূপ মেরামত</button>
                 <button class="type-btn" data-value="railway_repair"
-                    onclick="selectType(this)">🚂 রেললাইন মেরামত</button>
+                    onclick="selectType(this)"><i class="fa-solid fa-train"></i> রেললাইন মেরামত</button>
                 <button class="type-btn" data-value="railway_new"
-                    onclick="selectType(this)">🚂 নতুন রেললাইন</button>
+                    onclick="selectType(this)"><i class="fa-solid fa-train"></i> নতুন রেললাইন</button>
                 <button class="type-btn" data-value="railway_station_new"
-                    onclick="selectType(this)">🚉 নতুন রেল স্টেশন</button>
+                    onclick="selectType(this)"><i class="fa-solid fa-building-shield"></i> নতুন রেল স্টেশন</button>
                 <button class="type-btn" data-value="bus_station_repair"
-                    onclick="selectType(this)">🚌 বাস স্টেশন মেরামত</button>
+                    onclick="selectType(this)"><i class="fa-solid fa-bus"></i> বাস স্টেশন মেরামত</button>
                 <button class="type-btn" data-value="bus_station_new"
-                    onclick="selectType(this)">🚏 নতুন বাস স্টেশন</button>
+                    onclick="selectType(this)"><i class="fa-solid fa-signs-post"></i> নতুন বাস স্টেশন</button>
                 <button class="type-btn chor" data-value="chor_development" onclick="selectType(this)"
-                    >🌾 চর এলাকায় সংস্কার</button>
+                    ><i class="fa-solid fa-wheat-awn"></i> চর এলাকায় সংস্কার</button>
             </div>
 
             <div id="chorNeeds"
@@ -769,18 +771,211 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label>অটো লোকেশন</label>
-                    <button class="geo-btn" type="button" onclick="getGeo()">📍 <span data-i18n="report.gps">GPS থেকে
+                    <button class="geo-btn" type="button" onclick="getGeo()"><i class="fa-solid fa-location-dot"></i> <span data-i18n="report.gps">GPS থেকে
                             লোকেশন নিন</span></button>
-                    <div class="geo-status" id="geoStatus" data-i18n="report.gpsOk">✅ লোকেশন পাওয়া গেছে</div>
+                    <div class="geo-status" id="geoStatus" data-i18n="report.gpsOk"><i class="fa-solid fa-check"></i> লোকেশন পাওয়া গেছে</div>
                     <input type="hidden" id="latVal"><input type="hidden" id="lngVal">
                     <div id="miniMap"></div>
                 </div>
                 <div class="form-group">
                     <label data-i18n="report.photo">ছবি আপলোড (সর্বোচ্চ ৩টি)</label>
                     <div class="upload-area" onclick="document.getElementById('photoInput').click()">
-                        <span class="upload-icon">📸</span>
+                        <span class="upload-icon"><i class="fa-solid fa-camera"></i></span>
                         <p id="uploadText" data-i18n="report.clickPhoto">ছবি আপলোড করতে ক্লিক করুন</p>
-                        <input type="file" id="photoInput" accept="image
+                        <input type="file" id="photoInput" accept="image/*" multiple style="display:none"
+                            onchange="handlePhoto(event)">
+                    </div>
+                    <div class="img-preview" id="imgPreview"></div>
+                </div>
+            </div>
+            <button class="submit-btn" id="submitBtn" onclick="submitReport()"><span data-i18n="report.submit">📤
+                    রিপোর্ট জমা দিন</span></button>
+        </div>
+    </main>
+    <div id="toast"></div>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let geoLat = 23.8103, geoLng = 90.4125, selectedFiles = [], map, marker;
+        let _miniMapReady = false;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            renderNavAuth(); injectLangToggle('nav'); applyLang(); initSocket(() => { });
+            if (!getUser()) {
+                setTimeout(() => {
+                    openAuthModal();
+                    showToast(typeof getLang === 'function' && getLang() === 'en' ? 'Please log in to report' : 'রিপোর্ট করতে লগইন করুন', 'error');
+                }, 800);
+            }
+            // Parse query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialType = urlParams.get('type');
+            if (initialType) {
+                const btn = document.querySelector(`.type-btn[data-value="${initialType}"]`);
+                if (btn) btn.click();
+            }
+
+            // Load Google Maps for Mini-Map — with proper async guard
+            try {
+                const conf = await fetch('/api/config').then(r => r.json());
+                if (conf.googleMapsKey && conf.googleMapsKey.trim() !== '') {
+                    // Avoid double-loading if script is already present
+                    if (!document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
+                        const script = document.createElement('script');
+                        script.src = `https://maps.googleapis.com/maps/api/js?key=${conf.googleMapsKey}&callback=initMiniMap&loading=async`;
+                        script.async = true;
+                        script.onerror = () => console.warn('Google Maps failed to load on report page');
+                        document.head.appendChild(script);
+                    } else if (typeof google !== 'undefined' && google.maps) {
+                        // Script already loaded (e.g. navigated back), call directly
+                        initMiniMap();
+                    }
+                }
+            } catch (e) { console.warn('Map config error:', e); }
+        });
+
+        window.initMiniMap = function () {
+            if (_miniMapReady) return; // Guard against double init
+            _miniMapReady = true;
+            const mapEl = document.getElementById('miniMap');
+            mapEl.style.display = 'block';
+            mapEl.style.height = '200px';
+            mapEl.style.border = '1px solid var(--green-neon)';
+            mapEl.style.borderRadius = '8px';
+            mapEl.style.marginTop = '10px';
+
+            try {
+                map = new google.maps.Map(mapEl, {
+                    center: { lat: parseFloat(geoLat), lng: parseFloat(geoLng) },
+                    zoom: 13,
+                    mapTypeId: google.maps.MapTypeId.HYBRID,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: false,
+                    zoomControl: true
+                });
+
+                marker = new google.maps.Marker({
+                    position: { lat: parseFloat(geoLat), lng: parseFloat(geoLng) },
+                    map: map,
+                    draggable: true,
+                    icon: { path: google.maps.SymbolPath.CIRCLE, scale: 8, fillOpacity: 1, fillColor: '#ff1744', strokeColor: '#fff', strokeWeight: 2 }
+                });
+
+                google.maps.event.addListener(map, 'click', (e) => {
+                    updateCoords(e.latLng.lat(), e.latLng.lng());
+                });
+
+                google.maps.event.addListener(marker, 'dragend', (e) => {
+                    updateCoords(e.latLng.lat(), e.latLng.lng());
+                });
+
+                // Force resize after a short delay to fix tile rendering
+                setTimeout(() => { google.maps.event.trigger(map, 'resize'); }, 300);
+            } catch(err) {
+                console.warn('Mini-map init error:', err);
+                _miniMapReady = false;
+            }
+        };
+
+        function selectType(btn) {
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const val = btn.dataset.value;
+            document.getElementById('selectedType').value = val;
+            document.getElementById('chorNeeds').style.display = (val === 'chor_development') ? 'block' : 'none';
+        }
+
+        function updateCoords(lat, lng) {
+            geoLat = lat.toFixed(7);
+            geoLng = lng.toFixed(7);
+            document.getElementById('latVal').value = geoLat;
+            document.getElementById('lngVal').value = geoLng;
+            marker.setPosition({ lat: parseFloat(geoLat), lng: parseFloat(geoLng) });
+            document.getElementById('geoStatus').style.display = 'block';
+        }
+
+        function getGeo() {
+            if (!navigator.geolocation) { showToast('GPS সমর্থিত নয়', 'error'); return; }
+            navigator.geolocation.getCurrentPosition(pos => {
+                updateCoords(pos.coords.latitude, pos.coords.longitude);
+                if (map) map.setCenter({ lat: parseFloat(geoLat), lng: parseFloat(geoLng) });
+                showToast('✅ সঠিক লোকেশন পাওয়া গেছে');
+            }, err => showToast('লোকেশন পেতে ব্যর্থ', 'error'),
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+        }
+        function handlePhoto(e) {
+            selectedFiles = Array.from(e.target.files).slice(0, 3);
+            document.getElementById('uploadText').textContent = selectedFiles.length + 'টি ছবি নির্বাচিত ✅';
+            const prev = document.getElementById('imgPreview'); prev.innerHTML = '';
+            selectedFiles.forEach(f => { const r = new FileReader(); r.onload = ev => { const img = document.createElement('img'); img.src = ev.target.result; img.className = 'img-thumb'; prev.appendChild(img); }; r.readAsDataURL(f); });
+        }
+        async function submitReport() {
+            const u = getUser();
+            if (!u) {
+                openAuthModal();
+                showToast(typeof getLang === 'function' && getLang() === 'en' ? 'Please log in to report' : 'রিপোর্ট করতে লগইন করুন', 'error');
+                return;
+            }
+            const type = document.getElementById('selectedType').value;
+            // Use let so we can reassign for opinion type
+            let road = document.getElementById('roadName').value.trim();
+            let dist = document.getElementById('district').value;
+            let area = document.getElementById('area').value.trim();
+            let desc = document.getElementById('description').value.trim();
+
+            if (type === 'chor_development') {
+                const checked = Array.from(document.querySelectorAll('.chor-opt:checked')).map(c => c.value);
+                if (checked.length > 0) {
+                    desc = `সংস্কার তালিকা: ${checked.join(', ')}। ${desc}`;
+                }
+            }
+
+            // For opinion/public feedback, fill in default values
+            if (type === 'opinion') {
+                if (!road) road = 'জনমতামত';
+                if (!dist) dist = 'সকল জেলা';
+                if (!area) area = 'সব এলাকা';
+            }
+
+            if (!type) { showToast('সমস্যার ধরন নির্বাচন করুন', 'error'); return; }
+            if (!road || !dist || !area) { showToast('রাস্তার নাম, জেলা ও এলাকা অবশ্যই দিন', 'error'); return; }
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true; btn.querySelector('span').textContent = 'জমা হচ্ছে...';
+            const fd = new FormData();
+            fd.append('problemType', type);
+            fd.append('status', document.getElementById('reportStatus').value);
+            fd.append('roadName', road);
+            fd.append('roadNumber', document.getElementById('roadNumber').value.trim());
+            fd.append('district', dist);
+            fd.append('area', area);
+            fd.append('description', desc);
+            if (geoLat && parseFloat(geoLat) !== 23.8103) {
+                fd.append('lat', geoLat);
+                fd.append('lng', geoLng);
+            }
+            selectedFiles.forEach(f => fd.append('photos', f));
+            try {
+                const d = await apiFormPost('/api/reports', fd);
+                if (d.success) {
+                    if (window._socket) window._socket.emit('report_new', d.data);
+                    showToast('✅ রিপোর্ট সফলভাবে জমা হয়েছে!');
+                    setTimeout(() => window.location.href = '/feed', 1800);
+                } else {
+                    showToast(d.message || 'রিপোর্ট জমা ব্যর্থ', 'error');
+                    btn.disabled = false;
+                    btn.querySelector('span').textContent = '📤 রিপোর্ট জমা দিন';
+                }
+            } catch (e) {
+                showToast('সার্ভার সমস্যা', 'error');
+                btn.disabled = false;
+                btn.querySelector('span').textContent = '📤 রিপোর্ট জমা দিন';
+            }
+        }
+    </script>
+
+<script>
+/* ─── Hamburger menu logic ─── */
 (function() {
   var btn = document.querySelector('.hamburger-btn');
   var drawer = document.querySelector('.mobile-drawer');
@@ -799,7 +994,7 @@
     }
   });
 
-  
+  // Close drawer when a link is clicked
   drawer.querySelectorAll('.drawer-link').forEach(function(link) {
     link.addEventListener('click', function() {
       drawer.classList.remove('open');

@@ -67,6 +67,7 @@
             background: var(--bg-panel);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             position: relative;
         }
@@ -91,7 +92,7 @@
         
         .profile-avatar-wrap {
             position: absolute;
-            bottom: -50px;
+            top: 140px;
             left: 30px;
             border-radius: 50%;
             padding: 5px;
@@ -231,21 +232,21 @@
     <div class="profile-container">
         
         <div class="profile-header">
-            <div class="cover-photo" id="profCoverDisplay" onclick="document.getElementById('coverUploader').click()">
-                <div class="cover-edit-btn">📷 Cover</div>
+            <div class="cover-photo" id="profCoverDisplay" onclick="if(event.target === this || event.target.tagName === 'IMG') { if(this.style.backgroundImage && this.style.backgroundImage !== 'none') { const url = this.style.backgroundImage.slice(5, -2); window.open(url, '_blank'); } }">
+                <div class="cover-edit-btn" onclick="event.stopPropagation(); document.getElementById('coverUploader').click()"><i class="fa-solid fa-camera"></i> Cover</div>
             </div>
             <input type="file" id="coverUploader" style="display:none" accept="image/*" onchange="handleCoverUpload(event)">
             
             <div class="profile-avatar-wrap">
-                <div class="profile-avatar" id="profAvatarDisplay">
-                    👤
+                <div class="profile-avatar" id="profAvatarDisplay" onclick="const img = this.querySelector('img'); if(img){ window.open(img.src, '_blank'); }">
+                    <i class="fa-solid fa-user"></i>
                 </div>
-                <div class="avatar-edit-icon" onclick="document.getElementById('avatarUploader').click()" title="Change Avatar">📷</div>
+                <div class="avatar-edit-icon" onclick="event.stopPropagation(); document.getElementById('avatarUploader').click()" title="Change Avatar"><i class="fa-solid fa-camera"></i></div>
                 <input type="file" id="avatarUploader" style="display:none" accept="image/*" onchange="handleAvatarUpload(event)">
             </div>
             
             <div class="profile-actions">
-                <button class="btn-profile btn-edit" onclick="openEditModal()">✏️ Edit Profile</button>
+                <button class="btn-profile btn-edit" onclick="openEditModal()"><i class="fa-solid fa-pen"></i> Edit Profile</button>
                 <button class="btn-profile btn-danger" onclick="doLogout()">Log Out</button>
             </div>
 
@@ -268,23 +269,23 @@
                 <div class="panel-title">About</div>
                 <div class="info-list">
                     <div class="info-row">
-                        <div class="info-icon">📞</div>
+                        <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
                         <div class="info-text"><strong>Phone</strong> <span id="infoPhone">-</span></div>
                     </div>
                     <div class="info-row">
-                        <div class="info-icon">💳</div>
+                        <div class="info-icon"><i class="fa-solid fa-id-card"></i></div>
                         <div class="info-text"><strong>NID</strong> <span id="infoNID">-</span></div>
                     </div>
                     <div class="info-row">
-                        <div class="info-icon">💼</div>
+                        <div class="info-icon"><i class="fa-solid fa-briefcase"></i></div>
                         <div class="info-text"><strong>Occupation</strong> <span id="infoJob">-</span></div>
                     </div>
                     <div class="info-row">
-                        <div class="info-icon">📍</div>
+                        <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
                         <div class="info-text"><strong>Location</strong> <span id="infoAddress">-</span></div>
                     </div>
                     <div class="info-row">
-                        <div class="info-icon">🎂</div>
+                        <div class="info-icon"><i class="fa-solid fa-cake-candles"></i></div>
                         <div class="info-text"><strong>Date of Birth</strong> <span id="infoDOB">-</span></div>
                     </div>
                 </div>
@@ -308,7 +309,7 @@
     
     <div id="editProfileModal" class="modal-overlay">
         <div class="modal-box" style="max-width: 500px;">
-            <button class="modal-close" onclick="document.getElementById('editProfileModal').classList.remove('open')">✕</button>
+            <button class="modal-close" onclick="document.getElementById('editProfileModal').classList.remove('open')"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-title">Edit Profile</div>
             
             <div class="form-group">
@@ -369,7 +370,7 @@
                     <img src="${user.avatar}" alt="Avatar" onclick="window.open('${user.avatar}', '_blank')">
                 `;
             } else {
-                document.getElementById('profAvatarDisplay').innerHTML = user.icon || '👤';
+                document.getElementById('profAvatarDisplay').innerHTML = user.icon || '<i class="fa-solid fa-user"></i>';
             }
 
             if (user.coverPhoto) {
@@ -408,11 +409,11 @@
                     <div class="feed-item" id="tr-${r._id}">
                         <div class="feed-header">
                             <span class="feed-road">${r.problemType === 'opinion' ? 'Public Opinion' : (r.roadName || 'Location Unknown')}</span>
-                            <button class="btn-trash" onclick="removePost('${r._id}')" title="Delete">🗑️</button>
+                            <button class="btn-trash" onclick="removePost('${r._id}')" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         <div class="feed-desc">${r.description || ''}</div>
                         <div class="feed-meta">
-                            ${r.problemType !== 'opinion' ? `<span class="badge" style="background:${getMarkerColor(r)}">${getProblemLabel(r.problemType)}</span>` : `<span class="badge" style="background:var(--blue-neon)">🗣️ Post</span>`}
+                            ${r.problemType !== 'opinion' ? `<span class="badge" style="background:${getMarkerColor(r)}">${getProblemLabel(r.problemType)}</span>` : `<span class="badge" style="background:var(--blue-neon)"><i class="fa-solid fa-bullhorn"></i> Post</span>`}
                             <span>${new Date(r.createdAt || r.timestamp).toLocaleDateString()}</span>
                         </div>
                     </div>
@@ -439,7 +440,7 @@
             if(d.success) {
                 saveAuth(localStorage.getItem('rtbd_token'), d.user);
                 document.getElementById('editProfileModal').classList.remove('open');
-                showToast('✅ Profile Updated');
+                showToast('<i class="fa-solid fa-check"></i> Profile Updated');
                 loadProfileView();
                 renderNavAuth();
             } else {
@@ -458,7 +459,7 @@
                     const user = getUser();
                     user.avatar = d.avatar;
                     localStorage.setItem('rtbd_user', JSON.stringify(user));
-                    showToast('✅ Avatar Updated');
+                    showToast('<i class="fa-solid fa-check"></i> Avatar Updated');
                     loadProfileView();
                     renderNavAuth();
                 } else showToast(d.message || 'Upload failed', 'error');
@@ -476,7 +477,7 @@
                     const user = getUser();
                     user.coverPhoto = d.coverPhoto;
                     localStorage.setItem('rtbd_user', JSON.stringify(user));
-                    showToast('✅ Cover Photo Updated');
+                    showToast('<i class="fa-solid fa-check"></i> Cover Photo Updated');
                     loadProfileView();
                 } else showToast(d.message || 'Upload failed', 'error');
             } catch (err) { showToast('Server problem', 'error'); }
@@ -487,7 +488,7 @@
             try {
                 const d = await apiFetch('/api/reports/' + id, { method: 'DELETE' });
                 if (d.success) {
-                    showToast('✅ Report deleted');
+                    showToast('<i class="fa-solid fa-check"></i> Report deleted');
                     const el = document.getElementById('tr-' + id);
                     if(el) el.remove();
                     
@@ -508,7 +509,7 @@
         }
 
         async function handleDeleteProfile() {
-            if(!confirm('🚨 Warning: This is permanent. It removes you from the app. Proceed?')) return;
+            if(!confirm('<i class="fa-solid fa-triangle-exclamation"></i> Warning: This is permanent. It removes you from the app. Proceed?')) return;
             try {
                 const d = await apiFetch('/api/auth/profile', { method: 'DELETE' });
                 if (d.success) {

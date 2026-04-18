@@ -430,11 +430,11 @@
                         <label style="margin-bottom:8px;display:block;">ভূমিকা নির্বাচন করুন *</label>
                         <div class="role-grid">
                             <button class="role-btn selected" data-role="স্বেচ্ছাসেবক" onclick="selectRole(this)"><span
-                                    class="role-icon">🤝</span>স্বেচ্ছাসেবক</button>
+                                    class="role-icon"><i class="fa-solid fa-handshake"></i></span>স্বেচ্ছাসেবক</button>
                             <button class="role-btn" data-role="ঠিকাদার" onclick="selectRole(this)"><span
-                                    class="role-icon">🏗️</span>ঠিকাদার</button>
+                                    class="role-icon"><i class="fa-solid fa-helmet-safety"></i></span>ঠিকাদার</button>
                             <button class="role-btn" data-role="সরকারিকর্মকর্তা" onclick="selectRole(this)"><span
-                                    class="role-icon">🏛️</span>সরকারি ব্যক্তি</button>
+                                    class="role-icon"><i class="fa-solid fa-building-columns"></i></span>সরকারি ব্যক্তি</button>
                         </div>
                         <input type="hidden" id="selectedRole" value="স্বেচ্ছাসেবক">
                     </div>
@@ -445,7 +445,7 @@
                                 placeholder="০১৮XXXXXXXX"></div>
                         <div class="form-group"><label>জন্ম তারিখ *</label><input type="date" id="regDob"></div>
                         <div class="form-group"><label>এনআইডি (আবশ্যক) *</label><input type="text" id="regNid"
-                                placeholder="আপনার ১০ সংখ্যার সঠিক এনআইডি নাম্বার দিন"></div>
+                                placeholder="১০, ১৩ বা ১৭ ডিজিট এনআইডি" maxlength="17"></div>
                         <div class="form-group"><label>পেশা</label><input type="text" id="regJob"
                                 placeholder="বর্তমান পেশা"></div>
                         <div class="form-group"><label>পাসওয়ার্ড *</label><input type="password" id="regPass"
@@ -474,7 +474,7 @@
                 <div id="resetPanel" style="display:none;">
                     <div class="modal-title" style="font-size:0.9rem; margin-bottom:1rem;">পাসওয়ার্ড রিসেট</div>
                     <div class="form-group"><label>ফোন নম্বর</label><input type="tel" id="resetPhone" placeholder="০১৮XXXXXXXX"></div>
-                    <div class="form-group"><label>এনআইডি নম্বর</label><input type="text" id="resetNid" placeholder="১০ সংখ্যার এনআইডি"></div>
+                    <div class="form-group"><label>এনআইডি নম্বর</label><input type="text" id="resetNid" placeholder="১০/১৩/১৭ সংখ্যার এনআইডি"></div>
                     <div class="form-group"><label>নতুন পাসওয়ার্ড</label><input type="password" id="resetPass" placeholder="কমপক্ষে ৬ অক্ষর"></div>
                     <button class="submit-btn" id="resetBtn" onclick="doResetPage()">পাসওয়ার্ড পরিবর্তন করুন</button>
                     <div class="switch-link"><button onclick="switchAuthTabPage('login',null)">লগইন পেজে ফিরুন</button></div>
@@ -516,7 +516,7 @@
             const role = document.getElementById('selectedRole').value;
             
             if (!name || !phone || !pass || !dob || !nid) { showToast('সব বাধ্যতামূলক তথ্য দিন', 'error'); return; }
-            if (nid.length !== 10 || isNaN(nid)) { showToast('আপনার ১০ সংখ্যার সঠিক এনআইডি নাম্বার দিন', 'error'); return; }
+            if (![10, 13, 17].includes(nid.length) || isNaN(nid)) { showToast('আপনার সঠিক এনআইডি (১০, ১৩ বা ১৭ ডিজিট) নাম্বার দিন', 'error'); return; }
             if (pass !== pass2) { showToast('পাসওয়ার্ড মিলছে না', 'error'); return; }
             if (pass.length < 6) { showToast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error'); return; }
             
@@ -530,7 +530,7 @@
                 });
                 if (d.success) { 
                     saveAuth(d.token, d.user); 
-                    typeof showCongratsCard === 'function' ? showCongratsCard('🎉 অভিনন্দন!', 'আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।') : showToast('✅ নিবন্ধন সফল হয়েছে!'); 
+                    typeof showCongratsCard === 'function' ? showCongratsCard('<i class="fa-solid fa-party-horn"></i> অভিনন্দন!', 'আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।') : showToast('<i class="fa-solid fa-check"></i> নিবন্ধন সফল হয়েছে!'); 
                     setTimeout(() => window.location.href = '/', 3000); 
                 }
                 else showToast(d.message || 'নিবন্ধন ব্যর্থ হয়েছে', 'error');
@@ -550,7 +550,7 @@
             try {
                 const d = await apiPost('/api/auth/reset-password', { phone, nid, newPassword });
                 if (d.success) {
-                    showToast('✅ পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে। লগইন করুন।');
+                    showToast('<i class="fa-solid fa-check"></i> পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে। লগইন করুন।');
                     setTimeout(() => switchAuthTabPage('login', null), 2000);
                 } else {
                     showToast(d.message || 'রিসেট ব্যর্থ হয়েছে', 'error');
@@ -567,7 +567,7 @@
             btn.disabled = true; btn.textContent = 'যাচাই হচ্ছে...';
             try {
                 const d = await apiPost('/api/auth/login', { phone, password: pass });
-                if (d.success) { saveAuth(d.token, d.user); typeof showCongratsCard === 'function' ? showCongratsCard('🎉 স্বাগতম!', 'আপনি সফলভাবে লগইন করেছেন।') : showToast('✅ লগইন সফল হয়েছে!'); setTimeout(() => window.location.href = '/', 3000); }
+                if (d.success) { saveAuth(d.token, d.user); typeof showCongratsCard === 'function' ? showCongratsCard('<i class="fa-solid fa-party-horn"></i> স্বাগতম!', 'আপনি সফলভাবে লগইন করেছেন।') : showToast('<i class="fa-solid fa-check"></i> লগইন সফল হয়েছে!'); setTimeout(() => window.location.href = '/', 3000); }
                 else showToast(d.message || 'লগইন ব্যর্থ হয়েছে', 'error');
             } catch (e) { showToast('সার্ভার সমস্যা হয়েছে', 'error'); }
             btn.disabled = false; btn.textContent = 'লগইন করুন';

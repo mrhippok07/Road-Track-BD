@@ -30,41 +30,41 @@ const PROBLEM_COLORS = {
 
 
 const PROBLEM_LABELS = {
-    broken: 'ভাঙা রাস্তা', pothole: 'বড় গর্ত', waterlogged: 'পানি জমা',
-    dangerous: 'ঝুঁকিপূর্ণ', unpaved: 'কাঁচা রাস্তা', narrow: 'সংকীর্ণ রাস্তা',
-    nolight: 'আলো নেই', erosion: 'মাটি ক্ষয়',
-    bridge_repair: '🌉 ব্রিজ সংস্কার প্রয়োজন', bridge_new: '🌉 নতুন ব্রিজ প্রয়োজন',
-    road_bridge_new: '🛣️ নতুন রাস্তা ও ব্রিজ', culvert_new: '🔧 কালভার্ট প্রয়োজন',
-    culvert_repair: '🔧 কালভার্ট সংস্কার', embankment_new: '🏞️ বেড়িবাঁধ প্রয়োজন',
-    embankment_repair: '🏞️ বেড়িবাঁধ সংস্কার', canal_small: '💧 ছোট খাল খনন',
-    canal_large: '💧 বড় খাল খনন', under_repair: 'সংস্কার কাজ চলছে',
-    tube_well_needed: '🚰 নলকূপ প্রয়োজন',
-    tube_well_repair: '🔧 নলকূপ মেরামত',
-    railway_repair: '🚂 রেললাইন মেরামত',
-    railway_new: '🚂 নতুন রেললাইন',
-    railway_station_new: '🚉 নতুন রেল স্টেশন',
-    bus_station_repair: '🚌 বাস স্টেশন মেরামত',
-    bus_station_new: '🚏 নতুন বাস স্টেশন',
-    opinion: '💬 জনমতামত'
+    broken: '<i class="fa-solid fa-road-circle-exclamation"></i> ভাঙা রাস্তা', pothole: '<i class="fa-solid fa-road-spikes"></i> বড় গর্ত', waterlogged: '<i class="fa-solid fa-water"></i> পানি জমা',
+    dangerous: '<i class="fa-solid fa-triangle-exclamation"></i> ঝুঁকিপূর্ণ', unpaved: '<i class="fa-solid fa-road"></i> কাঁচা রাস্তা', narrow: '<i class="fa-solid fa-compress"></i> সংকীর্ণ রাস্তা',
+    nolight: '<i class="fa-regular fa-lightbulb"></i> আলো নেই', erosion: '<i class="fa-solid fa-hill-rockslide"></i> মাটি ক্ষয়',
+    bridge_repair: '<i class="fa-solid fa-bridge-circle-exclamation"></i> ব্রিজ সংস্কার প্রয়োজন', bridge_new: '<i class="fa-solid fa-bridge"></i> নতুন ব্রিজ প্রয়োজন',
+    road_bridge_new: '<i class="fa-solid fa-bridge-water"></i> নতুন রাস্তা ও ব্রিজ', culvert_new: '<i class="fa-solid fa-wrench"></i> কালভার্ট প্রয়োজন',
+    culvert_repair: '<i class="fa-solid fa-screwdriver-wrench"></i> কালভার্ট সংস্কার', embankment_new: '<i class="fa-solid fa-mound"></i> বেড়িবাঁধ প্রয়োজন',
+    embankment_repair: '<i class="fa-solid fa-trowel"></i> বেড়িবাঁধ সংস্কার', canal_small: '<i class="fa-solid fa-water"></i> ছোট খাল খনন',
+    canal_large: '<i class="fa-solid fa-water"></i> বড় খাল খনন', under_repair: '<i class="fa-solid fa-person-digging"></i> সংস্কার কাজ চলছে',
+    tube_well_needed: '<i class="fa-solid fa-faucet-drip"></i> নলকূপ প্রয়োজন',
+    tube_well_repair: '<i class="fa-solid fa-wrench"></i> নলকূপ মেরামত',
+    railway_repair: '<i class="fa-solid fa-train-tram"></i> রেললাইন মেরামত',
+    railway_new: '<i class="fa-solid fa-train"></i> নতুন রেললাইন',
+    railway_station_new: '<i class="fa-building-shield"></i> নতুন রেল স্টেশন',
+    bus_station_repair: '<i class="fa-solid fa-bus"></i> বাস স্টেশন মেরামত',
+    bus_station_new: '<i class="fa-solid fa-building"></i> নতুন বাস স্টেশন',
+    opinion: '<i class="fa-regular fa-comments"></i> জনমতামত'
 };
 
 const PROBLEM_LABELS_EN = {
-    broken: 'Broken Road', pothole: 'Pothole', waterlogged: 'Waterlogged',
-    dangerous: 'Dangerous', unpaved: 'Unpaved Road', narrow: 'Narrow Road',
-    nolight: 'No Street Light', erosion: 'Soil Erosion',
-    bridge_repair: '🌉 Bridge Repair Needed', bridge_new: '🌉 New Bridge Needed',
-    road_bridge_new: '🛣️ New Road & Bridge', culvert_new: '🔧 Culvert Needed',
-    culvert_repair: '🔧 Culvert Repair', embankment_new: '🏞️ Embankment Needed',
-    embankment_repair: '🏞️ Embankment Repair', canal_small: '💧 Small Canal',
-    canal_large: '💧 Large Canal', under_repair: 'Repair In Progress',
-    tube_well_needed: '🚰 Tube Well Needed',
-    tube_well_repair: '🔧 Tube Well Repair',
-    railway_repair: '🚂 Railway Repair',
-    railway_new: '🚂 New Railway',
-    railway_station_new: '🚉 New Railway Station',
-    bus_station_repair: '🚌 Bus Station Repair',
-    bus_station_new: '🚏 New Bus Station',
-    opinion: '💬 Public Opinion'
+    broken: '<i class="fa-solid fa-road-circle-exclamation"></i> Broken Road', pothole: '<i class="fa-solid fa-road-spikes"></i> Pothole', waterlogged: '<i class="fa-solid fa-water"></i> Waterlogged',
+    dangerous: '<i class="fa-solid fa-triangle-exclamation"></i> Dangerous', unpaved: '<i class="fa-solid fa-road"></i> Unpaved Road', narrow: '<i class="fa-solid fa-compress"></i> Narrow Road',
+    nolight: '<i class="fa-regular fa-lightbulb"></i> No Street Light', erosion: '<i class="fa-solid fa-hill-rockslide"></i> Soil Erosion',
+    bridge_repair: '<i class="fa-solid fa-bridge-circle-exclamation"></i> Bridge Repair Needed', bridge_new: '<i class="fa-solid fa-bridge"></i> New Bridge Needed',
+    road_bridge_new: '<i class="fa-solid fa-bridge-water"></i> New Road & Bridge', culvert_new: '<i class="fa-solid fa-wrench"></i> Culvert Needed',
+    culvert_repair: '<i class="fa-solid fa-screwdriver-wrench"></i> Culvert Repair', embankment_new: '<i class="fa-solid fa-mound"></i> Embankment Needed',
+    embankment_repair: '<i class="fa-solid fa-trowel"></i> Embankment Repair', canal_small: '<i class="fa-solid fa-water"></i> Small Canal',
+    canal_large: '<i class="fa-solid fa-water"></i> Large Canal', under_repair: '<i class="fa-solid fa-person-digging"></i> Repair In Progress',
+    tube_well_needed: '<i class="fa-solid fa-faucet-drip"></i> Tube Well Needed',
+    tube_well_repair: '<i class="fa-solid fa-wrench"></i> Tube Well Repair',
+    railway_repair: '<i class="fa-solid fa-train-tram"></i> Railway Repair',
+    railway_new: '<i class="fa-solid fa-train"></i> New Railway',
+    railway_station_new: '<i class="fa-building-shield"></i> New Railway Station',
+    bus_station_repair: '<i class="fa-solid fa-bus"></i> Bus Station Repair',
+    bus_station_new: '<i class="fa-solid fa-building"></i> New Bus Station',
+    opinion: '<i class="fa-regular fa-comments"></i> Public Opinion'
 };
 
 function getProblemLabel(type) {
@@ -100,12 +100,12 @@ function getReactionEmoji(problemType) {
     const bridgeTypes = ['bridge_repair', 'bridge_new', 'road_bridge_new', 'culvert_new', 'culvert_repair'];
     const earthTypes  = ['embankment_new', 'embankment_repair', 'erosion'];
     const roadTypes   = ['broken', 'pothole', 'dangerous', 'unpaved', 'narrow', 'nolight', 'under_repair'];
-    if (problemType === 'opinion') return '💡';
-    if (waterTypes.includes(problemType)) return '🚰';
-    if (bridgeTypes.includes(problemType)) return '🌉';
-    if (earthTypes.includes(problemType)) return '⛏️';
-    if (roadTypes.includes(problemType)) return '🛠️';
-    return '👍';
+    if (problemType === 'opinion') return '<i class="fa-regular fa-lightbulb"></i>';
+    if (waterTypes.includes(problemType)) return '<i class="fa-solid fa-droplet"></i>';
+    if (bridgeTypes.includes(problemType)) return '<i class="fa-solid fa-bridge"></i>';
+    if (earthTypes.includes(problemType)) return '<i class="fa-solid fa-hammer"></i>';
+    if (roadTypes.includes(problemType)) return '<i class="fa-solid fa-helmet-safety"></i>';
+    return '<i class="fa-solid fa-thumbs-up"></i>';
 }
 
 function getReactionLabel(problemType) {
@@ -149,7 +149,7 @@ function formatTime(ts) {
 function showToast(msg, type = '') {
     const el = document.getElementById('toast');
     if (!el) return;
-    el.textContent = msg;
+    el.innerHTML = msg;
     el.className = 'toast show' + (type ? ' ' + type : '');
     el.style.display = 'block';
     clearTimeout(el._t);
@@ -196,7 +196,16 @@ function saveAuth(token, user) {
 }
 
 function getUser() {
-    try { return JSON.parse(localStorage.getItem('rtbd_user')); } catch { return null; }
+    try { 
+        let u = JSON.parse(localStorage.getItem('rtbd_user'));
+        if (u && typeof u.icon === 'string') {
+            if (u.icon === '🤝') u.icon = '<i class="fa-solid fa-handshake"></i>';
+            if (u.icon === '🏗️') u.icon = '<i class="fa-solid fa-helmet-safety"></i>';
+            if (u.icon === '🏛️') u.icon = '<i class="fa-solid fa-building-columns"></i>';
+            localStorage.setItem('rtbd_user', JSON.stringify(u));
+        }
+        return u;
+    } catch { return null; }
 }
 
 function logout() {
@@ -234,7 +243,7 @@ function renderNavAuth() {
     if (user) {
         const avatarSrc = user.avatar
             ? `<img src="${user.avatar}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
-            : (user.icon || '👤');
+            : (user.icon || '<i class="fa-solid fa-user"></i>');
         navRight.innerHTML = `
             <div class="nav-status"><div class="status-dot"></div><span id="liveCount" data-i18n="nav.live">লাইভ</span></div>
             <div class="profile-btn" id="profileNavBtn" title="${user.name}" onclick="openProfileModal()">
@@ -245,7 +254,7 @@ function renderNavAuth() {
         navRight.innerHTML = `
             <div class="nav-status"><div class="status-dot"></div><span id="liveCount" data-i18n="nav.live">লাইভ</span></div>
             <div class="profile-btn" onclick="openAuthModal()" title="${typeof getLang==='function'&&getLang()==='en'?'Login / Profile':'লগইন / প্রোফাইল'}">
-                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;"><i class="fa-solid fa-user"></i></div>
             </div>`;
     }
     if (typeof applyLang === 'function') applyLang();
@@ -258,7 +267,7 @@ window.showCongratsCard = function(msgLine1, msgLine2) {
     card.style.background = 'rgba(2, 10, 5, 0.95)';
     card.innerHTML = `
         <div class="modal-box" style="max-width:400px; text-align:center; padding: 3rem 2rem;">
-            <div style="font-size:3.5rem;margin-bottom:15px;animation: pulse 1.5s infinite;">🎉</div>
+            <div style="font-size:3.5rem;margin-bottom:15px;animation: pulse 1.5s infinite;"><i class="fa-solid fa-party-horn"></i></div>
             <h2 style="color:var(--green-neon);font-family:'Exo 2',sans-serif;font-size:1.4rem;margin-bottom:8px;">${msgLine1}</h2>
             <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">${msgLine2 || ''}</p>
         </div>
@@ -281,9 +290,9 @@ window.openWhiteboxModal = function() {
     const lang = typeof getLang === 'function' ? getLang() : 'bn';
     modal.innerHTML = `
     <div class="modal-box" style="max-width:650px;">
-        <button class="modal-close" onclick="document.getElementById('whiteboxModal').classList.remove('open')">✕</button>
+        <button class="modal-close" onclick="document.getElementById('whiteboxModal').classList.remove('open')"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-title" style="text-align:center;font-size:1.2rem;margin-bottom:1rem;border-bottom:1px solid var(--green-neon);padding-bottom:10px;">
-            ${lang === 'en' ? '🔍 USER GUIDE & RULES' : '🔍 প্রকল্প গাইডলাইন ও নিয়মকানুন'}
+            ${lang === 'en' ? '<i class="fa-solid fa-magnifying-glass"></i> USER GUIDE & RULES' : '<i class="fa-solid fa-magnifying-glass"></i> প্রকল্প গাইডলাইন ও নিয়মকানুন'}
         </div>
         <div style="font-family:'Noto Sans Bengali',sans-serif; line-height:1.6; color:var(--text-primary); font-size:0.9rem;">
             <div style="margin-bottom:1rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
@@ -299,7 +308,7 @@ window.openWhiteboxModal = function() {
                 অ্যাপের উপরে থাকা ইউনিভার্সাল প্রোফাইল আইকনে ক্লিক করে ব্যবহারকারীরা তাদের সঠিক তথ্য দিয়ে একাউন্ট খুলতে পারবেন ও কাজ করতে পারবেন। তাদের তথ্য সম্পূর্ণ সুরক্ষিত থাকবে।
             </div>
             <div style="margin-bottom:1rem; border:1px solid var(--red-neon); padding:10px; border-radius:8px; background:rgba(244,42,65,0.07);">
-                <strong style="color:var(--red-neon);">⚠️ সতর্কতা (নকল রিপোর্ট):</strong> 
+                <strong style="color:var(--red-neon);"><i class="fa-solid fa-triangle-exclamation"></i> সতর্কতা (নকল রিপোর্ট):</strong> 
                 কেউ ফেক বা ভুয়া রিপোর্ট করতে পারবে না। যদি কেউ এমনটা করে, তবে তাদের যাবতীয় তথ্য যাচাই করে আইনগত ব্যবস্থা নেওয়া হবে।
             </div>
         </div>
@@ -327,8 +336,8 @@ function openAuthModal() {
     const lang = typeof getLang === 'function' ? getLang() : 'bn';
     modal.innerHTML = `
     <div class="modal-box">
-        <button class="modal-close" onclick="document.getElementById('authModal').classList.remove('open')">✕</button>
-        <div class="modal-title" data-i18n="auth.title">${lang === 'en' ? '🔐 Account Access' : '🔐 অ্যাকাউন্টে প্রবেশ'}</div>
+        <button class="modal-close" onclick="document.getElementById('authModal').classList.remove('open')"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-title" data-i18n="auth.title">${lang === 'en' ? '<i class="fa-solid fa-lock"></i> Account Access' : '<i class="fa-solid fa-lock"></i> অ্যাকাউন্টে প্রবেশ'}</div>
         <div class="auth-tabs">
             <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login',this)" data-i18n="auth.login">${lang === 'en' ? 'Login' : 'লগইন'}</button>
             <button class="auth-tab" id="tabReg" onclick="switchAuthTab('register',this)" data-i18n="auth.register">${lang === 'en' ? 'New Account' : 'একাউন্ট খুলুন'}</button>
@@ -344,7 +353,7 @@ function openAuthModal() {
             <div class="form-group"><label data-i18n="auth.phone">${lang === 'en' ? 'Phone' : 'ফোন নম্বর'}</label><input type="tel" id="regPhone" placeholder="01XXXXXXXXX"></div>
             <div class="form-group"><label data-i18n="auth.password">${lang === 'en' ? 'Password' : 'পাসওয়ার্ড'}</label><input type="password" id="regPass" placeholder="${lang === 'en' ? 'Min 6 characters' : 'কমপক্ষে ৬ অক্ষর'}"></div>
             <div style="display:flex; gap:10px;">
-                <div class="form-group" style="flex:1;"><label data-i18n="auth.nid">${lang === 'en' ? 'National ID (NID)' : 'এনআইডি (১০ ডিজিট)'}</label><input type="text" id="regNid" placeholder="10 Digit NID" maxlength="10"></div>
+                <div class="form-group" style="flex:1;"><label data-i18n="auth.nid">${lang === 'en' ? 'National ID (NID)' : 'এনআইডি নাম্বার (NID)'}</label><input type="text" id="regNid" placeholder="10/13/17 Digit NID" maxlength="17"></div>
                 <div class="form-group" style="flex:1;"><label data-i18n="auth.dob">${lang === 'en' ? 'Date of Birth' : 'জন্ম তারিখ'}</label><input type="date" id="regDob"></div>
             </div>
             <div style="display:flex; gap:10px;">
@@ -366,10 +375,10 @@ function openAuthModal() {
         </div>
         <div id="resetFormModal" style="display:none;">
             <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px; line-height:1.5;">
-                ${lang === 'en' ? 'Verify via Phone and NID to reset your password.' : 'আপনার ফোন নম্বর ও ১০ ডিজিটের NID ব্যবহার করে পাসওয়ার্ড রিসেট করুন।'}
+                ${lang === 'en' ? 'Verify via Phone and NID to reset your password.' : 'আপনার ফোন নম্বর ও NID ব্যবহার করে পাসওয়ার্ড রিসেট করুন।'}
             </div>
             <div class="form-group"><label data-i18n="auth.phone">${lang === 'en' ? 'Phone' : 'ফোন নম্বর'}</label><input type="tel" id="resetPhone" placeholder="01XXXXXXXXX"></div>
-            <div class="form-group"><label data-i18n="auth.nid">${lang === 'en' ? 'National ID (NID)' : 'এনআইডি নম্বর (১০ ডিজিট)'}</label><input type="text" id="resetNid" placeholder="10 Digit NID" maxlength="10"></div>
+            <div class="form-group"><label data-i18n="auth.nid">${lang === 'en' ? 'National ID (NID)' : 'এনআইডি নম্বর'}</label><input type="text" id="resetNid" placeholder="10/13/17 Digit NID" maxlength="17"></div>
             <div class="form-group"><label data-i18n="auth.newPassword">${lang === 'en' ? 'New Password' : 'নতুন পাসওয়ার্ড'}</label><input type="password" id="resetPass" placeholder="••••••"></div>
             <button class="submit-btn" onclick="doResetPassword()" data-i18n="auth.doReset">${lang === 'en' ? 'Reset Password' : 'পাসওয়ার্ড সেট করুন'}</button>
         </div>
@@ -395,7 +404,7 @@ async function doLogin() {
         if (d.success) {
             saveAuth(d.token, d.user);
             document.getElementById('authModal').classList.remove('open');
-            showToast('✅ লগইন সফল হয়েছে — ' + d.user.name);
+            showToast('<i class="fa-solid fa-check"></i> লগইন সফল হয়েছে — ' + d.user.name);
             renderNavAuth();
         } else showToast(d.message || 'লগইন ব্যর্থ', 'error');
     } catch (e) { showToast('সার্ভার সমস্যা', 'error'); }
@@ -412,13 +421,13 @@ async function doRegister() {
     const address = document.getElementById('regAddress').value.trim();
     
     if (!name || !phone || !pass || !nid || !dob) { showToast('নাম, ফোন, পাসওয়ার্ড, NID এবং জন্ম তারিখ দিন', 'error'); return; }
-    if (nid.length !== 10) { showToast('NID অবশ্যই ১০ ডিজিটের হতে হবে', 'error'); return; }
+    if (![10, 13, 17].includes(nid.length)) { showToast('NID অবশ্যই ১০, ১৩ বা ১৭ ডিজিটের হতে হবে', 'error'); return; }
     try {
         const d = await apiPost('/api/auth/register', { name, phone, password: pass, role, nid, dob, job, address });
         if (d.success) {
             saveAuth(d.token, d.user);
             document.getElementById('authModal').classList.remove('open');
-            showToast('✅ একাউন্ট তৈরি সফল হয়েছে!');
+            showToast('<i class="fa-solid fa-check"></i> একাউন্ট তৈরি সফল হয়েছে!');
             renderNavAuth();
         } else showToast(d.message || 'রেজিস্ট্রেশন ব্যর্থ', 'error');
     } catch (e) { showToast('সার্ভার সমস্যা', 'error'); }
@@ -430,12 +439,12 @@ async function doResetPassword() {
     const newPass = document.getElementById('resetPass').value;
 
     if (!phone || !nid || !newPass) { showToast('সবগুলো তথ্য পূরণ করুন', 'error'); return; }
-    if (nid.length !== 10) { showToast('NID অবশ্যই ১০ ডিজিটের হতে হবে', 'error'); return; }
+    if (![10, 13, 17].includes(nid.length)) { showToast('NID অবশ্যই ১০, ১৩ বা ১৭ ডিজিটের হতে হবে', 'error'); return; }
 
     try {
         const d = await apiPost('/api/auth/reset-password', { phone, nid, newPassword: newPass });
         if (d.success) {
-            showToast('✅ পাসওয়ার্ড সফলভাবে আপডেট করা হয়েছে! লগইন করুন');
+            showToast('<i class="fa-solid fa-check"></i> পাসওয়ার্ড সফলভাবে আপডেট করা হয়েছে! লগইন করুন');
             switchAuthTab('login', document.getElementById('tabLogin'));
         } else {
             showToast(d.message || 'পাসওয়ার্ড রিসেট ব্যর্থ (তথ্য মেলেনি)', 'error');
@@ -446,11 +455,17 @@ async function doResetPassword() {
 }
 
 
+const _faLink = document.createElement('link');
+_faLink.rel = 'stylesheet';
+_faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+document.head.appendChild(_faLink);
+
 const _globalStyle = document.createElement('style');
 _globalStyle.textContent = `
 @keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 @keyframes markerPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:0.6;}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+i.fa-solid, i.fa-regular { line-height: inherit; }
 
 
 .lang-toggle{display:flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid var(--glass-border);border-radius:20px;background:rgba(0,255,136,0.04);}

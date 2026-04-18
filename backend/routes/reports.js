@@ -80,7 +80,11 @@ router.get('/', optionalAuth, (req, res) => {
     if (status && status !== 'all') filtered = filtered.filter(r => r.status === status && r.problemType !== 'opinion');
     filtered.sort((a, b) => new Date(b.createdAt || b.timestamp) - new Date(a.createdAt || a.timestamp));
     const start = (parseInt(page) - 1) * parseInt(limit);
-    let slice = filtered.slice(start, start + parseInt(limit));
+    const { users } = require('./auth');
+    let slice = filtered.slice(start, start + parseInt(limit)).map(r => {
+        const u = users.find(u => u.id === r.userId);
+        return { ...r, avatar: u?.avatar || null, icon: u?.icon || null, role: u?.role || null };
+    });
     if (!req.user) {
         slice = slice.map(r => ({ ...r, reporterPhone: 'লগইন করুন' }));
     }

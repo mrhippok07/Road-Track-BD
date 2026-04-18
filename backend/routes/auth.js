@@ -60,7 +60,7 @@ const validateRegister = [
     body('phone').matches(/^01[3-9]\d{8}$/).withMessage('সঠিক বাংলাদেশি ফোন নম্বর দিন'),
     body('password').isLength({ min: 6 }).withMessage('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর'),
     body('role').isIn(['সাধারণ', 'স্বেচ্ছাসেবক', 'ঠিকাদার', 'সরকারিকর্মকর্তা']).withMessage('ভূমিকা সঠিক নয়'),
-    body('nid').isLength({ min: 10, max: 10 }).withMessage('আপনার ১০ সংখ্যার সঠিক এনআইডি নাম্বার দিন'),
+    body('nid').matches(/^(\d{10}|\d{13}|\d{17})$/).withMessage('আপনার সঠিক এনআইডি নাম্বার দিন (১০, ১৩, অথবা ১৭ সংখ্যা)'),
     body('dob').notEmpty().withMessage('জন্ম তারিখ দিতে হবে')
 ];
 
@@ -89,7 +89,7 @@ router.post('/register', validateRegister, async (req, res) => {
         role, nid: nid.trim(), dob, job: job || '', address: address || '',
         points: 0, reportCount: 0,
         avatar: null,
-        icon: role === 'ঠিকাদার' ? '🏗️' : role === 'সরকারিকর্মকর্তা' ? '🏛️' : '🤝',
+        icon: role === 'ঠিকাদার' ? '<i class="fa-solid fa-helmet-safety"></i>' : role === 'সরকারিকর্মকর্তা' ? '<i class="fa-solid fa-building-columns"></i>' : '<i class="fa-solid fa-handshake"></i>',
         isFirstLogin: true,
         createdAt: new Date().toISOString()
     };

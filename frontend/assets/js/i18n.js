@@ -12,7 +12,7 @@ const RTBD_TRANSLATIONS = {
     'nav.profile':       { bn: 'প্রোফাইল',        en: 'Profile' },
 
     
-    'auth.title':        { bn: '🔐 অ্যাকাউন্টে প্রবেশ', en: '🔐 Account Access' },
+    'auth.title':        { bn: '<i class="fa-solid fa-lock"></i> অ্যাকাউন্টে প্রবেশ', en: '<i class="fa-solid fa-lock"></i> Account Access' },
     'auth.login':        { bn: 'লগইন',             en: 'Login' },
     'auth.register':     { bn: 'নতুন অ্যাকাউন্ট', en: 'New Account' },
     'auth.phone':        { bn: 'ফোন নম্বর',        en: 'Phone Number' },
@@ -32,23 +32,23 @@ const RTBD_TRANSLATIONS = {
     'auth.address':      { bn: 'ঠিকানা (জেলা ও এলাকা)', en: 'Address (District & Area)' },
 
     
-    'profile.title':     { bn: '👤 আমার প্রোফাইল', en: '👤 My Profile' },
+    'profile.title':     { bn: '<i class="fa-solid fa-user"></i> আমার প্রোফাইল', en: '<i class="fa-solid fa-user"></i> My Profile' },
     'profile.name':      { bn: 'আপনার নাম',         en: 'Your Name' },
     'profile.save':      { bn: 'সংরক্ষণ করুন',     en: 'Save' },
     'profile.reports':   { bn: 'রিপোর্ট সংখ্যা',   en: 'Reports' },
     'profile.changeAvatar': { bn: 'ছবি পরিবর্তন',    en: 'Change Avatar' },
-    'profile.welcome':   { bn: '🎉 স্বাগতম! আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।', en: '🎉 Welcome! Your account has been created successfully.' },
+    'profile.welcome':   { bn: '<i class="fa-solid fa-party-horn"></i> স্বাগতম! আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।', en: '<i class="fa-solid fa-party-horn"></i> Welcome! Your account has been created successfully.' },
     'profile.congrats':  { bn: 'ধন্যবাদ Road Track BD পরিবারে যোগ দেওয়ার জন্য!', en: 'Thank you for joining the Road Track BD family!' },
     'profile.settings':  { bn: 'সেটিংস', en: 'Settings' },
     'profile.myReports': { bn: 'আমার রিপোর্ট', en: 'My Reports' },
     'profile.delPost':   { bn: 'রিপোর্ট মুছুন', en: 'Delete Report' },
     'profile.delConf':   { bn: 'আপনি কি নিশ্চিত?', en: 'Are you sure?' },
-    'profile.delProf':   { bn: '🚨 প্রোফাইল মুছুন', en: '🚨 Delete Profile' },
+    'profile.delProf':   { bn: '<i class="fa-solid fa-triangle-exclamation"></i> প্রোফাইল মুছুন', en: '<i class="fa-solid fa-triangle-exclamation"></i> Delete Profile' },
     'profile.logout':    { bn: 'লগআউট করুন', en: 'Log Out' },
     'profile.mydata':    { bn: 'প্রোফাইল তথ্য', en: 'My Data' },
 
     
-    'report.title':      { bn: '📍 রাস্তার সমস্যা রিপোর্ট করুন', en: '📍 Report a Road Problem' },
+    'report.title':      { bn: '<i class="fa-solid fa-location-dot"></i> রাস্তার সমস্যা রিপোর্ট করুন', en: '<i class="fa-solid fa-location-dot"></i> Report a Road Problem' },
     'report.subtitle':   { bn: 'আপনার একটি রিপোর্ট অনেক বড় দুর্ঘটনা রুখে দিতে পারে।', en: 'Your one report can prevent major accidents.' },
     'report.typeLabel':  { bn: '▸ সমস্যার ধরন নির্বাচন করুন', en: '▸ Select Problem Type' },
     'report.statusLabel':{ bn: '▸ অবস্থা নির্বাচন করুন', en: '▸ Select Status' },
@@ -59,13 +59,13 @@ const RTBD_TRANSLATIONS = {
     'report.district':   { bn: 'জেলা *', en: 'District *' },
     'report.area':       { bn: 'উপজেলা / এলাকা *', en: 'Upazila / Area *' },
     'report.desc':       { bn: 'বিস্তারিত বিবরণ', en: 'Details / Description' },
-    'report.gps':        { bn: '📍 GPS থেকে লোকেশন নিন', en: '📍 Get GPS Location' },
-    'report.gpsOk':      { bn: '✅ লোকেশন পাওয়া গেছে', en: '✅ Location captured' },
+    'report.gps':        { bn: '<i class="fa-solid fa-location-dot"></i> GPS থেকে লোকেশন নিন', en: '<i class="fa-solid fa-location-dot"></i> Get GPS Location' },
+    'report.gpsOk':      { bn: '<i class="fa-solid fa-check"></i> লোকেশন পাওয়া গেছে', en: '<i class="fa-solid fa-check"></i> Location captured' },
     'report.photo':      { bn: 'ছবি আপলোড (সর্বোচ্চ ৩টি)', en: 'Upload Photos (max 3)' },
     'report.clickPhoto': { bn: 'ছবি আপলোড করতে ক্লিক করুন', en: 'Click to upload photo' },
     'report.yourName':   { bn: 'আপনার নাম (ঐচ্ছিক)', en: 'Your Name (optional)' },
     'report.mobile':     { bn: 'মোবাইল (ঐচ্ছিক)', en: 'Mobile (optional)' },
-    'report.submit':     { bn: '📤 রিপোর্ট জমা দিন', en: '📤 Submit Report' },
+    'report.submit':     { bn: '<i class="fa-solid fa-paper-plane"></i> রিপোর্ট জমা দিন', en: '<i class="fa-solid fa-paper-plane"></i> Submit Report' },
     'report.submitting': { bn: 'জমা হচ্ছে...', en: 'Submitting...' },
 
     
@@ -79,30 +79,30 @@ const RTBD_TRANSLATIONS = {
     'status.reject.dot':   { bn: 'বাতিল', en: 'Rejected' },
 
     
-    'type.broken':             { bn: '🚧 ভাঙা রাস্তা', en: '🚧 Broken Road' },
-    'type.pothole':            { bn: '🕳️ বড় গর্ত', en: '🕳️ Pothole' },
-    'type.waterlogged':        { bn: '🌊 পানি জমা', en: '🌊 Waterlogged' },
-    'type.dangerous':          { bn: '⚠️ ঝুঁকিপূর্ণ', en: '⚠️ Dangerous Road' },
+    'type.broken':             { bn: '<i class="fa-solid fa-traffic-cone"></i> ভাঙা রাস্তা', en: '<i class="fa-solid fa-traffic-cone"></i> Broken Road' },
+    'type.pothole':            { bn: '<i class="fa-solid fa-road-spikes"></i> বড় গর্ত', en: '<i class="fa-solid fa-road-spikes"></i> Pothole' },
+    'type.waterlogged':        { bn: '<i class="fa-solid fa-water"></i> পানি জমা', en: '<i class="fa-solid fa-water"></i> Waterlogged' },
+    'type.dangerous':          { bn: '<i class="fa-solid fa-triangle-exclamation"></i> ঝুঁকিপূর্ণ', en: '<i class="fa-solid fa-triangle-exclamation"></i> Dangerous Road' },
     'type.unpaved':            { bn: '🪨 কাঁচা রাস্তা', en: '🪨 Unpaved Road' },
-    'type.narrow':             { bn: '↔️ সংকীর্ণ রাস্তা', en: '↔️ Narrow Road' },
-    'type.nolight':            { bn: '🔦 আলো নেই', en: '🔦 No Street Light' },
-    'type.erosion':            { bn: '🌧️ মাটি ক্ষয়', en: '🌧️ Soil Erosion' },
-    'type.bridge_repair':      { bn: '🌉 ব্রিজ সংস্কার প্রয়োজন', en: '🌉 Bridge Repair Needed' },
-    'type.bridge_new':         { bn: '🌉 নতুন ব্রিজ প্রয়োজন', en: '🌉 New Bridge Needed' },
-    'type.road_bridge_new':    { bn: '🛣️ নতুন রাস্তা ও ব্রিজ', en: '🛣️ New Road & Bridge' },
-    'type.culvert_new':        { bn: '🔧 কালভার্ট প্রয়োজন', en: '🔧 Culvert Needed' },
-    'type.culvert_repair':     { bn: '🔧 কালভার্ট সংস্কার', en: '🔧 Culvert Repair' },
-    'type.embankment_new':     { bn: '🏞️ বেড়িবাঁধ প্রয়োজন', en: '🏞️ Embankment Needed' },
-    'type.embankment_repair':  { bn: '🏞️ বেড়িবাঁধ সংস্কার', en: '🏞️ Embankment Repair' },
-    'type.canal_small':        { bn: '💧 ছোট খাল খনন', en: '💧 Small Canal Needed' },
-    'type.canal_large':        { bn: '💧 বড় খাল খনন', en: '💧 Large Canal Needed' },
+    'type.narrow':             { bn: '<i class="fa-solid fa-compress"></i> সংকীর্ণ রাস্তা', en: '<i class="fa-solid fa-compress"></i> Narrow Road' },
+    'type.nolight':            { bn: '<i class="fa-solid fa-lightbulb"></i> আলো নেই', en: '<i class="fa-solid fa-lightbulb"></i> No Street Light' },
+    'type.erosion':            { bn: '<i class="fa-solid fa-cloud-showers-heavy"></i> মাটি ক্ষয়', en: '<i class="fa-solid fa-cloud-showers-heavy"></i> Soil Erosion' },
+    'type.bridge_repair':      { bn: '<i class="fa-solid fa-bridge"></i> ব্রিজ সংস্কার প্রয়োজন', en: '<i class="fa-solid fa-bridge"></i> Bridge Repair Needed' },
+    'type.bridge_new':         { bn: '<i class="fa-solid fa-bridge"></i> নতুন ব্রিজ প্রয়োজন', en: '<i class="fa-solid fa-bridge"></i> New Bridge Needed' },
+    'type.road_bridge_new':    { bn: '<i class="fa-solid fa-road"></i> নতুন রাস্তা ও ব্রিজ', en: '<i class="fa-solid fa-road"></i> New Road & Bridge' },
+    'type.culvert_new':        { bn: '<i class="fa-solid fa-screwdriver-wrench"></i> কালভার্ট প্রয়োজন', en: '<i class="fa-solid fa-screwdriver-wrench"></i> Culvert Needed' },
+    'type.culvert_repair':     { bn: '<i class="fa-solid fa-screwdriver-wrench"></i> কালভার্ট সংস্কার', en: '<i class="fa-solid fa-screwdriver-wrench"></i> Culvert Repair' },
+    'type.embankment_new':     { bn: '<i class="fa-solid fa-mountain"></i> বেড়িবাঁধ প্রয়োজন', en: '<i class="fa-solid fa-mountain"></i> Embankment Needed' },
+    'type.embankment_repair':  { bn: '<i class="fa-solid fa-mountain"></i> বেড়িবাঁধ সংস্কার', en: '<i class="fa-solid fa-mountain"></i> Embankment Repair' },
+    'type.canal_small':        { bn: '<i class="fa-solid fa-droplet"></i> ছোট খাল খনন', en: '<i class="fa-solid fa-droplet"></i> Small Canal Needed' },
+    'type.canal_large':        { bn: '<i class="fa-solid fa-droplet"></i> বড় খাল খনন', en: '<i class="fa-solid fa-droplet"></i> Large Canal Needed' },
     'type.under_repair':       { bn: 'সংস্কার কাজ চলছে', en: 'Repair In Progress' },
-    'type.tube_well_needed':   { bn: '🚰 নলকূপ প্রয়োজন', en: '🚰 Tube Well Needed' },
-    'type.tube_well_repair':   { bn: '🔧 নলকূপ মেরামত', en: '🔧 Tube Well Repair' },
+    'type.tube_well_needed':   { bn: '<i class="fa-solid fa-faucet"></i> নলকূপ প্রয়োজন', en: '<i class="fa-solid fa-faucet"></i> Tube Well Needed' },
+    'type.tube_well_repair':   { bn: '<i class="fa-solid fa-screwdriver-wrench"></i> নলকূপ মেরামত', en: '<i class="fa-solid fa-screwdriver-wrench"></i> Tube Well Repair' },
 
     
-    'feed.title':        { bn: '📰 লাইভ রিপোর্ট ফিড', en: '📰 Live Report Feed' },
-    'feed.newReport':    { bn: '➕ নতুন রিপোর্ট', en: '➕ New Report' },
+    'feed.title':        { bn: '<i class="fa-regular fa-newspaper"></i> লাইভ রিপোর্ট ফিড', en: '<i class="fa-regular fa-newspaper"></i> Live Report Feed' },
+    'feed.newReport':    { bn: '<i class="fa-solid fa-plus"></i> নতুন রিপোর্ট', en: '<i class="fa-solid fa-plus"></i> New Report' },
     'feed.all':          { bn: 'সব', en: 'All' },
     'feed.pending':      { bn: 'মেরামত বাকি', en: 'Pending' },
     'feed.repair':       { bn: 'সংস্কার চলছে', en: 'Under Repair' },
@@ -115,13 +115,13 @@ const RTBD_TRANSLATIONS = {
     'feed.loading':      { bn: 'লোড হচ্ছে...', en: 'Loading...' },
     'feed.comment':      { bn: 'মন্তব্য করুন...', en: 'Write a comment...' },
     'feed.send':         { bn: 'পাঠান', en: 'Send' },
-    'feed.update':       { bn: '🔄 অবস্থা আপডেট', en: '🔄 Update Status' },
-    'feed.doUpdate':     { bn: '✅ আপডেট করুন', en: '✅ Update' },
-    'feed.share':        { bn: '🔗 শেয়ার', en: '🔗 Share' },
+    'feed.update':       { bn: '<i class="fa-solid fa-rotate"></i> অবস্থা আপডেট', en: '<i class="fa-solid fa-rotate"></i> Update Status' },
+    'feed.doUpdate':     { bn: '<i class="fa-solid fa-check"></i> আপডেট করুন', en: '<i class="fa-solid fa-check"></i> Update' },
+    'feed.share':        { bn: '<i class="fa-solid fa-link"></i> শেয়ার', en: '<i class="fa-solid fa-link"></i> Share' },
     'feed.noComment':    { bn: 'কোনো মন্তব্য নেই', en: 'No comments yet' },
 
     
-    'dash.title':        { bn: '⚡ কেন্দ্রীয় বিশ্লেষণ ড্যাশবোর্ড', en: '⚡ Central Analytics Dashboard' },
+    'dash.title':        { bn: '<i class="fa-solid fa-bolt"></i> কেন্দ্রীয় বিশ্লেষণ ড্যাশবোর্ড', en: '<i class="fa-solid fa-bolt"></i> Central Analytics Dashboard' },
     'dash.subtitle':     { bn: 'বাংলাদেশের সড়ক অবস্থার রিয়েল-টাইম পরিসংখ্যান', en: 'Real-time road condition statistics for Bangladesh' },
     'dash.total':        { bn: 'মোট রিপোর্ট', en: 'Total Reports' },
     'dash.pending':      { bn: 'মেরামত বাকি', en: 'Pending Repair' },
@@ -138,29 +138,29 @@ const RTBD_TRANSLATIONS = {
     'map.pendingRep':    { bn: 'মেরামত বাকি', en: 'Pending Repair' },
     'map.resolved':      { bn: 'সম্পন্ন মেরামত', en: 'Resolved' },
     'map.allTypes':      { bn: 'সব ধরন', en: 'All Types' },
-    'map.myLocation':    { bn: '📍 আমার অবস্থান', en: '📍 My Location' },
-    'map.reportBtn':     { bn: '➕ রাস্তার সমস্যা রিপোর্ট করুন', en: '➕ Report a Road Problem' },
-    'map.dashBtn':       { bn: '📊 ড্যাশবোর্ড দেখুন', en: '📊 View Dashboard' },
-    'map.feedBtn':       { bn: '📰 ফিড দেখুন', en: '📰 View Feed' },
+    'map.myLocation':    { bn: '<i class="fa-solid fa-location-dot"></i> আমার অবস্থান', en: '<i class="fa-solid fa-location-dot"></i> My Location' },
+    'map.reportBtn':     { bn: '<i class="fa-solid fa-plus"></i> রাস্তার সমস্যা রিপোর্ট করুন', en: '<i class="fa-solid fa-plus"></i> Report a Road Problem' },
+    'map.dashBtn':       { bn: '<i class="fa-solid fa-chart-pie"></i> ড্যাশবোর্ড দেখুন', en: '<i class="fa-solid fa-chart-pie"></i> View Dashboard' },
+    'map.feedBtn':       { bn: '<i class="fa-regular fa-newspaper"></i> ফিড দেখুন', en: '<i class="fa-regular fa-newspaper"></i> View Feed' },
     'map.recentReports': { bn: 'সাম্প্রতিক রিপোর্ট সমূহ', en: 'Recent Reports' },
     'map.seeAll':        { bn: 'সব রিপোর্ট দেখুন →', en: 'View All Reports →' },
     'map.volunteerDir':  { bn: 'স্বেচ্ছাসেবক ও ঠিকাদার ডিরেক্টরি', en: 'Volunteer & Contractor Directory' },
     'map.seeVol':        { bn: 'সব স্বেচ্ছাসেবক দেখুন →', en: 'View All Volunteers →' },
     'map.noReports':     { bn: 'এখনো কোনো রিপোর্ট নেই', en: 'No reports yet' },
-    'map.youAreHere':    { bn: '📍 আপনি এখানে আছেন', en: '📍 You are here' },
+    'map.youAreHere':    { bn: '<i class="fa-solid fa-location-dot"></i> আপনি এখানে আছেন', en: '<i class="fa-solid fa-location-dot"></i> You are here' },
 
     
-    'vol.title':         { bn: '🤝 স্বেচ্ছাসেবক ও ঠিকাদার', en: '🤝 Volunteers & Contractors' },
+    'vol.title':         { bn: '<i class="fa-solid fa-handshake"></i> স্বেচ্ছাসেবক ও ঠিকাদার', en: '<i class="fa-solid fa-handshake"></i> Volunteers & Contractors' },
     'vol.contact':       { bn: 'যোগাযোগ করুন', en: 'Contact' },
     'vol.noData':        { bn: 'কোনো স্বেচ্ছাসেবক তথ্য নেই', en: 'No volunteers found' },
-    'vol.join':          { bn: '➕ স্বেচ্ছাসেবক হিসেবে যোগ দিন', en: '➕ Join as Volunteer' },
+    'vol.join':          { bn: '<i class="fa-solid fa-plus"></i> স্বেচ্ছাসেবক হিসেবে যোগ দিন', en: '<i class="fa-solid fa-plus"></i> Join as Volunteer' },
 
     
     'ui.loading':        { bn: 'লোড হচ্ছে...', en: 'Loading...' },
     'ui.sysOnline':      { bn: 'SYS: ONLINE', en: 'SYS: ONLINE' },
-    'ui.close':          { bn: '✕ বন্ধ করুন', en: '✕ Close' },
-    'ui.copy':           { bn: '📋 কপি করুন', en: '📋 Copy Link' },
-    'ui.shareTitle':     { bn: '🔗 শেয়ার করুন', en: '🔗 Share' },
+    'ui.close':          { bn: '<i class="fa-solid fa-xmark"></i> বন্ধ করুন', en: '<i class="fa-solid fa-xmark"></i> Close' },
+    'ui.copy':           { bn: '<i class="fa-solid fa-clipboard-list"></i> কপি করুন', en: '<i class="fa-solid fa-clipboard-list"></i> Copy Link' },
+    'ui.shareTitle':     { bn: '<i class="fa-solid fa-link"></i> শেয়ার করুন', en: '<i class="fa-solid fa-link"></i> Share' },
     'ui.noComments':     { bn: 'কোনো মন্তব্য নেই', en: 'No comments yet' },
 };
 
@@ -198,13 +198,8 @@ function applyLang() {
         if (!entry) return;
         const val = entry[lang] || entry['bn'] || key;
         
-        if (el.children.length === 0) {
-            el.textContent = val;
-        } else {
-            
-            el.childNodes.forEach(node => {
-                if (node.nodeType === 3) node.textContent = val;
-            });
+        if (val) {
+            el.innerHTML = val;
         }
     });
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {

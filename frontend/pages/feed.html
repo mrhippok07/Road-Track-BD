@@ -738,17 +738,17 @@
         <div id="navRight" style="display:flex;gap:10px;align-items:center;">
             <div class="nav-status"><div class="status-dot"></div><span data-i18n="nav.live">লাইভ</span></div>
             <div class="profile-btn" id="authBtn" onclick="openAuthModal()" title="লগইন / প্রোফাইল">
-                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;"><i class="fa-solid fa-user"></i></div>
             </div>
         </div>
     </nav>
 
     <main>
         <div class="page-header">
-            <h1>📰 লাইভ রিপোর্ট ফিড</h1>
+            <h1><i class="fa-regular fa-newspaper"></i> লাইভ রিপোর্ট ফিড</h1>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <a href="/report" class="new-report-btn">➕ নতুন রিপোর্ট</a>
-                <button onclick="openOpinionModal()" class="new-report-btn" style="background:transparent; border-color:var(--blue-neon); color:var(--text-primary); cursor:pointer;">💬 জনমতামত দিন</button>
+                <a href="/report" class="new-report-btn"><i class="fa-solid fa-plus"></i> নতুন রিপোর্ট</a>
+                <button onclick="openOpinionModal()" class="new-report-btn" style="background:transparent; border-color:var(--blue-neon); color:var(--text-primary); cursor:pointer;"><i class="fa-regular fa-comments"></i> জনমতামত দিন</button>
             </div>
         </div>
         <div class="filter-row">
@@ -759,7 +759,7 @@
             <button class="filter-chip" onclick="filterFeed('bridge_repair',this)" data-i18n="feed.bridge">ব্রিজ</button>
             <button class="filter-chip" onclick="filterFeed('canal_large',this)" data-i18n="feed.canal">খাল</button>
             <button class="filter-chip" onclick="filterFeed('tube_well_needed',this)" data-i18n="feed.tubewell">নলকূপ</button>
-            <button class="filter-chip" onclick="filterFeed('opinion',this)" style="border-color:var(--blue-neon); color:var(--blue-neon);">💬 মতামত ট্যাগ</button>
+            <button class="filter-chip" onclick="filterFeed('opinion',this)" style="border-color:var(--blue-neon); color:var(--blue-neon);"><i class="fa-regular fa-comments"></i> মতামত ট্যাগ</button>
         </div>
         <div class="feed-list" id="feedList">
             <div style="color:var(--text-muted);text-align:center;padding:3rem;">লোড হচ্ছে...</div>
@@ -769,23 +769,23 @@
 
     <div class="share-popup" id="sharePopup">
         <div class="share-box">
-            <h3>🔗 শেয়ার করুন</h3>
+            <h3><i class="fa-solid fa-link"></i> শেয়ার করুন</h3>
             <input class="share-url" type="text" id="shareUrl" readonly>
             <div class="share-btns">
-                <button class="share-opt" onclick="copyShareUrl()">📋 কপি করুন</button>
-                <button class="share-opt" onclick="shareWhatsApp()">💬 WhatsApp</button>
-                <button class="share-opt" onclick="shareFacebook()">📘 Facebook</button>
-                <button class="share-opt" onclick="closeShare()">✕ বন্ধ করুন</button>
+                <button class="share-opt" onclick="copyShareUrl()"><i class="fa-solid fa-clipboard-list"></i> কপি করুন</button>
+                <button class="share-opt" onclick="shareWhatsApp()"><i class="fa-regular fa-comments"></i> WhatsApp</button>
+                <button class="share-opt" onclick="shareFacebook()"><i class="fa-brands fa-facebook"></i> Facebook</button>
+                <button class="share-opt" onclick="closeShare()"><i class="fa-solid fa-xmark"></i> বন্ধ করুন</button>
             </div>
         </div>
     </div>
     <div class="share-popup" id="opinionPopup">
         <div class="share-box">
-            <h3>💬 জনমতামত দিন</h3>
+            <h3><i class="fa-regular fa-comments"></i> জনমতামত দিন</h3>
             <textarea id="opinionText" style="width:100%; min-height:100px; background:rgba(0,255,136,0.05); border:1px solid var(--glass-border); border-radius:6px; padding:10px; color:var(--text-primary); font-size:0.8rem; margin-bottom:10px; resize:vertical;" placeholder="আপনার মতামত বা পরামর্শ লিখুন..."></textarea>
             <div class="share-btns">
-                <button class="share-opt" style="border-color:var(--green-neon); color:var(--green-neon);" onclick="submitOpinion()">📤 প্রকাশ করুন</button>
-                <button class="share-opt" onclick="closeOpinionModal()">✕ বন্ধ করুন</button>
+                <button class="share-opt" style="border-color:var(--green-neon); color:var(--green-neon);" onclick="submitOpinion()"><i class="fa-solid fa-paper-plane"></i> প্রকাশ করুন</button>
+                <button class="share-opt" onclick="closeOpinionModal()"><i class="fa-solid fa-xmark"></i> বন্ধ করুন</button>
             </div>
         </div>
     </div>
@@ -811,14 +811,14 @@
             const typeLabel = PROBLEM_LABELS[r.problemType] || r.problemType;
             const u = getUser();
             const isOwner = u && (u.id === r.userId || u.role === 'সরকারিকর্মকর্তা');
-            const updateBtnHtml = isOwner ? `<button class="update-btn" onclick="toggleUpdate('${r._id}')">🔄 অবস্থা আপডেট</button>` : '';
+            const updateBtnHtml = isOwner ? `<button class="update-btn" onclick="toggleUpdate('${r._id}')"><i class="fa-solid fa-rotate"></i> অবস্থা আপডেট</button>` : '';
 
             return `<div class="feed-card" id="card-${r._id}">
     <div class="feed-card-top">
       <div class="feed-dot" style="background:${color};box-shadow:0 0 8px ${color}"></div>
       <div class="feed-meta">
         <div class="feed-road">${r.roadName}</div>
-        <div class="feed-loc">${r.problemType !== 'opinion' ? `📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''} &nbsp;·&nbsp; ` : ''}🕒 ${formatTime(r.createdAt)}</div>
+        <div class="feed-loc">${r.problemType !== 'opinion' ? `<i class="fa-solid fa-location-dot"></i> ${r.district || ''} ${r.area ? '— ' + r.area : ''} &nbsp;·&nbsp; ` : ''}<i class="fa-regular fa-clock"></i> ${formatTime(r.createdAt)}</div>
       </div>
       ${r.problemType !== 'opinion' ? `<div class="feed-badge" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">${sLabel}</div>` : ''}
     </div>
@@ -826,10 +826,10 @@
     ${r.description ? `<div class="feed-desc">${r.description}</div>` : ''}
     ${photosHtml}
     <div class="feed-actions">
-      <button class="action-btn ${(r.userLiked)?'liked':''}" onclick="toggleLike('${r._id}',this)">❤️ <span id="like-${r._id}">${r.likes||0}</span></button>
+      <button class="action-btn ${(r.userLiked)?'liked':''}" onclick="toggleLike('${r._id}',this)"><i class="fa-solid fa-heart"></i> <span id="like-${r._id}">${r.likes||0}</span></button>
       <button class="action-btn ${(r.userReacted)?'reacted':''}" onclick="toggleReact('${r._id}',this)">${getReactionEmoji(r.problemType)} <span id="react-${r._id}">${r.reactions||0}</span></button>
-      <button class="action-btn" onclick="toggleComments('${r._id}')">💬 মতামত <span id="cmtCount-${r._id}">${r.commentCount||0}</span></button>
-      <button class="action-btn" onclick="openShare('${r._id}')">🔗 <span data-i18n="feed.share">শেয়ার</span></button>
+      <button class="action-btn" onclick="toggleComments('${r._id}')"><i class="fa-regular fa-comments"></i> মতামত <span id="cmtCount-${r._id}">${r.commentCount||0}</span></button>
+      <button class="action-btn" onclick="openShare('${r._id}')"><i class="fa-solid fa-link"></i> <span data-i18n="feed.share">শেয়ার</span></button>
       ${r.problemType !== 'opinion' ? updateBtnHtml : ''}
     </div>
     <div class="feed-comments" id="comments-${r._id}">
@@ -846,7 +846,7 @@
         <option value="repaired">সংস্কার সম্পন্ন (সবুজ ডট)</option>
         <option value="rejected">বাতিল</option>
       </select>
-      <button onclick="submitStatusUpdate('${r._id}')">✅ আপডেট করুন</button>
+      <button onclick="submitStatusUpdate('${r._id}')"><i class="fa-solid fa-check"></i> আপডেট করুন</button>
     </div>
   </div>`;
         }
@@ -939,7 +939,7 @@
             const status = document.getElementById('updateStatus-' + id).value;
             try {
                 const d = await apiPut(`/api/reports/${id}/status`, { status });
-                if (d.success) { showToast('✅ অবস্থা আপডেট হয়েছে'); loadFeed(true); }
+                if (d.success) { showToast('<i class="fa-solid fa-check"></i> অবস্থা আপডেট হয়েছে'); loadFeed(true); }
                 else showToast(d.message || 'আপডেট ব্যর্থ', 'error');
             } catch (e) { showToast('সার্ভার সমস্যা', 'error'); }
         }
@@ -950,7 +950,7 @@
             document.getElementById('sharePopup').classList.add('open');
         }
         function closeShare() { document.getElementById('sharePopup').classList.remove('open'); }
-        function copyShareUrl() { navigator.clipboard.writeText(currentShareUrl); showToast('✅ লিংক কপি হয়েছে'); }
+        function copyShareUrl() { navigator.clipboard.writeText(currentShareUrl); showToast('<i class="fa-solid fa-check"></i> লিংক কপি হয়েছে'); }
         function shareWhatsApp() { window.open('https://wa.me/?text=' + encodeURIComponent('Road Track BD — রিপোর্ট দেখুন: ' + currentShareUrl)); }
         function shareFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(currentShareUrl)); }
         function openPhoto(src) { window.open(src, '_blank'); }
@@ -981,7 +981,7 @@
                     area: '-'
                 });
                 if (d.success) {
-                    showToast('✅ মতামত প্রকাশিত হয়েছে');
+                    showToast('<i class="fa-solid fa-check"></i> মতামত প্রকাশিত হয়েছে');
                     closeOpinionModal();
                     if (currentFilter === 'all' || currentFilter === 'opinion') {
                         loadFeed(true);
@@ -998,7 +998,7 @@
             sk.on('report_update',r=>{
                 const existing=document.getElementById('card-'+r._id);
                 if(existing){existing.outerHTML=buildCard(r);}
-                else{const list=document.getElementById('feedList');list.insertAdjacentHTML('afterbegin',buildCard(r));showToast('📍 নতুন রিপোর্ট: '+r.roadName,'');}
+                else{const list=document.getElementById('feedList');list.insertAdjacentHTML('afterbegin',buildCard(r));showToast('<i class="fa-solid fa-location-dot"></i> নতুন রিপোর্ট: '+r.roadName,'');}
             });
             
             sk.on('comment_new',({reportId,comment})=>{

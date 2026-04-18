@@ -624,14 +624,14 @@
         <div class="status-dot"></div><span data-i18n="nav.live">লাইভ ডেটা</span>
       </div>
       <div class="profile-btn" onclick="openAuthModal()" title="লগইন / প্রোফাইল">
-        <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+        <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;"><i class="fa-solid fa-user"></i></div>
       </div>
     </div>
   </nav>
 
   <div class="dash-wrap">
     <div class="dash-header">
-      <h1>⚡ কেন্দ্রীয় বিশ্লেষণ ড্যাশবোর্ড</h1>
+      <h1><i class="fa-solid fa-bolt"></i> কেন্দ্রীয় বিশ্লেষণ ড্যাশবোর্ড</h1>
       <p>বাংলাদেশের সড়ক অবস্থার রিয়েল-টাইম পরিসংখ্যান ও বিশ্লেষণ</p>
     </div>
 
@@ -709,7 +709,7 @@
 
     <div class="chart-card"
       style="margin-bottom: 2rem; background: var(--bg-panel); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px;">
-      <div class="chart-title" style="margin-bottom:15px;">📋 সমস্যার ধরন অনুযায়ী মোট রিপোর্ট</div>
+      <div class="chart-title" style="margin-bottom:15px;"><i class="fa-solid fa-clipboard-list"></i> সমস্যার ধরন অনুযায়ী মোট রিপোর্ট</div>
       <div id="typeStatsContainer" style="display:flex;gap:10px;flex-wrap:wrap;">
         <div style="color:var(--text-muted);font-size:0.85rem;">লোড হচ্ছে...</div>
       </div>
@@ -717,25 +717,25 @@
 
     <div class="charts-grid">
       <div class="chart-card">
-        <div class="chart-title">📊 সমস্যার ধরন অনুযায়ী বিবরণ</div>
+        <div class="chart-title"><i class="fa-solid fa-chart-pie"></i> সমস্যার ধরন অনুযায়ী বিবরণ</div>
         <div style="height:220px;"><canvas id="typeChart"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">📈 গত ৭ দিনের রিপোর্ট প্রবাহ</div>
+        <div class="chart-title"><i class="fa-solid fa-chart-line"></i> গত ৭ দিনের রিপোর্ট প্রবাহ</div>
         <div style="height:220px;"><canvas id="trendChart"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">🗺️ সর্বাধিক ক্ষতিগ্রস্ত জেলা</div>
+        <div class="chart-title"><i class="fa-solid fa-map"></i> সর্বাধিক ক্ষতিগ্রস্ত জেলা</div>
         <div class="district-bars" id="districtBars">
           <div style="color:var(--text-muted);text-align:center;padding:1rem;">লোড হচ্ছে...</div>
         </div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">📅 মাসিক রিপোর্ট তুলনা</div>
+        <div class="chart-title"><i class="fa-solid fa-calendar-days"></i> মাসিক রিপোর্ট তুলনা</div>
         <div style="height:220px;"><canvas id="monthChart"></canvas></div>
       </div>
       <div class="chart-card wide">
-        <div class="chart-title">📋 সাম্প্রতিক পেন্ডিং রাস্তার তালিকা</div>
+        <div class="chart-title"><i class="fa-solid fa-clipboard-list"></i> সাম্প্রতিক পেন্ডিং রাস্তার তালিকা</div>
         <div class="pending-list" id="pendingList">
           <div style="color:var(--text-muted);text-align:center;padding:1rem;">লোড হচ্ছে...</div>
         </div>
@@ -801,7 +801,7 @@
           el.innerHTML = d.data.map((r, i) => `
         <div class="pending-item">
           <div class="pending-num">${i + 1}</div>
-          <div class="pending-info"><div class="pending-road">${r.roadName}</div><div class="pending-district">📍 ${r.district || ''} ${r.area ? '— ' + r.area : ''}</div></div>
+          <div class="pending-info"><div class="pending-road">${r.roadName}</div><div class="pending-district"><i class="fa-solid fa-location-dot"></i> ${r.district || ''} ${r.area ? '— ' + r.area : ''}</div></div>
           <div class="pending-badge">${PROBLEM_LABELS[r.problemType] || r.problemType}</div>
           <div class="pending-date">${formatTime(r.createdAt)}</div>
         </div>`).join('');
@@ -811,7 +811,7 @@
 
     function renderTypeChart(byType) {
       const keys = Object.keys(byType);
-      const labels = keys.map(k => PROBLEM_LABELS[k] || k);
+      const labels = keys.map(k => (PROBLEM_LABELS[k] || k).replace(/<[^>]*>?/gm, '').trim());
       const data = Object.values(byType);
       const colors = keys.map(k => (PROBLEM_COLORS[k] || '#ff1744') + 'cc'); 
       const ctx = document.getElementById('typeChart').getContext('2d');

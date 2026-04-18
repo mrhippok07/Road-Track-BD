@@ -457,14 +457,14 @@
         <div id="navRight" style="display:flex;gap:10px;align-items:center;">
             <div class="nav-status"><div class="status-dot"></div><span data-i18n="nav.live">লাইভ</span></div>
             <div class="profile-btn" id="authBtn" onclick="openAuthModal()" title="লগইন / প্রোফাইল">
-                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;"><i class="fa-solid fa-user"></i></div>
             </div>
         </div>
     </nav>
 
     <main>
         <div class="page-header">
-            <h1 data-i18n="vol.title">🤝 স্বেচ্ছাসেবক ও ঠিকাদার</h1>
+            <h1 data-i18n="vol.title"><i class="fa-solid fa-handshake"></i> স্বেচ্ছাসেবক ও ঠিকাদার</h1>
         </div>
         <div class="filter-row">
             <button class="filter-chip active" onclick="filterVols('all',this)">সবাই</button>
@@ -482,7 +482,7 @@
     <script>
         let allVols = [];
 
-        const ROLE_ICONS = { 'স্বেচ্ছাসেবক': '🤝', 'ঠিকাদার': '🏗️', 'সরকারিকর্মকর্তা': '🏛️' };
+        const ROLE_ICONS = { 'স্বেচ্ছাসেবক': '<i class="fa-solid fa-handshake"></i>', 'ঠিকাদার': '<i class="fa-solid fa-helmet-safety"></i>', 'সরকারিকর্মকর্তা': '<i class="fa-solid fa-building-columns"></i>' };
 
         async function loadVols() {
             try {
@@ -497,10 +497,10 @@
             if (!list.length) { g.innerHTML = '<div class="empty-state">কোনো তথ্য নেই</div>'; return; }
             g.innerHTML = list.map(v => `
     <div class="vol-card">
-      <div class="vol-avatar">${v.avatar ? `<img src="${v.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : (v.icon || ROLE_ICONS[v.role] || '👤')}</div>
+      <div class="vol-avatar">${v.avatar ? `<img src="${v.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : (v.icon || ROLE_ICONS[v.role] || '<i class="fa-solid fa-user"></i>')}</div>
       <div class="vol-name">${v.name}</div>
       <div class="vol-role">${v.role}</div>
-      <div class="vol-info">📍 ${v.address || v.district || v.area || '—'}<br>📞 ${v.phone || '—'}<br>${v.job ? '💼 ' + v.job : ''}</div>
+      <div class="vol-info"><i class="fa-solid fa-location-dot"></i> ${v.address || v.district || v.area || '—'}<br><i class="fa-solid fa-phone"></i> ${v.phone || '—'}<br>${v.job ? '<i class="fa-solid fa-briefcase"></i> ' + v.job : ''}</div>
       <div class="vol-stats">
         <div class="vol-stat"><div class="vol-stat-val">${v.reportCount || 0}</div><div class="vol-stat-label">রিপোর্ট</div></div>
         <div class="vol-stat"><div class="vol-stat-val">${v.points || 0}</div><div class="vol-stat-label">পয়েন্ট</div></div>
