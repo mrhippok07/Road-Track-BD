@@ -68,9 +68,9 @@ function cleanExpired() {
 
 setInterval(cleanExpired, 3600000);
 
-// === ROUTES ===
-// IMPORTANT: Named sub-routes (markers, stats, me/list) MUST come BEFORE /:id
-// Otherwise Express treats 'markers', 'stats', 'me' as report IDs!
+
+
+
 
 router.get('/', optionalAuth, (req, res) => {
     cleanExpired();
@@ -140,7 +140,7 @@ router.get('/stats', (req, res) => {
     res.json({ success: true, data: { total, totalOpinions, pending, underRepair, resolved, today: todayCount, todayOpinions, byType, byDistrict, trend7, monthly } });
 });
 
-// MUST be before /:id !
+
 router.get('/me/list', requireAuth, (req, res) => {
     const list = reports.filter(r => r.userId === req.user.id);
     res.json({ success: true, data: list });

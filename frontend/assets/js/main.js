@@ -1,11 +1,11 @@
-// ════════════════════════════════════════════════════════════════════
-//  Road Track BD — main.js  (Shared Utilities v3.0)
-// ════════════════════════════════════════════════════════════════════
 
-// ─── Crash Monitoring ────────────────────────────────────────────────────────
+
+
+
+
 window.onerror = function(msg, url, line, col, error) {
     console.error("SYS_CRASH:", { msg, url, line, col, error });
-    // In a real app, you'd send this to a logging server like Sentry/LogDNA
+    
 };
 window.onunhandledrejection = function(event) {
     console.error("SYS_UNHANDLED_PROMISE:", event.reason);
@@ -13,7 +13,7 @@ window.onunhandledrejection = function(event) {
 
 const API_BASE = window.location.origin;
 
-// ─── Problem Type Colors (Consistent across Map & Dashboard) ─────────────────
+
 const PROBLEM_COLORS = {
     broken: '#ff1744', pothole: '#ff1744', dangerous: '#ffd600',
     waterlogged: '#00b0ff', narrow: '#ffd600', nolight: '#ffd600',
@@ -28,7 +28,7 @@ const PROBLEM_COLORS = {
     opinion: '#00f2ff'
 };
 
-// ─── Problem Type Labels (bilingual handled via i18n.js) ─────────────────────
+
 const PROBLEM_LABELS = {
     broken: 'ভাঙা রাস্তা', pothole: 'বড় গর্ত', waterlogged: 'পানি জমা',
     dangerous: 'ঝুঁকিপূর্ণ', unpaved: 'কাঁচা রাস্তা', narrow: 'সংকীর্ণ রাস্তা',
@@ -85,7 +85,7 @@ function getStatusLabel(status) {
     return (lang === 'en' ? STATUS_LABELS_EN[status] : STATUS_LABELS[status]) || status;
 }
 
-// ─── Map Marker Colors ────────────────────────────────────────────────────────
+
 function getMarkerColor(r) {
     if (r.problemType === 'opinion') return '#00f2ff';
     if (r.status === 'under_repair') return '#2196f3';
@@ -94,7 +94,7 @@ function getMarkerColor(r) {
     return PROBLEM_COLORS[r.problemType] || '#ff1744';
 }
 
-// ─── Type-specific Reaction Emoji ────────────────────────────────────────────
+
 function getReactionEmoji(problemType) {
     const waterTypes = ['waterlogged', 'canal_small', 'canal_large', 'tube_well_needed', 'tube_well_repair'];
     const bridgeTypes = ['bridge_repair', 'bridge_new', 'road_bridge_new', 'culvert_new', 'culvert_repair'];
@@ -115,7 +115,7 @@ function getReactionLabel(problemType) {
     return emoji + ' রিঅ্যাক্ট';
 }
 
-// ─── Counter Animation ────────────────────────────────────────────────────────
+
 function animateCount(id, target) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -128,7 +128,7 @@ function animateCount(id, target) {
     }, 40);
 }
 
-// ─── Time Formatting (bilingual) ──────────────────────────────────────────────
+
 function formatTime(ts) {
     if (!ts) return '';
     const lang = typeof getLang === 'function' ? getLang() : 'bn';
@@ -145,7 +145,7 @@ function formatTime(ts) {
     return `${Math.floor(diff / 86400)} দিন আগে`;
 }
 
-// ─── Toast Notification ───────────────────────────────────────────────────────
+
 function showToast(msg, type = '') {
     const el = document.getElementById('toast');
     if (!el) return;
@@ -156,7 +156,7 @@ function showToast(msg, type = '') {
     el._t = setTimeout(() => { el.style.display = 'none'; el.className = 'toast'; }, 4000);
 }
 
-// ─── API Helpers ──────────────────────────────────────────────────────────────
+
 async function apiFetch(url, opts = {}) {
     const token = localStorage.getItem('rtbd_token');
     const headers = {
@@ -189,7 +189,7 @@ async function apiFormPost(url, formData) {
     return res.json();
 }
 
-// ─── Auth Helpers ─────────────────────────────────────────────────────────────
+
 function saveAuth(token, user) {
     localStorage.setItem('rtbd_token', token);
     localStorage.setItem('rtbd_user', JSON.stringify(user));
@@ -205,7 +205,7 @@ function logout() {
     window.location.href = '/';
 }
 
-// ─── Socket.IO ────────────────────────────────────────────────────────────────
+
 function initSocket(cb) {
     if (typeof io === 'undefined') return;
     const sk = io(window.location.origin, {
@@ -225,7 +225,7 @@ function updateLiveDot(on) {
     });
 }
 
-// ─── Profile System ───────────────────────────────────────────────────────────
+
 function renderNavAuth() {
     const user = getUser();
     const navRight = document.getElementById('navRight');
@@ -313,7 +313,7 @@ function openProfileModal() {
     window.location.href = '/profile';
 }
 
-// ─── Shared Auth Modal (injected into all pages) ──────────────────────────────
+
 function openAuthModal() {
     const user = getUser();
     if (user) { openProfileModal(); return; }
@@ -445,32 +445,32 @@ async function doResetPassword() {
     }
 }
 
-// ─── Injected Global Styles ───────────────────────────────────────────────────
+
 const _globalStyle = document.createElement('style');
 _globalStyle.textContent = `
 @keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 @keyframes markerPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:0.6;}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
 
-/* Language Toggle */
+
 .lang-toggle{display:flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid var(--glass-border);border-radius:20px;background:rgba(0,255,136,0.04);}
 .lt-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.7rem;font-family:'Exo 2',sans-serif;letter-spacing:1px;padding:2px 4px;border-radius:3px;transition:all 0.2s;}
 .lt-btn.active{color:var(--green-neon);background:rgba(0,255,136,0.1);}
 .lt-sep{color:var(--glass-border);font-size:0.7rem;}
 
-/* Profile Button in Nav */
+
 .profile-btn{display:flex;align-items:center;gap:8px;padding:5px 12px;background:rgba(0,255,136,0.06);border:1px solid var(--glass-border);border-radius:20px;cursor:pointer;transition:all 0.25s;color:var(--text-primary);}
 .profile-btn:hover{border-color:var(--green-neon);background:rgba(0,255,136,0.12);}
 .profile-avatar-mini{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),#004d38);border:1px solid var(--green-neon);display:flex;align-items:center;justify-content:center;font-size:0.9rem;overflow:hidden;flex-shrink:0;}
 .profile-name-mini{font-size:0.75rem;font-family:'Noto Sans Bengali',sans-serif;color:var(--green-neon);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-/* Profile Modal */
+
 .profile-welcome-banner{background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:14px;text-align:center;margin-bottom:1rem;animation:fadeIn 0.5s ease;}
 .profile-avatar-lg{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),#004d38);border:2px solid var(--green-neon);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--glow-green);transition:all 0.3s;}
 .profile-avatar-lg:hover .profile-avatar-overlay{opacity:1;}
 .profile-avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-size:1.5rem;opacity:0;transition:opacity 0.2s;}
 
-/* Modal base (if not already in page) */
+
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
 .modal-overlay.open{display:flex;}
 .modal-box{background:#021008;border:1px solid var(--green-neon);border-radius:16px;padding:2rem;max-width:500px;width:90%;position:relative;box-shadow:var(--glow-green);animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto;}
@@ -486,7 +486,7 @@ _globalStyle.textContent = `
 .submit-btn:hover{background:var(--green-neon);color:var(--bg-deep);transform:translateY(-2px);}
 .submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 
-/* Global Input Theme Fix (No White Boxes) */
+
 input, select, textarea {
     background: rgba(0, 255, 136, 0.05) !important;
     border: 1px solid var(--glass-border) !important;

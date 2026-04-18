@@ -1,11 +1,6 @@
-/**
- * Road Track BD — Bilingual i18n System (Bengali / English)
- * Usage: t('key') returns translated string based on current language
- * Toggle: setLang('en') / setLang('bn')
- */
-
 const RTBD_TRANSLATIONS = {
-    // ── Navigation ──────────────────────────────────────────────────────────
+    
+    
     'nav.map':           { bn: 'ম্যাপ',          en: 'Map' },
     'nav.report':        { bn: 'রিপোর্ট',         en: 'Report' },
     'nav.feed':          { bn: 'ফিড',             en: 'Feed' },
@@ -16,7 +11,7 @@ const RTBD_TRANSLATIONS = {
     'nav.logout':        { bn: 'লগআউট',           en: 'Logout' },
     'nav.profile':       { bn: 'প্রোফাইল',        en: 'Profile' },
 
-    // ── Auth Modal ───────────────────────────────────────────────────────────
+    
     'auth.title':        { bn: '🔐 অ্যাকাউন্টে প্রবেশ', en: '🔐 Account Access' },
     'auth.login':        { bn: 'লগইন',             en: 'Login' },
     'auth.register':     { bn: 'নতুন অ্যাকাউন্ট', en: 'New Account' },
@@ -36,7 +31,7 @@ const RTBD_TRANSLATIONS = {
     'auth.occ_pl':       { bn: 'আপনার পেশা', en: 'Your Occupation' },
     'auth.address':      { bn: 'ঠিকানা (জেলা ও এলাকা)', en: 'Address (District & Area)' },
 
-    // ── Profile Modal ────────────────────────────────────────────────────────
+    
     'profile.title':     { bn: '👤 আমার প্রোফাইল', en: '👤 My Profile' },
     'profile.name':      { bn: 'আপনার নাম',         en: 'Your Name' },
     'profile.save':      { bn: 'সংরক্ষণ করুন',     en: 'Save' },
@@ -52,7 +47,7 @@ const RTBD_TRANSLATIONS = {
     'profile.logout':    { bn: 'লগআউট করুন', en: 'Log Out' },
     'profile.mydata':    { bn: 'প্রোফাইল তথ্য', en: 'My Data' },
 
-    // ── Report Page ──────────────────────────────────────────────────────────
+    
     'report.title':      { bn: '📍 রাস্তার সমস্যা রিপোর্ট করুন', en: '📍 Report a Road Problem' },
     'report.subtitle':   { bn: 'আপনার একটি রিপোর্ট অনেক বড় দুর্ঘটনা রুখে দিতে পারে।', en: 'Your one report can prevent major accidents.' },
     'report.typeLabel':  { bn: '▸ সমস্যার ধরন নির্বাচন করুন', en: '▸ Select Problem Type' },
@@ -73,7 +68,7 @@ const RTBD_TRANSLATIONS = {
     'report.submit':     { bn: '📤 রিপোর্ট জমা দিন', en: '📤 Submit Report' },
     'report.submitting': { bn: 'জমা হচ্ছে...', en: 'Submitting...' },
 
-    // ── Status Labels ────────────────────────────────────────────────────────
+    
     'status.pending':      { bn: 'মেরামত বাকি', en: 'Pending Repair' },
     'status.under_repair': { bn: 'সংস্কার চলছে', en: 'Under Repair' },
     'status.repaired':     { bn: 'সংস্কার সম্পন্ন', en: 'Repaired' },
@@ -83,7 +78,7 @@ const RTBD_TRANSLATIONS = {
     'status.done.dot':     { bn: 'সংস্কার সম্পন্ন হয়েছে (সবুজ ডট)', en: 'Repaired (green dot)' },
     'status.reject.dot':   { bn: 'বাতিল', en: 'Rejected' },
 
-    // ── Problem Type Labels ──────────────────────────────────────────────────
+    
     'type.broken':             { bn: '🚧 ভাঙা রাস্তা', en: '🚧 Broken Road' },
     'type.pothole':            { bn: '🕳️ বড় গর্ত', en: '🕳️ Pothole' },
     'type.waterlogged':        { bn: '🌊 পানি জমা', en: '🌊 Waterlogged' },
@@ -105,7 +100,7 @@ const RTBD_TRANSLATIONS = {
     'type.tube_well_needed':   { bn: '🚰 নলকূপ প্রয়োজন', en: '🚰 Tube Well Needed' },
     'type.tube_well_repair':   { bn: '🔧 নলকূপ মেরামত', en: '🔧 Tube Well Repair' },
 
-    // ── Feed Page ────────────────────────────────────────────────────────────
+    
     'feed.title':        { bn: '📰 লাইভ রিপোর্ট ফিড', en: '📰 Live Report Feed' },
     'feed.newReport':    { bn: '➕ নতুন রিপোর্ট', en: '➕ New Report' },
     'feed.all':          { bn: 'সব', en: 'All' },
@@ -125,7 +120,7 @@ const RTBD_TRANSLATIONS = {
     'feed.share':        { bn: '🔗 শেয়ার', en: '🔗 Share' },
     'feed.noComment':    { bn: 'কোনো মন্তব্য নেই', en: 'No comments yet' },
 
-    // ── Dashboard ────────────────────────────────────────────────────────────
+    
     'dash.title':        { bn: '⚡ কেন্দ্রীয় বিশ্লেষণ ড্যাশবোর্ড', en: '⚡ Central Analytics Dashboard' },
     'dash.subtitle':     { bn: 'বাংলাদেশের সড়ক অবস্থার রিয়েল-টাইম পরিসংখ্যান', en: 'Real-time road condition statistics for Bangladesh' },
     'dash.total':        { bn: 'মোট রিপোর্ট', en: 'Total Reports' },
@@ -136,7 +131,7 @@ const RTBD_TRANSLATIONS = {
     'dash.activeUsers':  { bn: 'সক্রিয় ব্যবহারকারী', en: 'Active Users' },
     'dash.online':       { bn: 'অনলাইন', en: 'Online' },
 
-    // ── Map / Home Page ──────────────────────────────────────────────────────
+    
     'map.liveLabel':     { bn: 'LIVE SATELLITE MAP — BANGLADESH', en: 'LIVE SATELLITE MAP — BANGLADESH' },
     'map.totalRep':      { bn: 'মোট রিপোর্ট', en: 'Total Reports' },
     'map.todayRep':      { bn: 'আজকের রিপোর্ট', en: "Today's Reports" },
@@ -154,13 +149,13 @@ const RTBD_TRANSLATIONS = {
     'map.noReports':     { bn: 'এখনো কোনো রিপোর্ট নেই', en: 'No reports yet' },
     'map.youAreHere':    { bn: '📍 আপনি এখানে আছেন', en: '📍 You are here' },
 
-    // ── Volunteer Page ───────────────────────────────────────────────────────
+    
     'vol.title':         { bn: '🤝 স্বেচ্ছাসেবক ও ঠিকাদার', en: '🤝 Volunteers & Contractors' },
     'vol.contact':       { bn: 'যোগাযোগ করুন', en: 'Contact' },
     'vol.noData':        { bn: 'কোনো স্বেচ্ছাসেবক তথ্য নেই', en: 'No volunteers found' },
     'vol.join':          { bn: '➕ স্বেচ্ছাসেবক হিসেবে যোগ দিন', en: '➕ Join as Volunteer' },
 
-    // ── General UI ───────────────────────────────────────────────────────────
+    
     'ui.loading':        { bn: 'লোড হচ্ছে...', en: 'Loading...' },
     'ui.sysOnline':      { bn: 'SYS: ONLINE', en: 'SYS: ONLINE' },
     'ui.close':          { bn: '✕ বন্ধ করুন', en: '✕ Close' },
@@ -169,24 +164,24 @@ const RTBD_TRANSLATIONS = {
     'ui.noComments':     { bn: 'কোনো মন্তব্য নেই', en: 'No comments yet' },
 };
 
-// ─── Core Functions ────────────────────────────────────────────────────────────
 
-/** Get the current active language */
+
+
 function getLang() {
     return localStorage.getItem('rtbd_lang') || 'bn';
 }
 
-/** Set language and refresh all translated elements */
+
 function setLang(lang) {
     localStorage.setItem('rtbd_lang', lang);
     applyLang();
-    // Update toggle button states
+    
     document.querySelectorAll('.lang-toggle .lt-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
     });
 }
 
-/** Translate a key */
+
 function t(key) {
     const lang = getLang();
     const entry = RTBD_TRANSLATIONS[key];
@@ -194,7 +189,7 @@ function t(key) {
     return entry[lang] || entry['bn'] || key;
 }
 
-/** Apply all translations to [data-i18n] elements */
+
 function applyLang() {
     const lang = getLang();
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -202,11 +197,11 @@ function applyLang() {
         const entry = RTBD_TRANSLATIONS[key];
         if (!entry) return;
         const val = entry[lang] || entry['bn'] || key;
-        // Preserve child elements if element has children
+        
         if (el.children.length === 0) {
             el.textContent = val;
         } else {
-            // Only update text nodes
+            
             el.childNodes.forEach(node => {
                 if (node.nodeType === 3) node.textContent = val;
             });
@@ -224,7 +219,7 @@ function applyLang() {
     });
 }
 
-/** Inject the language toggle widget into a nav element */
+
 function injectLangToggle(navSelector) {
     const nav = document.querySelector(navSelector || 'nav');
     if (!nav || nav.querySelector('.lang-toggle')) return;
@@ -236,11 +231,11 @@ function injectLangToggle(navSelector) {
         <span class="lt-sep">|</span>
         <button class="lt-btn ${lang === 'en' ? 'active' : ''}" data-lang="en" onclick="setLang('en')">EN</button>
     `;
-    // Insert before the last child (usually auth button group)
+    
     nav.appendChild(toggle);
 }
 
-// ─── Apply on load ─────────────────────────────────────────────────────────────
+
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(applyLang, 10);
 });

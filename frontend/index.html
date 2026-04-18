@@ -1181,11 +1181,9 @@
             }
         }
     
-/* ═══════════════════════════════════════════════════
-   HAMBURGER MENU — MOBILE NAV (Road Track BD)
-   ═══════════════════════════════════════════════════ */
 
-/* Hamburger button — hidden on desktop */
+
+
 .hamburger-btn {
   display: none;
   flex-direction: column;
@@ -1206,12 +1204,12 @@
   border-radius: 2px;
   transition: all 0.3s ease;
 }
-/* Animated X when open */
+
 .hamburger-btn.open .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
 .hamburger-btn.open .bar:nth-child(2) { opacity: 0; }
 .hamburger-btn.open .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-/* Mobile drawer */
+
 .mobile-drawer {
   display: none;
   position: fixed;
@@ -1262,7 +1260,7 @@
 }
 .mobile-drawer .drawer-close:hover { color: #00ff88; }
 
-/* ─── @media: Switch to mobile layout at 768px ─── */
+
 @media screen and (max-width: 768px) {
   nav {
     padding: 0 1rem !important;
@@ -1272,35 +1270,35 @@
     justify-content: space-between !important;
   }
 
-  /* Hide desktop nav links completely */
+  
   
 
-  /* Show hamburger */
+  
   .hamburger-btn { display: flex !important; }
 
-  /* Brand: show logo small, hide subtitle text */
+  
   .brand-title { font-size: 0.9rem !important; letter-spacing: 1px !important; }
   .brand-sub { display: none !important; }
   .brand-logo { height: 30px !important; }
 
-  /* Right nav buttons: shrink */
+  
   #whiteboxTrigger span:last-child { display: none !important; }
   #whiteboxTrigger { padding: 6px 8px !important; }
 
-  /* Page wrappers */
+  
   .dash-wrap { padding: 75px 0.8rem 2rem !important; }
   .main-container, .page-wrap { padding-top: 75px !important; }
 
-  /* Grids: single column */
+  
   .kpi-grid,
   .charts-grid,
   .form-grid,
   .vol-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
 
-  /* Inputs: prevent iOS auto-zoom */
+  
   input, select, textarea { font-size: 16px !important; }
 
-  /* Modals: full width */
+  
   .modal-box, .auth-modal-inner { width: 94% !important; padding: 1.4rem !important; max-height: 90vh !important; overflow-y: auto !important; }
 }
 
@@ -1603,7 +1601,7 @@
 
         window.initGoogleMap = function () {
             if (_mapInitialized) {
-                // Already init — just trigger resize to fix blank tiles on navigation
+                
                 if (gMap) {
                     google.maps.event.trigger(gMap, 'resize');
                     gMap.setCenter({ lat: 23.685, lng: 90.356 });
@@ -1626,7 +1624,7 @@
                 });
                 gInfoWindow = new google.maps.InfoWindow();
 
-                // Force map tile refresh after brief delay (fixes blank tiles after navigation)
+                
                 setTimeout(() => {
                     google.maps.event.trigger(gMap, 'resize');
                     gMap.setCenter({ lat: 23.685, lng: 90.356 });
@@ -1634,7 +1632,7 @@
 
                 loadMarkersOnMap();
 
-                // Setup real-time user location
+                
                 if (navigator.geolocation) {
                     userWatchId = navigator.geolocation.watchPosition(pos => {
                         const lat = pos.coords.latitude, lng = pos.coords.longitude;
@@ -1664,7 +1662,7 @@
 
         function addMarkerOnMap(r) {
             if (!r.lat || !r.lng || !gMap) return;
-            // Clear existing marker for this rep if exists
+            
             const existing = mapMarkers.find(mx => mx._id === r._id);
             if (existing) existing.marker.setMap(null);
 
@@ -1692,7 +1690,7 @@
     </div>`);
                 gInfoWindow.open(gMap, m);
             });
-            // store
+            
             if (existing) existing.marker = m;
             else mapMarkers.push({ _id: r._id, marker: m, type: r.problemType });
         }
@@ -1772,7 +1770,7 @@
             document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
             btn.classList.add('active');
             loadHomeReports(type);
-            // also filter markers on map!
+            
             if (mapMarkers && mapMarkers.length) {
                 mapMarkers.forEach(mx => {
                     if (type === 'all' || mx.type === type) mx.marker.setMap(gMap);
@@ -1795,11 +1793,11 @@
                 if (d.success && d.data.length) {
                     g.innerHTML = d.data.map(v => `
         <div class="contractor-card">
-          <div class="contractor-avatar">${v.icon || '👤'}</div>
+          <div class="contractor-avatar">${v.avatar ? `<img src="${v.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : (v.icon || '👤')}</div>
           <div class="contractor-name">${v.name}</div>
           <div class="contractor-role">${v.role}</div>
           <div class="contractor-contact">📍 ${v.district || v.area || ''}<br>📞 ${v.phone || ''}</div>
-          <button class="contact-btn">যোগাযোগ করুন</button>
+          <button class="contact-btn" onclick="if('${v.phone || ''}') window.location.href='tel:${v.phone || ''}'">যোগাযোগ করুন</button>
         </div>`).join('');
                 } else {
                     g.innerHTML = '<div style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:2rem;">স্বেচ্ছাসেবক তথ্য নেই</div>';
@@ -1835,19 +1833,19 @@
                 if (el) el.innerHTML = 'SYS: ONLINE<br>' + now.toLocaleTimeString('en-US', { hour12: false });
             }, 1000);
 
-            // Load Google Maps — with double-load protection
+            
             function loadGoogleMapsScript(cfg) {
                 if (!cfg.googleMapsKey || cfg.googleMapsKey.trim() === '') {
                     document.getElementById('map').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:2rem;padding-top:200px;">ম্যাপ লোড করতে .env-এ GOOGLE_MAPS_API_KEY সেট করুন</div>';
                     return;
                 }
-                // Check if already loaded (browser cache / SPA navigation)
+                
                 if (document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
-                    // Script exists — call initGoogleMap if google is ready
+                    
                     if (typeof google !== 'undefined' && google.maps) {
                         window.initGoogleMap();
                     }
-                    // else the callback will fire naturally
+                    
                     return;
                 }
                 const sc = document.createElement('script');
@@ -1867,17 +1865,17 @@
                     document.getElementById('map').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:2rem;padding-top:200px;">ম্যাপ লোড করতে .env-এ GOOGLE_MAPS_API_KEY সেট করুন</div>';
                 });
 
-            // Hide loading overlay — wait a bit longer to ensure map starts
+            
             setTimeout(() => document.getElementById('loadingOverlay').classList.add('hide'), 1800);
 
-            // Register PWA Service Worker
+            
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/sw.js')
                     .then(reg => console.log('SW Registered', reg.scope))
                     .catch(err => console.log('SW Failed', err));
             }
 
-            // Visibility change: re-trigger map resize when tab becomes active
+            
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden && gMap && typeof google !== 'undefined' && google.maps) {
                     setTimeout(() => {
@@ -1890,7 +1888,7 @@
     </script>
 
 <script>
-/* ─── Hamburger menu logic ─── */
+
 (function() {
   var btn = document.querySelector('.hamburger-btn');
   var drawer = document.querySelector('.mobile-drawer');
@@ -1909,7 +1907,7 @@
     }
   });
 
-  // Close drawer when a link is clicked
+  
   drawer.querySelectorAll('.drawer-link').forEach(function(link) {
     link.addEventListener('click', function() {
       drawer.classList.remove('open');

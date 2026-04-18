@@ -24,12 +24,12 @@ function saveComments(comments) {
 
 let comments = readComments();
 
-// GET /api/feed/:id/comments
+
 router.get("/:id/comments", (req, res) => {
     res.json({ success: true, data: comments[req.params.id] || [] });
 });
 
-// POST /api/feed/:id/comments
+
 router.post("/:id/comments", requireAuth, (req, res) => {
     const { text } = req.body;
     if (!text || !text.trim()) return res.status(400).json({ success: false, message: "Comment cannot be empty" });
@@ -63,7 +63,7 @@ router.post("/:id/comments", requireAuth, (req, res) => {
     res.status(201).json({ success: true, data: comment });
 });
 
-// POST /api/feed/:id/like
+
 router.post("/:id/like", requireAuth, (req, res) => {
     const reports = reportsModule.reports;
     const report = reports.find(r => r._id === req.params.id);
@@ -77,7 +77,7 @@ router.post("/:id/like", requireAuth, (req, res) => {
     res.json({ success: true, likes: report.likes, liked });
 });
 
-// POST /api/feed/:id/react
+
 router.post("/:id/react", requireAuth, (req, res) => {
     const reports = reportsModule.reports;
     const report = reports.find(r => r._id === req.params.id);

@@ -39,7 +39,7 @@ self.addEventListener('fetch', event => {
   
   const url = new URL(event.request.url);
   
-  // API Calls: Network First, fallback to cache
+  
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(event.request)
@@ -53,14 +53,14 @@ self.addEventListener('fetch', event => {
     return;
   }
   
-  // Static & HTML: Stale-While-Revalidate (Instant load, background update)
+  
   event.respondWith(
     caches.match(event.request).then(cachedRes => {
       const fetchPromise = fetch(event.request).then(networkRes => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkRes.clone()));
         return networkRes;
       }).catch(() => {
-          // If offline and navigate, fallback to root or cached items
+          
           if (event.request.mode === 'navigate') return caches.match('/');
       });
       return cachedRes || fetchPromise;

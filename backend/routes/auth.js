@@ -9,7 +9,7 @@ const { body, validationResult } = require('express-validator');
 const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
-// Persistent Storage
+
 const DATA_FILE = path.join(__dirname, '../data/users.json');
 
 function readUsers() {
@@ -32,7 +32,7 @@ function saveUsers(users) {
 
 let users = readUsers();
 
-// ─── Avatar Upload ─────────────────────────────────────────────────────────────
+
 const avatarStorage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, path.join(__dirname, '../uploads')),
     filename: (req, file, cb) => cb(null, `avatar-${Date.now()}${path.extname(file.originalname)}`)
@@ -40,6 +40,15 @@ const avatarStorage = multer.diskStorage({
 const uploadAvatar = multer({
     storage: avatarStorage,
     limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) cb(null, true);
+        else cb(new Error('শুধুমাত্র ছবি আপলোড করা যাবে'));
+    }
+});
+
+const uploadCover = multer({
+    storage: avatarStorage, // Reuse the same storage
+    limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         if (file.mimetype.startsWith('image/')) cb(null, true);
         else cb(new Error('শুধুমাত্র ছবি আপলোড করা যাবে'));
@@ -102,14 +111,14 @@ router.post('/login', async (req, res) => {
     res.json({ success: true, message: 'লগইন সফল হয়েছে', token, user: safeUser(user) });
 });
 
-// GET /api/auth/me — get current user
+
 router.get('/me', requireAuth, (req, res) => {
     const user = users.find(u => u.id === req.user.id);
     if (!user) return res.status(404).json({ success: false, message: 'ব্যবহারকারী পাওয়া যায়নি' });
     res.json({ success: true, user: safeUser(user) });
 });
 
-// POST /api/auth/avatar — upload profile picture
+
 router.post('/avatar', requireAuth, uploadAvatar.single('avatar'), (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'ছবি আপলোড করুন' });
     const idx = users.findIndex(u => u.id === req.user.id);
@@ -119,7 +128,16 @@ router.post('/avatar', requireAuth, uploadAvatar.single('avatar'), (req, res) =>
     res.json({ success: true, avatar: users[idx].avatar });
 });
 
-// PUT /api/auth/profile — update profile data
+router.post('/cover', requireAuth, uploadCover.single('cover'), (req, res) => {
+    if (!req.file) return res.status(400).json({ success: false, message: 'ছবি আপলোড করুন' });
+    const idx = users.findIndex(u => u.id === req.user.id);
+    if (idx === -1) return res.status(404).json({ success: false, message: 'ব্যবহারকারী পাওয়া যায়নি' });
+    users[idx].coverPhoto = `/uploads/${req.file.filename}`;
+    saveUsers(users);
+    res.json({ success: true, coverPhoto: users[idx].coverPhoto });
+});
+
+
 router.put('/profile', requireAuth, (req, res) => {
     const idx = users.findIndex(u => u.id === req.user.id);
     if (idx === -1) return res.status(404).json({ success: false, message: 'ব্যবহারকারী পাওয়া যায়নি' });
@@ -131,27 +149,27 @@ router.put('/profile', requireAuth, (req, res) => {
     if (address !== undefined) users[idx].address = address.trim();
     if (dob !== undefined) users[idx].dob = dob.trim();
 
-    // Mark first login as done
+    
     users[idx].isFirstLogin = false;
     saveUsers(users);
     
-    // Re-issue token with updated info
+    
     const token = makeToken(users[idx]);
     res.json({ success: true, message: 'প্রোফাইল আপডেট হয়েছে', token, user: safeUser(users[idx]) });
 });
 
-// DELETE /api/auth/profile — delete user account
+
 router.delete('/profile', requireAuth, (req, res) => {
     const idx = users.findIndex(u => u.id === req.user.id);
     if (idx === -1) return res.status(404).json({ success: false, message: 'ব্যবহারকারী পাওয়া যায়নি' });
     
-    // Anonymize their legacy points/activity but wipe their account from DB
+    
     users.splice(idx, 1);
     saveUsers(users);
     res.json({ success: true, message: 'প্রোফাইল সফলভাবে মুছে ফেলা হয়েছে' });
 });
 
-// POST /api/auth/reset-password
+
 router.post('/reset-password', async (req, res) => {
     const { phone, nid, newPassword } = req.body;
     if (!phone || !nid || !newPassword) {
