@@ -93,6 +93,7 @@ app.get('/feed', serveFile('pages/feed.html'));
 app.get('/report', serveFile('pages/report.html'));
 app.get('/register', serveFile('pages/register.html'));
 app.get('/volunteer', serveFile('pages/volunteer.html'));
+app.get('/profile', serveFile('pages/profile.html'));
 
 app.use((req, res) => res.status(404).json({ success: false, message: 'পেজ পাওয়া যায়নি' }));
 

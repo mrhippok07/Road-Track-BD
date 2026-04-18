@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -80,11 +80,14 @@ router.get('/', optionalAuth, (req, res) => {
     if (status && status !== 'all') filtered = filtered.filter(r => r.status === status && r.problemType !== 'opinion');
     filtered.sort((a, b) => new Date(b.createdAt || b.timestamp) - new Date(a.createdAt || a.timestamp));
     const start = (parseInt(page) - 1) * parseInt(limit);
-    const slice = filtered.slice(start, start + parseInt(limit));
+    let slice = filtered.slice(start, start + parseInt(limit));
+    if (!req.user) {
+        slice = slice.map(r => ({ ...r, reporterPhone: 'লগইন করুন' }));
+    }
     res.json({ success: true, total: filtered.length, page: parseInt(page), data: slice });
 });
 
-router.get('/markers', (req, res) => {
+router.get('/markers', optionalAuth, (req, res) => {
     cleanExpired();
     const { type } = req.query;
     let list = reports.filter(r => r.lat && r.lng && r.problemType !== 'opinion');
@@ -94,6 +97,9 @@ router.get('/markers', (req, res) => {
         problemType: r.problemType, status: r.status, description: r.description,
         lat: r.lat, lng: r.lng, createdAt: r.createdAt, updatedAt: r.updatedAt
     }));
+    if (!req.user) {
+        markers.forEach(m => m.reporterPhone = 'লগইন করুন');
+    }
     res.json({ success: true, data: markers });
 });
 
@@ -140,10 +146,12 @@ router.get('/me/list', requireAuth, (req, res) => {
     res.json({ success: true, data: list });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', optionalAuth, (req, res) => {
     const r = reports.find(r => r._id === req.params.id);
     if (!r) return res.status(404).json({ success: false, message: 'Report not found' });
-    res.json({ success: true, data: r });
+    const safeReport = { ...r };
+    if (!req.user) safeReport.reporterPhone = 'লগইন করুন';
+    res.json({ success: true, data: safeReport });
 });
 
 router.post('/', requireAuth, upload.array('photos', 3), [
