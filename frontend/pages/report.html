@@ -553,6 +553,87 @@
   .modal-box, .auth-modal-inner { width: 94% !important; padding: 1.4rem !important; max-height: 90vh !important; overflow-y: auto !important; }
 }
 
+/* Custom modern checkboxes styling */
+.custom-checkbox-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    cursor: pointer;
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    user-select: none;
+    font-size: 0.85rem;
+}
+
+.custom-checkbox-container:hover {
+    border-color: var(--green-neon) !important;
+    background: rgba(0, 255, 136, 0.04) !important;
+    box-shadow: 0 4px 15px rgba(0, 255, 136, 0.05);
+}
+
+.custom-checkbox-container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkbox-box {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--glass-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.custom-checkbox-container input[type="checkbox"]:checked ~ .checkbox-box {
+    border-color: var(--green-neon) !important;
+    background: var(--green-neon) !important;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.checkbox-box::after {
+    content: "";
+    display: none;
+    width: 4px;
+    height: 8px;
+    border: solid #020a05;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.custom-checkbox-container input[type="checkbox"]:checked ~ .checkbox-box::after {
+    display: block;
+}
+
+.custom-checkbox-container i {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    transition: color 0.2s;
+    width: 18px;
+    text-align: center;
+}
+
+.custom-checkbox-container input[type="checkbox"]:checked ~ i {
+    color: var(--green-neon) !important;
+}
+
+.custom-checkbox-container input[type="checkbox"]:checked ~ span:last-child {
+    color: var(--green-neon) !important;
+    font-weight: 600;
+}
+
 </style>
 
 </head>
@@ -574,7 +655,7 @@
                 <div class="status-dot"></div>
             </div>
             <div class="profile-btn" id="authBtn" onclick="openAuthModal()" title="লগইন / প্রোফাইল">
-                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;">👤</div>
+                <div class="profile-avatar-mini" style="font-size:1.1rem; border:none; background:transparent;"><i class="fa-solid fa-user"></i></div>
             </div>
         </div>
     </nav>
@@ -594,7 +675,7 @@
                     data-i18n="type.waterlogged"><i class="fa-solid fa-water"></i> পানি জমা</button>
                 <button class="type-btn" data-value="dangerous" onclick="selectType(this)" data-i18n="type.dangerous"><i class="fa-solid fa-triangle-exclamation"></i>
                     ঝুঁকিপূর্ণ</button>
-                <button class="type-btn" data-value="unpaved" onclick="selectType(this)" data-i18n="type.unpaved">🪨
+                <button class="type-btn" data-value="unpaved" onclick="selectType(this)" data-i18n="type.unpaved"><i class="fa-solid fa-road"></i>
                     কাঁচা রাস্তা</button>
                 <button class="type-btn" data-value="narrow" onclick="selectType(this)" data-i18n="type.narrow"><i class="fa-solid fa-compress"></i>
                     সংকীর্ণ রাস্তা</button>
@@ -643,36 +724,36 @@
                 <div class="section-label"
                     style="margin-bottom:1.5rem; font-size:0.8rem; border-bottom:1px solid rgba(0,255,136,0.2); padding-bottom:8px;">
                     ▸ চরে কী কী সংস্কার প্রয়োজন? (একাধিক সিলেক্ট করুন)</div>
-                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:12px;">
-                    <label
-                        style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary); background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; border:1px solid var(--glass-border); transition:all 0.2s;"
-                        onmouseover="this.style.borderColor='var(--green-neon)'"
-                        onmouseout="this.style.borderColor='var(--glass-border)'">
-                        <input type="checkbox" class="chor-opt" value="স্কুল"> স্কুল
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:12px;">
+                    <label class="custom-checkbox-container">
+                        <input type="checkbox" class="chor-opt" value="স্কুল">
+                        <span class="checkbox-box"></span>
+                        <i class="fa-solid fa-school"></i>
+                        <span>স্কুল</span>
                     </label>
-                    <label
-                        style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary); background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; border:1px solid var(--glass-border); transition:all 0.2s;"
-                        onmouseover="this.style.borderColor='var(--green-neon)'"
-                        onmouseout="this.style.borderColor='var(--glass-border)'">
-                        <input type="checkbox" class="chor-opt" value="উপাসনালয়"> উপাসনালয়
+                    <label class="custom-checkbox-container">
+                        <input type="checkbox" class="chor-opt" value="উপাসনালয়">
+                        <span class="checkbox-box"></span>
+                        <i class="fa-solid fa-place-of-worship"></i>
+                        <span>উপাসনালয়</span>
                     </label>
-                    <label
-                        style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary); background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; border:1px solid var(--glass-border); transition:all 0.2s;"
-                        onmouseover="this.style.borderColor='var(--green-neon)'"
-                        onmouseout="this.style.borderColor='var(--glass-border)'">
-                        <input type="checkbox" class="chor-opt" value="চর বাঁধ"> চর বাঁধ
+                    <label class="custom-checkbox-container">
+                        <input type="checkbox" class="chor-opt" value="চর বাঁধ">
+                        <span class="checkbox-box"></span>
+                        <i class="fa-solid fa-bridge-water"></i>
+                        <span>চর বাঁধ</span>
                     </label>
-                    <label
-                        style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary); background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; border:1px solid var(--glass-border); transition:all 0.2s;"
-                        onmouseover="this.style.borderColor='var(--green-neon)'"
-                        onmouseout="this.style.borderColor='var(--glass-border)'">
-                        <input type="checkbox" class="chor-opt" value="চরের রাস্তা"> চরের রাস্তা
+                    <label class="custom-checkbox-container">
+                        <input type="checkbox" class="chor-opt" value="চরের রাস্তা">
+                        <span class="checkbox-box"></span>
+                        <i class="fa-solid fa-road"></i>
+                        <span>চরের রাস্তা</span>
                     </label>
-                    <label
-                        style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-primary); background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; border:1px solid var(--glass-border); transition:all 0.2s;"
-                        onmouseover="this.style.borderColor='var(--green-neon)'"
-                        onmouseout="this.style.borderColor='var(--glass-border)'">
-                        <input type="checkbox" class="chor-opt" value="সরকারি অফিস"> সরকারি অফিস
+                    <label class="custom-checkbox-container">
+                        <input type="checkbox" class="chor-opt" value="সরকারি অফিস">
+                        <span class="checkbox-box"></span>
+                        <i class="fa-solid fa-building-columns"></i>
+                        <span>সরকারি অফিস</span>
                     </label>
                 </div>
             </div>
@@ -788,7 +869,7 @@
                     <div class="img-preview" id="imgPreview"></div>
                 </div>
             </div>
-            <button class="submit-btn" id="submitBtn" onclick="submitReport()"><span data-i18n="report.submit">📤
+            <button class="submit-btn" id="submitBtn" onclick="submitReport()"><span data-i18n="report.submit"><i class="fa-solid fa-paper-plane"></i>
                     রিপোর্ট জমা দিন</span></button>
         </div>
     </main>
@@ -900,13 +981,13 @@
             navigator.geolocation.getCurrentPosition(pos => {
                 updateCoords(pos.coords.latitude, pos.coords.longitude);
                 if (map) map.setCenter({ lat: parseFloat(geoLat), lng: parseFloat(geoLng) });
-                showToast('✅ সঠিক লোকেশন পাওয়া গেছে');
+                showToast('<i class="fa-solid fa-check"></i> সঠিক লোকেশন পাওয়া গেছে');
             }, err => showToast('লোকেশন পেতে ব্যর্থ', 'error'),
                 { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
         }
         function handlePhoto(e) {
             selectedFiles = Array.from(e.target.files).slice(0, 3);
-            document.getElementById('uploadText').textContent = selectedFiles.length + 'টি ছবি নির্বাচিত ✅';
+            document.getElementById('uploadText').innerHTML = selectedFiles.length + 'টি ছবি নির্বাচিত <i class="fa-solid fa-circle-check"></i>';
             const prev = document.getElementById('imgPreview'); prev.innerHTML = '';
             selectedFiles.forEach(f => { const r = new FileReader(); r.onload = ev => { const img = document.createElement('img'); img.src = ev.target.result; img.className = 'img-thumb'; prev.appendChild(img); }; r.readAsDataURL(f); });
         }
@@ -959,17 +1040,17 @@
                 const d = await apiFormPost('/api/reports', fd);
                 if (d.success) {
                     if (window._socket) window._socket.emit('report_new', d.data);
-                    showToast('✅ রিপোর্ট সফলভাবে জমা হয়েছে!');
+                    showToast('<i class="fa-solid fa-check"></i> রিপোর্ট সফলভাবে জমা হয়েছে!');
                     setTimeout(() => window.location.href = '/feed', 1800);
                 } else {
                     showToast(d.message || 'রিপোর্ট জমা ব্যর্থ', 'error');
                     btn.disabled = false;
-                    btn.querySelector('span').textContent = '📤 রিপোর্ট জমা দিন';
+                    btn.querySelector('span').innerHTML = '<i class="fa-solid fa-paper-plane"></i> রিপোর্ট জমা দিন';
                 }
             } catch (e) {
                 showToast('সার্ভার সমস্যা', 'error');
                 btn.disabled = false;
-                btn.querySelector('span').textContent = '📤 রিপোর্ট জমা দিন';
+                btn.querySelector('span').innerHTML = '<i class="fa-solid fa-paper-plane"></i> রিপোর্ট জমা দিন';
             }
         }
     </script>

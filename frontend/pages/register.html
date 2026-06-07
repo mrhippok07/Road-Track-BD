@@ -400,20 +400,20 @@
 
     <main>
         <div class="left-col">
-            <div class="hero-tag">
+            <div class="hero-tag" data-i18n="auth.smartReg">
                 <div class="pulse-dot"></div>Smart Registration
             </div>
-            <div class="hero-heading">পরিবর্তন টা <span>আপনার থেকেই</span> শুরু হোক</div>
-            <div class="hero-desc">বাংলাদেশের রাস্তাগুলোকে সবার জন্য নিরাপদ ও পরিচ্ছন্ন করতে হাজার মানুষের নেটওয়ার্কে
+            <div class="hero-heading" data-i18n="auth.heroHeadline">পরিবর্তন টা <span>আপনার থেকেই</span> শুরু হোক</div>
+            <div class="hero-desc" data-i18n="auth.heroSubtext">বাংলাদেশের রাস্তাগুলোকে সবার জন্য নিরাপদ ও পরিচ্ছন্ন করতে হাজার মানুষের নেটওয়ার্কে
                 যোগ দিন।</div>
             <div class="stats-row">
                 <div class="stat-mini">
                     <div class="stat-mini-val">৫০কে+</div>
-                    <div class="stat-mini-label">সক্রিয় সদস্য</div>
+                    <div class="stat-mini-label" data-i18n="auth.activeMemb">সক্রিয় সদস্য</div>
                 </div>
                 <div class="stat-mini">
                     <div class="stat-mini-val">১২০০+</div>
-                    <div class="stat-mini-label">দৈনিক রিপোর্ট</div>
+                    <div class="stat-mini-label" data-i18n="auth.dailyRep">দৈনিক রিপোর্ট</div>
                 </div>
             </div>
         </div>
@@ -421,69 +421,68 @@
         <div class="right-col">
             <div class="auth-card">
                 <div class="auth-tabs">
-                    <button class="auth-tab active" onclick="switchAuthTabPage('register',this)">নিবন্ধন করুন</button>
-                    <button class="auth-tab" onclick="switchAuthTabPage('login',this)">লগইন করুন</button>
+                    <button class="auth-tab active" onclick="switchAuthTabPage('register',this)" data-i18n="auth.doRegisterTab">নিবন্ধন করুন</button>
+                    <button class="auth-tab" onclick="switchAuthTabPage('login',this)" data-i18n="auth.doLoginTab">লগইন করুন</button>
                 </div>
 
                 <div id="registerPanel">
                     <div style="margin-bottom:1rem;">
-                        <label style="margin-bottom:8px;display:block;">ভূমিকা নির্বাচন করুন *</label>
+                        <label style="margin-bottom:8px;display:block;" data-i18n="auth.roleSelect">ভূমিকা নির্বাচন করুন *</label>
                         <div class="role-grid">
                             <button class="role-btn selected" data-role="স্বেচ্ছাসেবক" onclick="selectRole(this)"><span
-                                    class="role-icon"><i class="fa-solid fa-handshake"></i></span>স্বেচ্ছাসেবক</button>
+                                    class="role-icon"><i class="fa-solid fa-handshake"></i></span><span data-i18n="auth.role.vol">স্বেচ্ছাসেবক</span></button>
                             <button class="role-btn" data-role="ঠিকাদার" onclick="selectRole(this)"><span
-                                    class="role-icon"><i class="fa-solid fa-helmet-safety"></i></span>ঠিকাদার</button>
+                                    class="role-icon"><i class="fa-solid fa-helmet-safety"></i></span><span data-i18n="auth.role.con">ঠিকাদার</span></button>
                             <button class="role-btn" data-role="সরকারিকর্মকর্তা" onclick="selectRole(this)"><span
-                                    class="role-icon"><i class="fa-solid fa-building-columns"></i></span>সরকারি ব্যক্তি</button>
+                                    class="role-icon"><i class="fa-solid fa-building-columns"></i></span><span data-i18n="auth.govtPerson">সরকারি ব্যক্তি</span></button>
                         </div>
                         <input type="hidden" id="selectedRole" value="স্বেচ্ছাসেবক">
                     </div>
                     <div class="form-grid">
-                        <div class="form-group"><label>পূর্ণ নাম *</label><input type="text" id="regName"
-                                placeholder="আপনার নাম"></div>
-                        <div class="form-group"><label>ফোন নম্বর *</label><input type="tel" id="regPhone"
-                                placeholder="০১৮XXXXXXXX"></div>
-                        <div class="form-group"><label>জন্ম তারিখ *</label><input type="date" id="regDob"></div>
-                        <div class="form-group"><label>এনআইডি (আবশ্যক) *</label><input type="text" id="regNid"
-                                placeholder="১০, ১৩ বা ১৭ ডিজিট এনআইডি" maxlength="17"></div>
-                        <div class="form-group"><label>পেশা</label><input type="text" id="regJob"
-                                placeholder="বর্তমান পেশা"></div>
-                        <div class="form-group"><label>পাসওয়ার্ড *</label><input type="password" id="regPass"
-                                placeholder="কমপক্ষে ৬ অক্ষর"></div>
-                        <div class="form-group"><label>পাসওয়ার্ড নিশ্চিত *</label><input type="password" id="regPass2"
-                                placeholder="পুনরায় লিখুন"></div>
+                        <div class="form-group"><label data-i18n="auth.fullName">পূর্ণ নাম *</label><input type="text" id="regName"
+                                data-i18n-placeholder="auth.namePl" placeholder="আপনার নাম"></div>
+                        <div class="form-group"><label data-i18n="auth.phone">ফোন নম্বর *</label><input type="tel" id="regPhone"
+                                data-i18n-placeholder="auth.phonePl" placeholder="০১৮XXXXXXXX"></div>
+                        <div class="form-group"><label data-i18n="auth.dobLabel">জন্ম তারিখ *</label><input type="date" id="regDob"></div>
+                        <div class="form-group"><label data-i18n="auth.nidLabel">এনআইডি (আবশ্যক) *</label><input type="text" id="regNid"
+                                data-i18n-placeholder="auth.nidPl" placeholder="১০, ১৩ বা ১৭ ডিজিট এনআইডি" maxlength="17"></div>
+                        <div class="form-group"><label data-i18n="auth.occLabel">পেশা</label><input type="text" id="regJob"
+                                data-i18n-placeholder="auth.occPl" placeholder="বর্তমান পেশা"></div>
+                        <div class="form-group"><label data-i18n="auth.passLabel">পাসওয়ার্ড *</label><input type="password" id="regPass"
+                                data-i18n-placeholder="auth.passPl" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+                        <div class="form-group"><label data-i18n="auth.passConfirm">পাসওয়ার্ড নিশ্চিত *</label><input type="password" id="regPass2"
+                                data-i18n-placeholder="auth.passConfirmPl" placeholder="পুনরায় লিখুন"></div>
                     </div>
-                    <button class="submit-btn" id="regBtn" onclick="doRegisterPage()">সাবমিট করুন</button>
-                    <div class="switch-link">ইতিমধ্যে অ্যাকাউন্ট আছে? <button onclick="switchAuthTabPage('login',null)">লগইন
-                            করুন</button></div>
+                    <button class="submit-btn" id="regBtn" onclick="doRegisterPage()" data-i18n="auth.submitReg">সাবমিট করুন</button>
+                    <div class="switch-link"><span data-i18n="auth.hasAccount">ইতিমধ্যে অ্যাকাউন্ট আছে? </span><button onclick="switchAuthTabPage('login',null)" data-i18n="auth.doLoginTab">লগইন করুন</button></div>
                 </div>
 
                 <div id="loginPanel" style="display:none;">
-                    <div class="form-group" style="margin-bottom:12px;"><label>ফোন নম্বর</label><input type="tel"
-                            id="loginPhone" placeholder="০১৮XXXXXXXX"></div>
-                    <div class="form-group" style="margin-bottom:12px;"><label>পাসওয়ার্ড</label><input type="password"
-                            id="loginPass" placeholder="পাসওয়ার্ড"></div>
+                    <div class="form-group" style="margin-bottom:12px;"><label data-i18n="auth.phone">ফোন নম্বর</label><input type="tel"
+                            id="loginPhone" data-i18n-placeholder="auth.phonePl" placeholder="০১৮XXXXXXXX"></div>
+                    <div class="form-group" style="margin-bottom:12px;"><label data-i18n="auth.password">পাসওয়ার্ড</label><input type="password"
+                            id="loginPass" data-i18n-placeholder="auth.password" placeholder="পাসওয়ার্ড"></div>
                     <div style="text-align:right; margin-bottom:16px;">
-                        <button onclick="openResetModal()" style="background:none; border:none; color:var(--text-muted); font-size:0.7rem; cursor:pointer; text-decoration:underline;">পাসওয়ার্ড ভুলে গেছেন?</button>
+                        <button onclick="openResetModal()" style="background:none; border:none; color:var(--text-muted); font-size:0.7rem; cursor:pointer; text-decoration:underline;" data-i18n="auth.forgotPass">পাসওয়ার্ড ভুলে গেছেন?</button>
                     </div>
-                    <button class="submit-btn" id="loginBtn" onclick="doLoginPage()">লগইন করুন</button>
-                    <div class="switch-link">নতুন ব্যবহারকারী? <button onclick="switchAuthTabPage('register',null)">নিবন্ধন
-                            করুন</button></div>
+                    <button class="submit-btn" id="loginBtn" onclick="doLoginPage()" data-i18n="auth.doLoginTab">লগইন করুন</button>
+                    <div class="switch-link"><span data-i18n="auth.newMemb">নতুন ব্যবহারকারী? </span><button onclick="switchAuthTabPage('register',null)" data-i18n="auth.doRegisterTab">নিবন্ধন করুন</button></div>
                 </div>
 
                 <div id="resetPanel" style="display:none;">
-                    <div class="modal-title" style="font-size:0.9rem; margin-bottom:1rem;">পাসওয়ার্ড রিসেট</div>
-                    <div class="form-group"><label>ফোন নম্বর</label><input type="tel" id="resetPhone" placeholder="০১৮XXXXXXXX"></div>
-                    <div class="form-group"><label>এনআইডি নম্বর</label><input type="text" id="resetNid" placeholder="১০/১৩/১৭ সংখ্যার এনআইডি"></div>
-                    <div class="form-group"><label>নতুন পাসওয়ার্ড</label><input type="password" id="resetPass" placeholder="কমপক্ষে ৬ অক্ষর"></div>
-                    <button class="submit-btn" id="resetBtn" onclick="doResetPage()">পাসওয়ার্ড পরিবর্তন করুন</button>
-                    <div class="switch-link"><button onclick="switchAuthTabPage('login',null)">লগইন পেজে ফিরুন</button></div>
+                    <div class="modal-title" style="font-size:0.9rem; margin-bottom:1rem;" data-i18n="auth.resetTitle">পাসওয়ার্ড রিসেট</div>
+                    <div class="form-group"><label data-i18n="auth.phone">ফোন নম্বর</label><input type="tel" id="resetPhone" data-i18n-placeholder="auth.phonePl" placeholder="০১৮XXXXXXXX"></div>
+                    <div class="form-group"><label data-i18n="auth.nidNum">এনআইডি নম্বর</label><input type="text" id="resetNid" data-i18n-placeholder="auth.nidPl" placeholder="১০/১৩/১৭ সংখ্যার এনআইডি"></div>
+                    <div class="form-group"><label data-i18n="auth.passLabel">নতুন পাসওয়ার্ড</label><input type="password" id="resetPass" data-i18n-placeholder="auth.passPl" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+                    <button class="submit-btn" id="resetBtn" onclick="doResetPage()" data-i18n="auth.resetBtn">পাসওয়ার্ড পরিবর্তন করুন</button>
+                    <div class="switch-link"><button onclick="switchAuthTabPage('login',null)" data-i18n="auth.backToLogin">লগইন পেজে ফিরুন</button></div>
                 </div>
             </div>
         </div>
     </main>
 
     <div class="toast" id="toast"></div>
+    <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/main.js"></script>
     <script>
         function switchAuthTabPage(tab, btn) {
@@ -515,13 +514,13 @@
             const pass2 = document.getElementById('regPass2').value;
             const role = document.getElementById('selectedRole').value;
             
-            if (!name || !phone || !pass || !dob || !nid) { showToast('সব বাধ্যতামূলক তথ্য দিন', 'error'); return; }
-            if (![10, 13, 17].includes(nid.length) || isNaN(nid)) { showToast('আপনার সঠিক এনআইডি (১০, ১৩ বা ১৭ ডিজিট) নাম্বার দিন', 'error'); return; }
-            if (pass !== pass2) { showToast('পাসওয়ার্ড মিলছে না', 'error'); return; }
-            if (pass.length < 6) { showToast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error'); return; }
+            if (!name || !phone || !pass || !dob || !nid) { showToast(t('toast.reqFields'), 'error'); return; }
+            if (![10, 13, 17].includes(nid.length) || isNaN(nid)) { showToast(t('toast.invalidNid'), 'error'); return; }
+            if (pass !== pass2) { showToast(t('toast.passMismatch'), 'error'); return; }
+            if (pass.length < 6) { showToast(t('toast.passMin'), 'error'); return; }
             
             const btn = document.getElementById('regBtn');
-            btn.disabled = true; btn.textContent = 'প্রক্রিয়া হচ্ছে...';
+            btn.disabled = true; btn.textContent = t('toast.processing');
             try {
                 const d = await apiPost('/api/auth/register', { 
                     name, phone, dob, nid, 
@@ -530,12 +529,12 @@
                 });
                 if (d.success) { 
                     saveAuth(d.token, d.user); 
-                    typeof showCongratsCard === 'function' ? showCongratsCard('<i class="fa-solid fa-party-horn"></i> অভিনন্দন!', 'আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।') : showToast('<i class="fa-solid fa-check"></i> নিবন্ধন সফল হয়েছে!'); 
+                    typeof showCongratsCard === 'function' ? showCongratsCard(t('profile.welcome'), t('profile.congrats')) : showToast(t('toast.regSuccess')); 
                     setTimeout(() => window.location.href = '/', 3000); 
                 }
-                else showToast(d.message || 'নিবন্ধন ব্যর্থ হয়েছে', 'error');
-            } catch (e) { showToast('সার্ভার সমস্যা হয়েছে', 'error'); }
-            btn.disabled = false; btn.textContent = 'সাবমিট করুন';
+                else showToast(d.message || t('toast.regFailed'), 'error');
+            } catch (e) { showToast(t('toast.serverError'), 'error'); }
+            btn.disabled = false; btn.textContent = t('toast.regSubmit');
         }
 
         async function doResetPage() {
@@ -543,39 +542,47 @@
             const nid = document.getElementById('resetNid').value.trim();
             const newPassword = document.getElementById('resetPass').value;
             
-            if (!phone || !nid || !newPassword) { showToast('সবগুলো তথ্য দিন', 'error'); return; }
+            if (!phone || !nid || !newPassword) { showToast(t('toast.allInfo'), 'error'); return; }
             
             const btn = document.getElementById('resetBtn');
-            btn.disabled = true; btn.textContent = 'পরিবর্তন হচ্ছে...';
+            btn.disabled = true; btn.textContent = t('toast.resetting');
             try {
                 const d = await apiPost('/api/auth/reset-password', { phone, nid, newPassword });
                 if (d.success) {
-                    showToast('<i class="fa-solid fa-check"></i> পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে। লগইন করুন।');
+                    showToast(t('toast.resetSuccess'));
                     setTimeout(() => switchAuthTabPage('login', null), 2000);
                 } else {
-                    showToast(d.message || 'রিসেট ব্যর্থ হয়েছে', 'error');
+                    showToast(d.message || t('toast.resetFailed'), 'error');
                 }
-            } catch (e) { showToast('সার্ভার সমস্যা হয়েছে', 'error'); }
-            btn.disabled = false; btn.textContent = 'পাসওয়ার্ড পরিবর্তন করুন';
+            } catch (e) { showToast(t('toast.serverError'), 'error'); }
+            btn.disabled = false; btn.textContent = t('toast.resetSubmit');
         }
 
         async function doLoginPage() {
             const phone = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value;
-            if (!phone || !pass) { showToast('ফোন ও পাসওয়ার্ড দিন', 'error'); return; }
+            if (!phone || !pass) { showToast(t('toast.phonePassReq'), 'error'); return; }
             const btn = document.getElementById('loginBtn');
-            btn.disabled = true; btn.textContent = 'যাচাই হচ্ছে...';
+            btn.disabled = true; btn.textContent = t('toast.verifying');
             try {
                 const d = await apiPost('/api/auth/login', { phone, password: pass });
-                if (d.success) { saveAuth(d.token, d.user); typeof showCongratsCard === 'function' ? showCongratsCard('<i class="fa-solid fa-party-horn"></i> স্বাগতম!', 'আপনি সফলভাবে লগইন করেছেন।') : showToast('<i class="fa-solid fa-check"></i> লগইন সফল হয়েছে!'); setTimeout(() => window.location.href = '/', 3000); }
-                else showToast(d.message || 'লগইন ব্যর্থ হয়েছে', 'error');
-            } catch (e) { showToast('সার্ভার সমস্যা হয়েছে', 'error'); }
-            btn.disabled = false; btn.textContent = 'লগইন করুন';
+                if (d.success) { 
+                    saveAuth(d.token, d.user); 
+                    typeof showCongratsCard === 'function' ? showCongratsCard(t('toast.loginSuccess'), '') : showToast(t('toast.loginSuccess')); 
+                    setTimeout(() => window.location.href = '/', 3000); 
+                }
+                else showToast(d.message || t('toast.loginFailed'), 'error');
+            } catch (e) { showToast(t('toast.serverError'), 'error'); }
+            btn.disabled = false; btn.textContent = t('toast.loginSubmit');
         }
 
         const u = getUser();
         if (u) window.location.href = '/';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            injectLangToggle('nav');
+            applyLang();
+        });
     </script>
 </body>
-
 </html>

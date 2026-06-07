@@ -258,6 +258,7 @@ function renderNavAuth() {
             </div>`;
     }
     if (typeof applyLang === 'function') applyLang();
+    if (typeof setupHamburgerMenu === 'function') setupHamburgerMenu();
 }
 
 window.showCongratsCard = function(msgLine1, msgLine2) {
@@ -295,6 +296,24 @@ window.openWhiteboxModal = function() {
             ${lang === 'en' ? '<i class="fa-solid fa-magnifying-glass"></i> USER GUIDE & RULES' : '<i class="fa-solid fa-magnifying-glass"></i> প্রকল্প গাইডলাইন ও নিয়মকানুন'}
         </div>
         <div style="font-family:'Noto Sans Bengali',sans-serif; line-height:1.6; color:var(--text-primary); font-size:0.9rem;">
+            ${lang === 'en' ? `
+            <div style="margin-bottom:1rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
+                <strong style="color:var(--green-neon); display:block;">1. Initiative & Goal:</strong>
+                This initiative has been taken for the welfare of 180 million people of Bangladesh. Please report any broken roads, potholes, waterlogging, dangerous conditions, unpaved roads, narrow streets, etc. in your area.
+            </div>
+            <div style="margin-bottom:1rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
+                <strong style="color:var(--green-neon); display:block;">2. Problem Solving Method:</strong>
+                Once a road problem is reported here, government officials can verify it and instruct contractors, or citizens can take the initiative to contact contractors to resolve the issue. Volunteers will report problems with live location markers.
+            </div>
+            <div style="margin-bottom:1rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
+                <strong style="color:var(--green-neon); display:block;">3. User Account & Security:</strong>
+                By clicking on the universal profile icon at the top, users can register an account with accurate details to work. Their information will remain completely secure.
+            </div>
+            <div style="margin-bottom:1rem; border:1px solid var(--red-neon); padding:10px; border-radius:8px; background:rgba(244,42,65,0.07);">
+                <strong style="color:var(--red-neon);"><i class="fa-solid fa-triangle-exclamation"></i> Warning (Fake Reports):</strong> 
+                No one can make fake or false reports. If anyone does so, their details will be verified and legal action will be taken.
+            </div>
+            ` : `
             <div style="margin-bottom:1rem; background:rgba(0,255,136,0.05); padding:12px; border-radius:8px; border-left:4px solid var(--green-neon);">
                 <strong style="color:var(--green-neon); display:block;">১. উদ্যোগ ও লক্ষ্য:</strong>
                 বাংলাদেশের ১৮ কোটি জনগনের মানুষের কল্যাণে এই উদ্যোগটি গ্রহন করা হয়েছে। আপনার আশেপাশে যত ভাঙা রাস্তায় বড় গর্ত, পানি জমা, ঝুঁকিপূর্ণ, কাঁচা রাস্তা, সংকীর্ণ রাস্তা ইত্যাদি রয়েছে তা এখানে রিপোর্ট করুন।
@@ -311,6 +330,7 @@ window.openWhiteboxModal = function() {
                 <strong style="color:var(--red-neon);"><i class="fa-solid fa-triangle-exclamation"></i> সতর্কতা (নকল রিপোর্ট):</strong> 
                 কেউ ফেক বা ভুয়া রিপোর্ট করতে পারবে না। যদি কেউ এমনটা করে, তবে তাদের যাবতীয় তথ্য যাচাই করে আইনগত ব্যবস্থা নেওয়া হবে।
             </div>
+            `}
         </div>
     </div>`;
     modal.classList.add('open');
@@ -467,6 +487,11 @@ _globalStyle.textContent = `
 @keyframes fadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
 i.fa-solid, i.fa-regular { line-height: inherit; }
 
+#navRight .nav-status { order: 1 !important; }
+#navRight .lang-toggle { order: 2 !important; }
+#navRight .profile-btn { order: 3 !important; }
+#navRight .hamburger-btn { order: 4 !important; }
+
 
 .lang-toggle{display:flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid var(--glass-border);border-radius:20px;background:rgba(0,255,136,0.04);}
 .lt-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.7rem;font-family:'Exo 2',sans-serif;letter-spacing:1px;padding:2px 4px;border-radius:3px;transition:all 0.2s;}
@@ -522,5 +547,222 @@ select option {
     background: #021008;
     color: var(--text-primary);
 }
+
+/* Hide scrollbars globally */
+* {
+    scrollbar-width: none !important;
+}
+*::-webkit-scrollbar {
+    display: none !important;
+}
+::-webkit-scrollbar {
+    width: 0px !important;
+    background: transparent !important;
+    display: none !important;
+}
+
+/* Hamburger button styling */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1200;
+  margin-left: 8px;
+}
+.hamburger-btn .bar {
+  width: 100%;
+  height: 2px;
+  background: #00ff88;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger-btn.open .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+.hamburger-btn.open .bar:nth-child(2) { opacity: 0; }
+.hamburger-btn.open .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+/* Mobile drawer styling */
+.mobile-drawer {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(2,10,5,0.97);
+  z-index: 1100;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.mobile-drawer.open {
+  display: flex;
+  opacity: 1;
+}
+.mobile-drawer .drawer-link {
+  width: 100%;
+  padding: 20px 40px;
+  font-size: 1.3rem;
+  font-family: 'Noto Sans Bengali', 'Exo 2', sans-serif;
+  color: rgba(180,255,210,0.7);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,255,136,0.08);
+  text-align: center;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+.mobile-drawer .drawer-link:first-child { border-top: 1px solid rgba(0,255,136,0.08); }
+.mobile-drawer .drawer-link:hover,
+.mobile-drawer .drawer-link.active {
+  color: #00ff88;
+  background: rgba(0,255,136,0.06);
+  text-shadow: 0 0 15px rgba(0,255,136,0.5);
+}
+.mobile-drawer .drawer-link .link-icon { margin-right: 12px; font-size: 1.1rem; }
+
+.mobile-drawer .drawer-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: none; border: none;
+  color: rgba(0,255,136,0.6);
+  font-size: 1.8rem; cursor: pointer;
+  line-height: 1;
+}
+.mobile-drawer .drawer-close:hover { color: #00ff88; }
+
+/* Responsive navigation rules */
+@media screen and (max-width: 768px) {
+  nav {
+    padding: 0 1rem !important;
+    height: 60px !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  nav .nav-links {
+    display: none !important;
+  }
+  #navRight {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  #navRight .nav-status { order: 1 !important; }
+  #navRight .lang-toggle { order: 2 !important; }
+  #navRight .profile-btn { order: 3 !important; }
+  #navRight .hamburger-btn { order: 4 !important; }
+  .hamburger-btn {
+    display: flex !important;
+  }
+  .brand-title { font-size: 0.9rem !important; letter-spacing: 1px !important; }
+  .brand-sub { display: none !important; }
+  .brand-logo { height: 30px !important; }
+  #whiteboxTrigger span:last-child { display: none !important; }
+  #whiteboxTrigger { padding: 6px 8px !important; }
+}
 `;
 document.head.appendChild(_globalStyle);
+
+function setupHamburgerMenu() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    
+    let navRight = document.getElementById('navRight') || nav.querySelector('div[style*="display:flex"]') || nav.lastElementChild;
+    if (navRight && !navRight.querySelector('.hamburger-btn')) {
+        const hamburger = document.createElement('button');
+        hamburger.className = 'hamburger-btn';
+        hamburger.setAttribute('aria-label', 'Toggle Navigation');
+        hamburger.innerHTML = `
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        `;
+        navRight.appendChild(hamburger);
+    }
+
+    if (!document.querySelector('.mobile-drawer')) {
+        const drawer = document.createElement('div');
+        drawer.className = 'mobile-drawer';
+        
+        const path = window.location.pathname;
+        const isMap = path === '/' || path === '/index.html' || path === '';
+        const isReport = path.includes('/report');
+        const isFeed = path.includes('/feed');
+        const isDash = path.includes('/dashboard');
+        const isVol = path.includes('/volunteer');
+
+        drawer.innerHTML = `
+            <button class="drawer-close"><i class="fa-solid fa-xmark"></i></button>
+            <a class="drawer-link ${isMap ? 'active' : ''}" href="/" data-i18n="nav.map"><i class="fa-solid fa-map link-icon"></i><span data-i18n="nav.map">ম্যাপ</span></a>
+            <a class="drawer-link ${isReport ? 'active' : ''}" href="/report" data-i18n="nav.report"><i class="fa-solid fa-file-invoice link-icon"></i><span data-i18n="nav.report">রিপোর্ট</span></a>
+            <a class="drawer-link ${isFeed ? 'active' : ''}" href="/feed" data-i18n="nav.feed"><i class="fa-solid fa-rss link-icon"></i><span data-i18n="nav.feed">ফিড</span></a>
+            <a class="drawer-link ${isDash ? 'active' : ''}" href="/dashboard" data-i18n="nav.dashboard"><i class="fa-solid fa-chart-line link-icon"></i><span data-i18n="nav.dashboard">ড্যাশবোর্ড</span></a>
+            <a class="drawer-link ${isVol ? 'active' : ''}" href="/volunteer" data-i18n="nav.volunteer"><i class="fa-solid fa-handshake link-icon"></i><span data-i18n="nav.volunteer">স্বেচ্ছাসেবক</span></a>
+        `;
+        document.body.appendChild(drawer);
+
+        if (typeof applyLang === 'function') {
+            applyLang();
+        }
+    }
+
+    const btn = document.querySelector('.hamburger-btn');
+    const drawer = document.querySelector('.mobile-drawer');
+    if (btn && drawer) {
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                drawer.classList.remove('open');
+                newBtn.classList.remove('open');
+                document.body.style.overflow = '';
+            } else {
+                drawer.classList.add('open');
+                newBtn.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        const closeBtn = drawer.querySelector('.drawer-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                drawer.classList.remove('open');
+                newBtn.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        }
+
+        drawer.querySelectorAll('.drawer-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                drawer.classList.remove('open');
+                newBtn.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+
+        drawer.addEventListener('click', function(e) {
+            if (e.target === drawer) {
+                drawer.classList.remove('open');
+                newBtn.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHamburgerMenu);
+} else {
+    setupHamburgerMenu();
+}

@@ -26,7 +26,7 @@ function saveUsers(users) {
     try {
         fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2), 'utf8');
     } catch (e) {
-        console.error('❌ ব্যবহারকারী সংরক্ষণ ব্যর্থ:', e.message);
+        console.error('Error: ব্যবহারকারী সংরক্ষণ ব্যর্থ:', e.message);
     }
 }
 

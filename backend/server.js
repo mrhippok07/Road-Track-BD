@@ -104,7 +104,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`\n🚀 Road Track BD চালু — http://localhost:${PORT}\n`);
+    console.log(`\nRoad Track BD চালু — http://localhost:${PORT}\n`);
 });
 
 module.exports = { app, io };

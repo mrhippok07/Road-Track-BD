@@ -631,46 +631,46 @@
 
   <div class="dash-wrap">
     <div class="dash-header">
-      <h1><i class="fa-solid fa-bolt"></i> কেন্দ্রীয় বিশ্লেষণ ড্যাশবোর্ড</h1>
-      <p>বাংলাদেশের সড়ক অবস্থার রিয়েল-টাইম পরিসংখ্যান ও বিশ্লেষণ</p>
+      <h1 data-i18n="dash.title"><i class="fa-solid fa-bolt"></i> কেন্দ্রীয় বিশ্লেষণ ড্যাশবোর্ড</h1>
+      <p data-i18n="dash.subtitle">বাংলাদেশের সড়ক অবস্থার রিয়েল-টাইম পরিসংখ্যান ও বিশ্লেষণ</p>
     </div>
 
     <div class="kpi-grid">
       <div class="kpi-card">
-        <div class="kpi-label">মোট রিপোর্ট</div>
+        <div class="kpi-label" data-i18n="dash.total">মোট রিপোর্ট</div>
         <div class="kpi-val" id="kTotal">—</div>
-        <div class="kpi-sub">সর্বমোট জমা</div>
+        <div class="kpi-sub" data-i18n="ui.totalSub">সর্বমোট জমা</div>
       </div>
       <div class="kpi-card red">
-        <div class="kpi-label">মেরামত বাকি</div>
+        <div class="kpi-label" data-i18n="dash.pending">মেরামত বাকি</div>
         <div class="kpi-val red" id="kPending">—</div>
-        <div class="kpi-sub">Pending রাস্তা</div>
+        <div class="kpi-sub" data-i18n="ui.pendingWork">Pending রাস্তা</div>
       </div>
       <div class="kpi-card cyan">
-        <div class="kpi-label">আজকের রিপোর্ট</div>
+        <div class="kpi-label" data-i18n="dash.today">আজকের রিপোর্ট</div>
         <div class="kpi-val cyan" id="kToday">—</div>
-        <div class="kpi-sub">আজ জমা পড়েছে</div>
+        <div class="kpi-sub" data-i18n="ui.todaySub">আজ জমা পড়েছে</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">সম্পন্ন মেরামত</div>
+        <div class="kpi-label" data-i18n="dash.resolved">সম্পন্ন মেরামত</div>
         <div class="kpi-val" id="kResolved">—</div>
-        <div class="kpi-sub">রাস্তা মেরামত হয়েছে</div>
+        <div class="kpi-sub" data-i18n="ui.repairDone">রাস্তা মেরামত হয়েছে</div>
       </div>
       <div class="kpi-card cyan">
-        <div class="kpi-label">সংস্কার চলছে</div>
+        <div class="kpi-label" data-i18n="dash.underRepair">সংস্কার চলছে</div>
         <div class="kpi-val cyan" id="kUnderRepair">—</div>
-        <div class="kpi-sub">In-Progress</div>
+        <div class="kpi-sub" data-i18n="type.under_repair">In-Progress</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">সক্রিয় ব্যবহারকারী</div>
+        <div class="kpi-label" data-i18n="dash.activeUsers">সক্রিয় ব্যবহারকারী</div>
         <div class="kpi-val" style="font-size:1.6rem;color:#ff9800;" id="kUsers">—</div>
-        <div class="kpi-sub">অনলাইন</div>
+        <div class="kpi-sub" data-i18n="dash.online">অনলাইন</div>
       </div>
     </div>
 
     <div class="progress-overview">
       <div class="progress-card">
-        <div class="progress-label">মেরামত অগ্রগতি</div>
+        <div class="progress-label" data-i18n="dash.repairProgress">মেরামত অগ্রগতি</div>
         <div class="circle-wrap">
           <svg width="80" height="80" viewBox="0 0 80 80">
             <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(0,255,136,0.1)" stroke-width="6" />
@@ -682,7 +682,7 @@
         <div class="kpi-sub" id="progSub1">— টি রাস্তা মেরামত হয়েছে</div>
       </div>
       <div class="progress-card">
-        <div class="progress-label">সংস্কার চলমান</div>
+        <div class="progress-label" data-i18n="dash.repairOngoing">সংস্কার চলমান</div>
         <div class="circle-wrap">
           <svg width="80" height="80" viewBox="0 0 80 80">
             <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,152,0,0.1)" stroke-width="6" />
@@ -694,7 +694,7 @@
         <div class="kpi-sub" id="progSub2">— টি রিপোর্ট চলমান</div>
       </div>
       <div class="progress-card">
-        <div class="progress-label">পেন্ডিং রিপোর্ট</div>
+        <div class="progress-label" data-i18n="ui.pendingWork">পেন্ডিং রিপোর্ট</div>
         <div class="circle-wrap">
           <svg width="80" height="80" viewBox="0 0 80 80">
             <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,23,68,0.1)" stroke-width="6" />
@@ -709,35 +709,35 @@
 
     <div class="chart-card"
       style="margin-bottom: 2rem; background: var(--bg-panel); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px;">
-      <div class="chart-title" style="margin-bottom:15px;"><i class="fa-solid fa-clipboard-list"></i> সমস্যার ধরন অনুযায়ী মোট রিপোর্ট</div>
+      <div class="chart-title" style="margin-bottom:15px;" data-i18n="ui.statsByTypeShort"><i class="fa-solid fa-clipboard-list"></i> সমস্যার ধরন অনুযায়ী মোট রিপোর্ট</div>
       <div id="typeStatsContainer" style="display:flex;gap:10px;flex-wrap:wrap;">
-        <div style="color:var(--text-muted);font-size:0.85rem;">লোড হচ্ছে...</div>
+        <div style="color:var(--text-muted);font-size:0.85rem;" data-i18n="ui.loading">লোড হচ্ছে...</div>
       </div>
     </div>
 
     <div class="charts-grid">
       <div class="chart-card">
-        <div class="chart-title"><i class="fa-solid fa-chart-pie"></i> সমস্যার ধরন অনুযায়ী বিবরণ</div>
+        <div class="chart-title" data-i18n="dash.detailsByType"><i class="fa-solid fa-chart-pie"></i> সমস্যার ধরন অনুযায়ী বিবরণ</div>
         <div style="height:220px;"><canvas id="typeChart"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title"><i class="fa-solid fa-chart-line"></i> গত ৭ দিনের রিপোর্ট প্রবাহ</div>
+        <div class="chart-title" data-i18n="dash.trend7Days"><i class="fa-solid fa-chart-line"></i> গত ৭ দিনের রিপোর্ট প্রবাহ</div>
         <div style="height:220px;"><canvas id="trendChart"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title"><i class="fa-solid fa-map"></i> সর্বাধিক ক্ষতিগ্রস্ত জেলা</div>
+        <div class="chart-title" data-i18n="dash.worstDistricts"><i class="fa-solid fa-map"></i> সর্বাধিক ক্ষতিগ্রস্ত জেলা</div>
         <div class="district-bars" id="districtBars">
-          <div style="color:var(--text-muted);text-align:center;padding:1rem;">লোড হচ্ছে...</div>
+          <div style="color:var(--text-muted);text-align:center;padding:1rem;" data-i18n="ui.loading">লোড হচ্ছে...</div>
         </div>
       </div>
       <div class="chart-card">
-        <div class="chart-title"><i class="fa-solid fa-calendar-days"></i> মাসিক রিপোর্ট তুলনা</div>
+        <div class="chart-title" data-i18n="dash.monthlyCompare"><i class="fa-solid fa-calendar-days"></i> মাসিক রিপোর্ট তুলনা</div>
         <div style="height:220px;"><canvas id="monthChart"></canvas></div>
       </div>
       <div class="chart-card wide">
-        <div class="chart-title"><i class="fa-solid fa-clipboard-list"></i> সাম্প্রতিক পেন্ডিং রাস্তার তালিকা</div>
+        <div class="chart-title" data-i18n="ui.recentPending"><i class="fa-solid fa-clipboard-list"></i> সাম্প্রতিক পেন্ডিং রাস্তার তালিকা</div>
         <div class="pending-list" id="pendingList">
-          <div style="color:var(--text-muted);text-align:center;padding:1rem;">লোড হচ্ছে...</div>
+          <div style="color:var(--text-muted);text-align:center;padding:1rem;" data-i18n="ui.loading">লোড হচ্ছে...</div>
         </div>
       </div>
     </div>
@@ -765,16 +765,16 @@
         const rPct = Math.round((s.resolved / total) * 100);
         const uPct = Math.round((s.underRepair / total) * 100);
         const pPct = Math.round((s.pending / total) * 100);
-        setCircle('progCircle1', rPct); document.getElementById('progPct1').textContent = rPct + '%'; document.getElementById('progSub1').textContent = (s.resolved || 0) + ' টি রাস্তা মেরামত হয়েছে';
-        setCircle('progCircle2', uPct); document.getElementById('progPct2').textContent = uPct + '%'; document.getElementById('progSub2').textContent = (s.underRepair || 0) + ' টি রিপোর্ট চলমান';
-        setCircle('progCircle3', pPct); document.getElementById('progPct3').textContent = pPct + '%'; document.getElementById('progSub3').textContent = (s.pending || 0) + ' টি রিপোর্ট বাকি';
+        setCircle('progCircle1', rPct); document.getElementById('progPct1').textContent = rPct + '%'; document.getElementById('progSub1').textContent = (s.resolved || 0) + ' ' + t('dash.roadDoneText');
+        setCircle('progCircle2', uPct); document.getElementById('progPct2').textContent = uPct + '%'; document.getElementById('progSub2').textContent = (s.underRepair || 0) + ' ' + t('dash.reportOngoingText');
+        setCircle('progCircle3', pPct); document.getElementById('progPct3').textContent = pPct + '%'; document.getElementById('progSub3').textContent = (s.pending || 0) + ' ' + t('dash.reportPendingText');
         if (s.byType) {
           renderTypeChart(s.byType);
           const tEl = document.getElementById('typeStatsContainer');
           if (tEl) {
             tEl.innerHTML = Object.entries(s.byType).map(([k, v]) =>
               `<div style="background:rgba(0,255,136,0.05);border:1px solid var(--glass-border);padding:6px 14px;border-radius:20px;font-size:0.9rem;color:var(--green-neon);">
-                  ${PROBLEM_LABELS[k] || k} : <strong style="color:#fff;">${v}</strong>
+                  ${getProblemLabel(k)} : <strong style="color:#fff;">${v}</strong>
               </div>`
             ).join('');
           }
@@ -802,16 +802,16 @@
         <div class="pending-item">
           <div class="pending-num">${i + 1}</div>
           <div class="pending-info"><div class="pending-road">${r.roadName}</div><div class="pending-district"><i class="fa-solid fa-location-dot"></i> ${r.district || ''} ${r.area ? '— ' + r.area : ''}</div></div>
-          <div class="pending-badge">${PROBLEM_LABELS[r.problemType] || r.problemType}</div>
+          <div class="pending-badge">${getProblemLabel(r.problemType)}</div>
           <div class="pending-date">${formatTime(r.createdAt)}</div>
         </div>`).join('');
-        } else el.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:1rem;">কোনো পেন্ডিং রিপোর্ট নেই</div>';
+        } else el.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:1rem;">${t('dash.noPending')}</div>`;
       } catch (e) { }
     }
 
     function renderTypeChart(byType) {
       const keys = Object.keys(byType);
-      const labels = keys.map(k => (PROBLEM_LABELS[k] || k).replace(/<[^>]*>?/gm, '').trim());
+      const labels = keys.map(k => getProblemLabel(k).replace(/<[^>]*>?/gm, '').trim());
       const data = Object.values(byType);
       const colors = keys.map(k => (PROBLEM_COLORS[k] || '#ff1744') + 'cc'); 
       const ctx = document.getElementById('typeChart').getContext('2d');
@@ -835,7 +835,7 @@
             legend: { 
               position: 'right', 
               labels: { 
-                font: { size: 10, family: "'Noto Sans Bengali'" }, 
+                font: { size: 10, family: getLang() === 'bn' ? "'Noto Sans Bengali'" : "'Exo 2'" }, 
                 padding: 8, 
                 boxWidth: 10 
               } 
@@ -847,16 +847,16 @@
     }
 
     function renderTrendChart(trend7) {
-      const days = ['সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি', 'রবি'];
+      const days = getLang() === 'en' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] : ['সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি', 'রবি'];
       const ctx = document.getElementById('trendChart').getContext('2d');
       if (trendChartInst) trendChartInst.destroy();
-      trendChartInst = new Chart(ctx, { type: 'line', data: { labels: days.slice(0, trend7.length), datasets: [{ label: 'রিপোর্ট', data: trend7, borderColor: '#00ff88', backgroundColor: 'rgba(0,255,136,0.08)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#00ff88', pointRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(0,255,136,0.05)' } }, y: { grid: { color: 'rgba(0,255,136,0.05)' }, beginAtZero: true } } } });
+      trendChartInst = new Chart(ctx, { type: 'line', data: { labels: days.slice(0, trend7.length), datasets: [{ label: t('dash.trendFlowLabel'), data: trend7, borderColor: '#00ff88', backgroundColor: 'rgba(0,255,136,0.08)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#00ff88', pointRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(0,255,136,0.05)' } }, y: { grid: { color: 'rgba(0,255,136,0.05)' }, beginAtZero: true } } } });
     }
 
     function renderMonthChart(monthly) {
       const ctx = document.getElementById('monthChart').getContext('2d');
       if (monthChartInst) monthChartInst.destroy();
-      monthChartInst = new Chart(ctx, { type: 'bar', data: { labels: monthly.labels, datasets: [{ label: 'নতুন রিপোর্ট', data: monthly.new, backgroundColor: 'rgba(0,255,136,0.3)', borderColor: '#00ff88', borderWidth: 1 }, { label: 'মেরামত সম্পন্ন', data: monthly.resolved, backgroundColor: 'rgba(0,232,255,0.3)', borderColor: '#00e8ff', borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { font: { size: 10, family: "'Noto Sans Bengali'" }, padding: 10, boxWidth: 8 } } }, scales: { x: { grid: { color: 'rgba(0,255,136,0.05)' } }, y: { grid: { color: 'rgba(0,255,136,0.05)' }, beginAtZero: true } } } });
+      monthChartInst = new Chart(ctx, { type: 'bar', data: { labels: monthly.labels, datasets: [{ label: t('dash.newReportLabel'), data: monthly.new, backgroundColor: 'rgba(0,255,136,0.3)', borderColor: '#00ff88', borderWidth: 1 }, { label: t('dash.resolvedLabel'), data: monthly.resolved, backgroundColor: 'rgba(0,232,255,0.3)', borderColor: '#00e8ff', borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { font: { size: 10, family: getLang() === 'bn' ? "'Noto Sans Bengali'" : "'Exo 2'" }, padding: 10, boxWidth: 8 } } }, scales: { x: { grid: { color: 'rgba(0,255,136,0.05)' } }, y: { grid: { color: 'rgba(0,255,136,0.05)' }, beginAtZero: true } } } });
     }
 
     function renderDistrictBars(byDistrict) {
@@ -870,7 +870,6 @@
     </div>`).join('');
     }
 
-    
     initSocket(sk => {
       sk.on('report_update', () => {
         loadDash(); 
@@ -888,7 +887,6 @@
   </script>
 
 <script>
-
 (function() {
   var btn = document.querySelector('.hamburger-btn');
   var drawer = document.querySelector('.mobile-drawer');
@@ -907,7 +905,6 @@
     }
   });
 
-  
   drawer.querySelectorAll('.drawer-link').forEach(function(link) {
     link.addEventListener('click', function() {
       drawer.classList.remove('open');
@@ -919,5 +916,4 @@
 </script>
 
 </body>
-
 </html>

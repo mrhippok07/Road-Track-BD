@@ -745,10 +745,10 @@
 
     <main>
         <div class="page-header">
-            <h1><i class="fa-regular fa-newspaper"></i> লাইভ রিপোর্ট ফিড</h1>
+            <h1 data-i18n="feed.title"><i class="fa-regular fa-newspaper"></i> লাইভ রিপোর্ট ফিড</h1>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <a href="/report" class="new-report-btn"><i class="fa-solid fa-plus"></i> নতুন রিপোর্ট</a>
-                <button onclick="openOpinionModal()" class="new-report-btn" style="background:transparent; border-color:var(--blue-neon); color:var(--text-primary); cursor:pointer;"><i class="fa-regular fa-comments"></i> জনমতামত দিন</button>
+                <a href="/report" class="new-report-btn" data-i18n="feed.newReport"><i class="fa-solid fa-plus"></i> নতুন রিপোর্ট</a>
+                <button onclick="openOpinionModal()" class="new-report-btn" style="background:transparent; border-color:var(--blue-neon); color:var(--text-primary); cursor:pointer;" data-i18n="feed.opinionBtn"><i class="fa-regular fa-comments"></i> জনমতামত দিন</button>
             </div>
         </div>
         <div class="filter-row">
@@ -759,33 +759,33 @@
             <button class="filter-chip" onclick="filterFeed('bridge_repair',this)" data-i18n="feed.bridge">ব্রিজ</button>
             <button class="filter-chip" onclick="filterFeed('canal_large',this)" data-i18n="feed.canal">খাল</button>
             <button class="filter-chip" onclick="filterFeed('tube_well_needed',this)" data-i18n="feed.tubewell">নলকূপ</button>
-            <button class="filter-chip" onclick="filterFeed('opinion',this)" style="border-color:var(--blue-neon); color:var(--blue-neon);"><i class="fa-regular fa-comments"></i> মতামত ট্যাগ</button>
+            <button class="filter-chip" onclick="filterFeed('opinion',this)" style="border-color:var(--blue-neon); color:var(--blue-neon);" data-i18n="feed.tagOpinion"><i class="fa-regular fa-comments"></i> মতামত ট্যাগ</button>
         </div>
         <div class="feed-list" id="feedList">
-            <div style="color:var(--text-muted);text-align:center;padding:3rem;">লোড হচ্ছে...</div>
+            <div style="color:var(--text-muted);text-align:center;padding:3rem;" data-i18n="ui.loading">লোড হচ্ছে...</div>
         </div>
-        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">আরও দেখুন ↓</button>
+        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()" data-i18n="feed.loadMore">আরও দেখুন ↓</button>
     </main>
 
     <div class="share-popup" id="sharePopup">
         <div class="share-box">
-            <h3><i class="fa-solid fa-link"></i> শেয়ার করুন</h3>
+            <h3 data-i18n="ui.shareTitle"><i class="fa-solid fa-link"></i> শেয়ার করুন</h3>
             <input class="share-url" type="text" id="shareUrl" readonly>
             <div class="share-btns">
-                <button class="share-opt" onclick="copyShareUrl()"><i class="fa-solid fa-clipboard-list"></i> কপি করুন</button>
-                <button class="share-opt" onclick="shareWhatsApp()"><i class="fa-regular fa-comments"></i> WhatsApp</button>
-                <button class="share-opt" onclick="shareFacebook()"><i class="fa-brands fa-facebook"></i> Facebook</button>
-                <button class="share-opt" onclick="closeShare()"><i class="fa-solid fa-xmark"></i> বন্ধ করুন</button>
+                <button class="share-opt" onclick="copyShareUrl()" data-i18n="ui.copy"><i class="fa-solid fa-clipboard-list"></i> কপি করুন</button>
+                <button class="share-opt" onclick="shareWhatsApp()">WhatsApp</button>
+                <button class="share-opt" onclick="shareFacebook()">Facebook</button>
+                <button class="share-opt" onclick="closeShare()" data-i18n="ui.close"><i class="fa-solid fa-xmark"></i> বন্ধ করুন</button>
             </div>
         </div>
     </div>
     <div class="share-popup" id="opinionPopup">
         <div class="share-box">
-            <h3><i class="fa-regular fa-comments"></i> জনমতামত দিন</h3>
-            <textarea id="opinionText" style="width:100%; min-height:100px; background:rgba(0,255,136,0.05); border:1px solid var(--glass-border); border-radius:6px; padding:10px; color:var(--text-primary); font-size:0.8rem; margin-bottom:10px; resize:vertical;" placeholder="আপনার মতামত বা পরামর্শ লিখুন..."></textarea>
+            <h3 data-i18n="feed.giveOpinion"><i class="fa-regular fa-comments"></i> জনমতামত দিন</h3>
+            <textarea id="opinionText" style="width:100%; min-height:100px; background:rgba(0,255,136,0.05); border:1px solid var(--glass-border); border-radius:6px; padding:10px; color:var(--text-primary); font-size:0.8rem; margin-bottom:10px; resize:vertical;" data-i18n-placeholder="feed.opinionPl" placeholder="আপনার মতামত বা পরামর্শ লিখুন..."></textarea>
             <div class="share-btns">
-                <button class="share-opt" style="border-color:var(--green-neon); color:var(--green-neon);" onclick="submitOpinion()"><i class="fa-solid fa-paper-plane"></i> প্রকাশ করুন</button>
-                <button class="share-opt" onclick="closeOpinionModal()"><i class="fa-solid fa-xmark"></i> বন্ধ করুন</button>
+                <button class="share-opt" style="border-color:var(--green-neon); color:var(--green-neon);" onclick="submitOpinion()" data-i18n="feed.publish"><i class="fa-solid fa-paper-plane"></i> প্রকাশ করুন</button>
+                <button class="share-opt" onclick="closeOpinionModal()" data-i18n="ui.close"><i class="fa-solid fa-xmark"></i> বন্ধ করুন</button>
             </div>
         </div>
     </div>
@@ -800,7 +800,7 @@
             if (type === 'opinion') return '#00f2ff';
             return { pending: '#ff1744', under_repair: '#2196f3', repaired: '#00ff88', rejected: '#546e7a' }[s] || '#ff1744';
         }
-        function statusLabel(s) { return STATUS_LABELS[s] || s; }
+        function statusLabel(s) { return getStatusLabel(s); }
 
         function buildCard(r) {
             const color = getMarkerColor(r);
@@ -808,10 +808,10 @@
             const sLabel = statusLabel(r.status);
             const hasPhotos = r.photos && r.photos.length > 0;
             const photosHtml = hasPhotos ? `<div class="feed-photos">${r.photos.map(p => `<img class="feed-photo" src="${p}" onclick="openPhoto('${p}')">`).join('')}</div>` : '';
-            const typeLabel = PROBLEM_LABELS[r.problemType] || r.problemType;
+            const typeLabel = getProblemLabel(r.problemType);
             const u = getUser();
             const isOwner = u && (u.id === r.userId || u.role === 'সরকারিকর্মকর্তা');
-            const updateBtnHtml = isOwner ? `<button class="update-btn" onclick="toggleUpdate('${r._id}')"><i class="fa-solid fa-rotate"></i> অবস্থা আপডেট</button>` : '';
+            const updateBtnHtml = isOwner ? `<button class="update-btn" onclick="toggleUpdate('${r._id}')">${t('feed.update')}</button>` : '';
 
             return `<div class="feed-card" id="card-${r._id}">
     <div class="feed-card-top">
@@ -828,25 +828,25 @@
     <div class="feed-actions">
       <button class="action-btn ${(r.userLiked)?'liked':''}" onclick="toggleLike('${r._id}',this)"><i class="fa-solid fa-heart"></i> <span id="like-${r._id}">${r.likes||0}</span></button>
       <button class="action-btn ${(r.userReacted)?'reacted':''}" onclick="toggleReact('${r._id}',this)">${getReactionEmoji(r.problemType)} <span id="react-${r._id}">${r.reactions||0}</span></button>
-      <button class="action-btn" onclick="toggleComments('${r._id}')"><i class="fa-regular fa-comments"></i> মতামত <span id="cmtCount-${r._id}">${r.commentCount||0}</span></button>
-      <button class="action-btn" onclick="openShare('${r._id}')"><i class="fa-solid fa-link"></i> <span data-i18n="feed.share">শেয়ার</span></button>
+      <button class="action-btn" onclick="toggleComments('${r._id}')"><i class="fa-regular fa-comments"></i> ${t('feed.commentLabel')} <span id="cmtCount-${r._id}">${r.commentCount||0}</span></button>
+      <button class="action-btn" onclick="openShare('${r._id}')"><i class="fa-solid fa-link"></i> <span>${t('feed.share')}</span></button>
       ${r.problemType !== 'opinion' ? updateBtnHtml : ''}
     </div>
     <div class="feed-comments" id="comments-${r._id}">
       <div class="comment-list" id="commentList-${r._id}"></div>
       <div class="comment-input-row">
-        <input class="comment-input" id="cmtInput-${r._id}" placeholder="মন্তব্য লিখুন..." onkeydown="if(event.key==='Enter')sendComment('${r._id}')">
-        <button class="comment-send" onclick="sendComment('${r._id}')">পাঠান</button>
+        <input class="comment-input" id="cmtInput-${r._id}" placeholder="${t('feed.comment')}" onkeydown="if(event.key==='Enter')sendComment('${r._id}')">
+        <button class="comment-send" onclick="sendComment('${r._id}')">${t('feed.send')}</button>
       </div>
     </div>
     <div class="status-update-form" id="updateForm-${r._id}">
       <select id="updateStatus-${r._id}">
-        <option value="pending">মেরামত বাকি (লাল ডট)</option>
-        <option value="under_repair">সংস্কার চলছে (নীল ডট)</option>
-        <option value="repaired">সংস্কার সম্পন্ন (সবুজ ডট)</option>
-        <option value="rejected">বাতিল</option>
+        <option value="pending">${t('status.pending.dot')}</option>
+        <option value="under_repair">${t('status.repair.dot')}</option>
+        <option value="repaired">${t('status.done.dot')}</option>
+        <option value="rejected">${t('status.rejected')}</option>
       </select>
-      <button onclick="submitStatusUpdate('${r._id}')"><i class="fa-solid fa-check"></i> আপডেট করুন</button>
+      <button onclick="submitStatusUpdate('${r._id}')"><i class="fa-solid fa-check"></i> ${t('feed.doUpdate')}</button>
     </div>
   </div>`;
         }
@@ -864,12 +864,12 @@
                 if (d.success) {
                     const list = document.getElementById('feedList');
                     if (reset || currentPage === 1) list.innerHTML = '';
-                    if (!d.data.length && currentPage === 1) { list.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:3rem;">কোনো রিপোর্ট নেই</div>'; return; }
+                    if (!d.data.length && currentPage === 1) { list.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:3rem;">${t('feed.noReport')}</div>`; return; }
                     d.data.forEach(r => { list.insertAdjacentHTML('beforeend', buildCard(r)); });
                     if (d.data.length < 10) allDone = true;
                     document.getElementById('loadMoreBtn').style.display = allDone ? 'none' : 'block';
                 }
-            } catch (e) { document.getElementById('feedList').innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:3rem;">ডেটা লোড ব্যর্থ</div>'; }
+            } catch (e) { document.getElementById('feedList').innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:3rem;">${t('feed.loadingDataFailed')}</div>`; }
         }
 
         function filterFeed(f, btn) {
@@ -894,7 +894,7 @@
                 const list = document.getElementById('commentList-' + id);
                 if (d.success && d.data.length) {
                     list.innerHTML = d.data.map(c => `<div class="comment-item"><div class="comment-author">${c.authorName || 'অজ্ঞাত'}</div><div class="comment-text">${c.text}</div></div>`).join('');
-                } else { list.innerHTML = '<div style="font-size:0.72rem;color:var(--text-muted);text-align:center;padding:6px;">কোনো মন্তব্য নেই</div>'; }
+                } else { list.innerHTML = `<div style="font-size:0.72rem;color:var(--text-muted);text-align:center;padding:6px;">${t('feed.noComment')}</div>`; }
             } catch (e) { }
         }
 
@@ -903,16 +903,16 @@
             const text = inp.value.trim();
             if (!text) return;
             const u = getUser();
-            if (!u) { showToast('মন্তব্য করতে লগইন করুন', 'error'); return; }
+            if (!u) { showToast(t('toast.commentLoginReq'), 'error'); return; }
             try {
                 const d = await apiPost(`/api/feed/${id}/comments`, { text });
                 if (d.success) { inp.value = ''; loadComments(id); const span = document.getElementById('cmtCount-' + id); if (span) span.textContent = parseInt(span.textContent || 0) + 1; }
-                else showToast(d.message || 'মন্তব্য পাঠাতে সমস্যা', 'error');
-            } catch (e) { showToast('সার্ভার সমস্যা', 'error'); }
+                else showToast(d.message || t('toast.commentError'), 'error');
+            } catch (e) { showToast(t('toast.serverError'), 'error'); }
         }
 
         async function toggleLike(id, btn) {
-            const u = getUser(); if (!u) { showToast('লাইক দিতে লগইন করুন', 'error'); return; }
+            const u = getUser(); if (!u) { showToast(t('toast.likeLoginReq'), 'error'); return; }
             try {
                 const d = await apiPost(`/api/feed/${id}/like`, {});
                 if (d.success) {
@@ -923,7 +923,7 @@
         }
 
         async function toggleReact(id, btn) {
-            const u = getUser(); if (!u) { showToast('রিঅ্যাক্ট করতে লগইন করুন', 'error'); return; }
+            const u = getUser(); if (!u) { showToast(t('toast.reactLoginReq'), 'error'); return; }
             try {
                 const d = await apiPost(`/api/feed/${id}/react`, {});
                 if (d.success) {
@@ -939,9 +939,9 @@
             const status = document.getElementById('updateStatus-' + id).value;
             try {
                 const d = await apiPut(`/api/reports/${id}/status`, { status });
-                if (d.success) { showToast('<i class="fa-solid fa-check"></i> অবস্থা আপডেট হয়েছে'); loadFeed(true); }
-                else showToast(d.message || 'আপডেট ব্যর্থ', 'error');
-            } catch (e) { showToast('সার্ভার সমস্যা', 'error'); }
+                if (d.success) { showToast(t('toast.statusUpdated')); loadFeed(true); }
+                else showToast(d.message || t('toast.updateFailed'), 'error');
+            } catch (e) { showToast(t('toast.serverError'), 'error'); }
         }
 
         function openShare(id) {
@@ -950,8 +950,8 @@
             document.getElementById('sharePopup').classList.add('open');
         }
         function closeShare() { document.getElementById('sharePopup').classList.remove('open'); }
-        function copyShareUrl() { navigator.clipboard.writeText(currentShareUrl); showToast('<i class="fa-solid fa-check"></i> লিংক কপি হয়েছে'); }
-        function shareWhatsApp() { window.open('https://wa.me/?text=' + encodeURIComponent('Road Track BD — রিপোর্ট দেখুন: ' + currentShareUrl)); }
+        function copyShareUrl() { navigator.clipboard.writeText(currentShareUrl); showToast(t('toast.linkCopied')); }
+        function shareWhatsApp() { window.open('https://wa.me/?text=' + encodeURIComponent('Road Track BD — ' + currentShareUrl)); }
         function shareFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(currentShareUrl)); }
         function openPhoto(src) { window.open(src, '_blank'); }
 
@@ -960,7 +960,7 @@
 
         function openOpinionModal() {
             const u = getUser();
-            if (!u) { showToast('মতামত দিতে লগইন করুন', 'error'); return; }
+            if (!u) { showToast(t('toast.opinionLoginReq'), 'error'); return; }
             document.getElementById('opinionText').value = '';
             document.getElementById('opinionPopup').classList.add('open');
         }
@@ -971,7 +971,7 @@
 
         async function submitOpinion() {
             const text = document.getElementById('opinionText').value.trim();
-            if (!text) { showToast('কিছু লিখুন', 'error'); return; }
+            if (!text) { showToast(t('toast.writeSomething'), 'error'); return; }
             try {
                 const d = await apiPost('/api/reports', {
                     problemType: 'opinion',
@@ -981,16 +981,16 @@
                     area: '-'
                 });
                 if (d.success) {
-                    showToast('<i class="fa-solid fa-check"></i> মতামত প্রকাশিত হয়েছে');
+                    showToast(t('toast.opinionPublished'));
                     closeOpinionModal();
                     if (currentFilter === 'all' || currentFilter === 'opinion') {
                         loadFeed(true);
                     }
                 } else {
-                    showToast(d.message || 'ব্যর্থ হয়েছে', 'error');
+                    showToast(d.message || t('toast.publishedFailed'), 'error');
                 }
             } catch (e) {
-                showToast('সার্ভার সমস্যা', 'error');
+                showToast(t('toast.serverError'), 'error');
             }
         }
 
@@ -998,7 +998,7 @@
             sk.on('report_update',r=>{
                 const existing=document.getElementById('card-'+r._id);
                 if(existing){existing.outerHTML=buildCard(r);}
-                else{const list=document.getElementById('feedList');list.insertAdjacentHTML('afterbegin',buildCard(r));showToast('<i class="fa-solid fa-location-dot"></i> নতুন রিপোর্ট: '+r.roadName,'');}
+                else{const list=document.getElementById('feedList');list.insertAdjacentHTML('afterbegin',buildCard(r));showToast(t('toast.newReportToast') + ': ' + r.roadName,'');}
             });
             
             sk.on('comment_new',({reportId,comment})=>{

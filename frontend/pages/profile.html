@@ -67,13 +67,19 @@
             background: var(--bg-panel);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
-            overflow: hidden;
+            overflow: visible;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
         
         .cover-photo {
-            height: 200px;
+            order: 1;
+            width: 100%;
+            height: 260px; /* Enlarge desktop view */
             background: linear-gradient(45deg, #001f11, #004d38);
             position: relative;
             border-radius: 16px 16px 0 0;
@@ -91,13 +97,15 @@
         }
         
         .profile-avatar-wrap {
-            position: absolute;
-            top: 140px;
-            left: 30px;
+            order: 2;
+            margin-top: -65px;
+            margin-bottom: 15px;
             border-radius: 50%;
             padding: 5px;
             background: var(--bg-deep);
             z-index: 2;
+            display: inline-block;
+            position: relative;
         }
         .profile-avatar {
             width: 120px; height: 120px;
@@ -107,6 +115,11 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 4rem; overflow: hidden;
             position: relative; cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 50px rgba(0, 255, 136, 0.2);
+            transition: all 0.3s ease;
+        }
+        .profile-avatar:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 255, 136, 0.4);
         }
         .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .avatar-edit-icon {
@@ -120,8 +133,14 @@
         .avatar-edit-icon:hover { transform: scale(1.1); }
         
         .profile-actions {
-            position: absolute; bottom: 15px; right: 20px; z-index: 2;
-            display: flex; gap: 10px;
+            order: 4;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 25px;
+            margin-top: 10px;
+            z-index: 2;
+            width: 100%;
         }
         .btn-profile {
             padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; cursor: pointer;
@@ -131,10 +150,15 @@
         .btn-edit:hover { background: var(--green-neon); color: var(--bg-deep); }
         .btn-danger { background: rgba(255,23,68,0.1); border: 1px solid #ff1744; color: #ff1744; }
         .btn-danger:hover { background: #ff1744; color: #fff; }
-
+ 
         .profile-info {
-            padding: 60px 30px 20px;
-            display: flex; flex-direction: column; gap: 5px;
+            order: 3;
+            padding: 10px 30px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            width: 100%;
         }
         .profile-name { font-size: 1.8rem; font-weight: 700; color: #fff; }
         .profile-role-badge { 
@@ -145,11 +169,14 @@
         .stats-bar {
             display: flex; gap: 20px; margin-top: 15px; padding-top: 15px;
             border-top: 1px solid var(--glass-border);
+            justify-content: center;
+            width: 100%;
+            max-width: 200px;
         }
         .stat-item { display: flex; flex-direction: column; }
         .stat-val { font-size: 1.2rem; font-weight: 700; color: var(--green-neon); }
         .stat-lbl { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-
+ 
         
         .profile-body {
             display: grid;
@@ -159,24 +186,23 @@
         }
         @media (max-width: 768px) {
             .profile-body { grid-template-columns: 1fr; }
-            .cover-photo { height: 150px; }
-            .profile-avatar-wrap { left: 50%; transform: translateX(-50%); }
-            .profile-info { text-align: center; align-items: center; }
-            .profile-actions { bottom: -45px; right: 50%; transform: translateX(50%); white-space: nowrap; }
-            nav { padding: 0 0.5rem !important; height: auto !important; min-height: 60px; flex-wrap: wrap; }
-            .nav-brand span.brand-title { display: none !important; }
-            .nav-links { 
-                width: 100%; overflow-x: auto; white-space: nowrap; padding: 5px 0;
-                justify-content: flex-start !important; gap: 5px !important;
-            }
+            .cover-photo { height: 180px; }
         }
-
+ 
         .panel {
-            background: var(--bg-panel);
+            background: rgba(0, 15, 8, 0.7);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 24px;
             height: max-content;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .panel:hover {
+            border-color: rgba(0, 255, 136, 0.35);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 255, 136, 0.15);
         }
         .panel-title {
             font-size: 1rem; color: #fff; margin-bottom: 15px; font-family: 'Exo 2', sans-serif;
@@ -219,12 +245,17 @@
     <nav>
         <a href="/" class="nav-brand">
             <img src="/assets/logo.png" alt="Road Track BD Logo" class="brand-logo" />
-            <span class="brand-title">Road Track BD</span>
+            <div class="brand-text">
+                <span class="brand-title">Road Track BD</span>
+                <span class="brand-sub" data-i18n="ui.brandSub">জাতীয় রাস্তা পর্যবেক্ষণ</span>
+            </div>
         </a>
         <div class="nav-links">
-            <a href="/" class="nav-link" data-i18n="nav.home">Home</a>
-            <a href="/dashboard" class="nav-link" data-i18n="nav.dash">Dashboard</a>
-            <a href="/feed" class="nav-link" data-i18n="nav.feed">Feed</a>
+            <a class="nav-link" href="/" data-i18n="nav.map">ম্যাপ</a>
+            <a class="nav-link" href="/report" data-i18n="nav.report">রিপোর্ট</a>
+            <a class="nav-link" href="/feed" data-i18n="nav.feed">ফিড</a>
+            <a class="nav-link" href="/dashboard" data-i18n="nav.dashboard">ড্যাশবোর্ড</a>
+            <a class="nav-link" href="/volunteer" data-i18n="nav.volunteer">স্বেচ্ছাসেবক</a>
         </div>
         <div id="navRight"></div>
     </nav>
@@ -233,7 +264,7 @@
         
         <div class="profile-header">
             <div class="cover-photo" id="profCoverDisplay" onclick="if(event.target === this || event.target.tagName === 'IMG') { if(this.style.backgroundImage && this.style.backgroundImage !== 'none') { const url = this.style.backgroundImage.slice(5, -2); window.open(url, '_blank'); } }">
-                <div class="cover-edit-btn" onclick="event.stopPropagation(); document.getElementById('coverUploader').click()"><i class="fa-solid fa-camera"></i> Cover</div>
+                <div class="cover-edit-btn" onclick="event.stopPropagation(); document.getElementById('coverUploader').click()"><i class="fa-solid fa-camera"></i> <span data-i18n="profile.changeCover">কভার ফটো</span></div>
             </div>
             <input type="file" id="coverUploader" style="display:none" accept="image/*" onchange="handleCoverUpload(event)">
             
@@ -241,13 +272,13 @@
                 <div class="profile-avatar" id="profAvatarDisplay" onclick="const img = this.querySelector('img'); if(img){ window.open(img.src, '_blank'); }">
                     <i class="fa-solid fa-user"></i>
                 </div>
-                <div class="avatar-edit-icon" onclick="event.stopPropagation(); document.getElementById('avatarUploader').click()" title="Change Avatar"><i class="fa-solid fa-camera"></i></div>
+                <div class="avatar-edit-icon" onclick="event.stopPropagation(); document.getElementById('avatarUploader').click()" data-i18n-title="profile.changeAvatar" title="Change Avatar"><i class="fa-solid fa-camera"></i></div>
                 <input type="file" id="avatarUploader" style="display:none" accept="image/*" onchange="handleAvatarUpload(event)">
             </div>
             
             <div class="profile-actions">
-                <button class="btn-profile btn-edit" onclick="openEditModal()"><i class="fa-solid fa-pen"></i> Edit Profile</button>
-                <button class="btn-profile btn-danger" onclick="doLogout()">Log Out</button>
+                <button class="btn-profile btn-edit" onclick="openEditModal()" data-i18n="profile.editBtn"><i class="fa-solid fa-pen"></i> Edit Profile</button>
+                <button class="btn-profile btn-danger" onclick="doLogout()" data-i18n="profile.logout">Log Out</button>
             </div>
 
             <div class="profile-info">
@@ -257,7 +288,7 @@
                 <div class="stats-bar">
                     <div class="stat-item">
                         <span class="stat-val" id="profReportCount">0</span>
-                        <span class="stat-lbl">Reports</span>
+                        <span class="stat-lbl" data-i18n="profile.reports">Reports</span>
                     </div>
                 </div>
             </div>
@@ -266,35 +297,35 @@
         <div class="profile-body">
             
             <div class="panel">
-                <div class="panel-title">About</div>
+                <div class="panel-title" data-i18n="profile.about">About</div>
                 <div class="info-list">
                     <div class="info-row">
                         <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
-                        <div class="info-text"><strong>Phone</strong> <span id="infoPhone">-</span></div>
+                        <div class="info-text"><strong data-i18n="profile.phone">Phone</strong> <span id="infoPhone">-</span></div>
                     </div>
                     <div class="info-row">
                         <div class="info-icon"><i class="fa-solid fa-id-card"></i></div>
-                        <div class="info-text"><strong>NID</strong> <span id="infoNID">-</span></div>
+                        <div class="info-text"><strong data-i18n="profile.nid">NID</strong> <span id="infoNID">-</span></div>
                     </div>
                     <div class="info-row">
                         <div class="info-icon"><i class="fa-solid fa-briefcase"></i></div>
-                        <div class="info-text"><strong>Occupation</strong> <span id="infoJob">-</span></div>
+                        <div class="info-text"><strong data-i18n="profile.job">Occupation</strong> <span id="infoJob">-</span></div>
                     </div>
                     <div class="info-row">
                         <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
-                        <div class="info-text"><strong>Location</strong> <span id="infoAddress">-</span></div>
+                        <div class="info-text"><strong data-i18n="profile.address">Location</strong> <span id="infoAddress">-</span></div>
                     </div>
                     <div class="info-row">
                         <div class="info-icon"><i class="fa-solid fa-cake-candles"></i></div>
-                        <div class="info-text"><strong>Date of Birth</strong> <span id="infoDOB">-</span></div>
+                        <div class="info-text"><strong data-i18n="profile.dob">Date of Birth</strong> <span id="infoDOB">-</span></div>
                     </div>
                 </div>
             </div>
 
             
             <div class="panel">
-                <div class="panel-title">Timeline</div>
-                <div id="timelineList" style="text-align:center; padding: 20px; color: var(--text-muted);">
+                <div class="panel-title" data-i18n="profile.timeline">Timeline</div>
+                <div id="timelineList" style="text-align:center; padding: 20px; color: var(--text-muted);" data-i18n="profile.loadingTimeline">
                     Loading reports...
                 </div>
             </div>
@@ -302,7 +333,7 @@
         
         
         <div style="margin-top: 30px; text-align: center;">
-            <button onclick="handleDeleteProfile()" style="background:none; border:none; color: var(--red-neon); text-decoration: underline; cursor: pointer; font-size: 0.8rem; opacity: 0.8;">Delete My Account</button>
+            <button onclick="handleDeleteProfile()" style="background:none; border:none; color: var(--red-neon); text-decoration: underline; cursor: pointer; font-size: 0.8rem; opacity: 0.8;" data-i18n="profile.delProf">Delete My Account</button>
         </div>
     </div>
 
@@ -310,32 +341,32 @@
     <div id="editProfileModal" class="modal-overlay">
         <div class="modal-box" style="max-width: 500px;">
             <button class="modal-close" onclick="document.getElementById('editProfileModal').classList.remove('open')"><i class="fa-solid fa-xmark"></i></button>
-            <div class="modal-title">Edit Profile</div>
+            <div class="modal-title" data-i18n="profile.editTitle">Edit Profile</div>
             
             <div class="form-group">
-                <label>Name</label>
+                <label data-i18n="profile.name">Name</label>
                 <input type="text" id="editName">
             </div>
             <div style="display:flex; gap:10px;">
                 <div class="form-group" style="flex:1;">
-                    <label>NID</label>
+                    <label data-i18n="auth.nid">NID</label>
                     <input type="text" id="editNID">
                 </div>
                 <div class="form-group" style="flex:1;">
-                    <label>DOB</label>
+                    <label data-i18n="profile.dob">DOB</label>
                     <input type="date" id="editDOB" style="color-scheme: dark;">
                 </div>
             </div>
             <div class="form-group">
-                <label>Occupation</label>
+                <label data-i18n="auth.occ">Occupation</label>
                 <input type="text" id="editJob">
             </div>
             <div class="form-group">
-                <label>Address</label>
+                <label data-i18n="profile.address">Address</label>
                 <input type="text" id="editAddress">
             </div>
             
-            <button class="submit-btn" onclick="saveProfileEdits()">Save Changes</button>
+            <button class="submit-btn" onclick="saveProfileEdits()" data-i18n="profile.save">Save Changes</button>
         </div>
     </div>
 
@@ -347,8 +378,35 @@
         document.addEventListener('DOMContentLoaded', () => {
             initSocket();
             renderNavAuth();
-            loadProfileView();
+            injectLangToggle('nav');
+            applyLang();
+            verifySession();
         });
+
+        async function verifySession() {
+            const user = getUser();
+            if (!user) {
+                window.location.href = '/register';
+                return;
+            }
+            try {
+                const d = await apiFetch('/api/auth/me');
+                if (d && d.success && d.user) {
+                    saveAuth(localStorage.getItem('rtbd_token'), d.user);
+                    loadProfileView();
+                } else {
+                    showToast(t('toast.sessionInvalid'), 'error');
+                    setTimeout(() => {
+                        logout();
+                    }, 2000);
+                }
+            } catch (e) {
+                showToast(t('toast.sessionInvalid'), 'error');
+                setTimeout(() => {
+                    logout();
+                }, 2000);
+            }
+        }
 
         function loadProfileView() {
             const user = getUser();
@@ -358,12 +416,12 @@
             }
 
             document.getElementById('profNameDisplay').textContent = user.name;
-            document.getElementById('profRoleDisplay').textContent = user.role;
+            document.getElementById('profRoleDisplay').textContent = getRoleTranslation(user.role);
             document.getElementById('infoPhone').textContent = user.phone;
-            document.getElementById('infoNID').textContent = user.nid || 'Not provided';
-            document.getElementById('infoJob').textContent = user.job || 'Not provided';
-            document.getElementById('infoAddress').textContent = user.address || 'Not provided';
-            document.getElementById('infoDOB').textContent = user.dob || 'Not provided';
+            document.getElementById('infoNID').textContent = user.nid || t('profile.notProvided');
+            document.getElementById('infoJob').textContent = user.job || t('profile.notProvided');
+            document.getElementById('infoAddress').textContent = user.address || t('profile.notProvided');
+            document.getElementById('infoDOB').textContent = user.dob || t('profile.notProvided');
 
             if (user.avatar) {
                 document.getElementById('profAvatarDisplay').innerHTML = `
@@ -379,47 +437,51 @@
                 document.getElementById('profCoverDisplay').style.backgroundImage = '';
             }
 
-            
             document.getElementById('editName').value = user.name || '';
             document.getElementById('editNID').value = user.nid || '';
             document.getElementById('editDOB').value = user.dob || '';
             document.getElementById('editJob').value = user.job || '';
             document.getElementById('editAddress').value = user.address || '';
 
-            
             loadTimeline(user);
         }
 
         async function loadTimeline(user) {
             try {
-                
                 apiFetch('/api/volunteers/' + user.id).then(d => {
                     if (d.success) document.getElementById('profReportCount').textContent = d.data.reportCount || 0;
                 });
 
-                
                 const d = await apiFetch('/api/reports/me/list');
                 const list = document.getElementById('timelineList');
                 if (!d.success || d.data.length === 0) {
-                    list.innerHTML = 'You have not posted any reports yet.';
+                    list.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-muted);" data-i18n="profile.noReports">${t('profile.noReports')}</div>`;
                     return;
                 }
                 
-                list.innerHTML = d.data.map(r => `
+                list.innerHTML = d.data.map(r => {
+                    const roadName = r.problemType === 'opinion' 
+                        ? t('feed.tagOpinion') 
+                        : (r.roadName || (typeof getLang === 'function' && getLang() === 'en' ? 'Location Unknown' : 'অজানা রাস্তা'));
+                    const badgeText = r.problemType === 'opinion'
+                        ? `<i class="fa-solid fa-bullhorn"></i> Post`
+                        : getProblemLabel(r.problemType);
+                    const formattedDate = new Date(r.createdAt || r.timestamp).toLocaleDateString();
+                    return `
                     <div class="feed-item" id="tr-${r._id}">
                         <div class="feed-header">
-                            <span class="feed-road">${r.problemType === 'opinion' ? 'Public Opinion' : (r.roadName || 'Location Unknown')}</span>
-                            <button class="btn-trash" onclick="removePost('${r._id}')" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                            <span class="feed-road">${roadName}</span>
+                            <button class="btn-trash" onclick="removePost('${r._id}')" data-i18n-title="profile.delPost" title="${t('profile.delPost')}"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         <div class="feed-desc">${r.description || ''}</div>
                         <div class="feed-meta">
-                            ${r.problemType !== 'opinion' ? `<span class="badge" style="background:${getMarkerColor(r)}">${getProblemLabel(r.problemType)}</span>` : `<span class="badge" style="background:var(--blue-neon)"><i class="fa-solid fa-bullhorn"></i> Post</span>`}
-                            <span>${new Date(r.createdAt || r.timestamp).toLocaleDateString()}</span>
+                            ${r.problemType !== 'opinion' ? `<span class="badge" style="background:${getMarkerColor(r)}">${badgeText}</span>` : `<span class="badge" style="background:var(--blue-neon)">${badgeText}</span>`}
+                            <span>${formattedDate}</span>
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
             } catch(e) {
-                document.getElementById('timelineList').innerHTML = 'Failed to load timeline.';
+                document.getElementById('timelineList').innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-muted);" data-i18n="profile.loadingTimelineFailed">${t('profile.loadingTimelineFailed')}</div>`;
             }
         }
 
@@ -430,7 +492,7 @@
             const address = document.getElementById('editAddress').value.trim();
             const dob = document.getElementById('editDOB').value;
 
-            if(!name) { showToast('Name is required', 'error'); return; }
+            if(!name) { showToast(t('toast.nameRequired'), 'error'); return; }
 
             const d = await apiFetch('/api/auth/profile', {
                 method: 'PUT',
@@ -440,11 +502,11 @@
             if(d.success) {
                 saveAuth(localStorage.getItem('rtbd_token'), d.user);
                 document.getElementById('editProfileModal').classList.remove('open');
-                showToast('<i class="fa-solid fa-check"></i> Profile Updated');
+                showToast(t('toast.profileUpdated'));
                 loadProfileView();
                 renderNavAuth();
             } else {
-                showToast(d.message || 'Error updating profile', 'error');
+                showToast(d.message || t('toast.profileUpdateError'), 'error');
             }
         }
 
@@ -459,10 +521,10 @@
                     const user = getUser();
                     user.avatar = d.avatar;
                     localStorage.setItem('rtbd_user', JSON.stringify(user));
-                    showToast('<i class="fa-solid fa-check"></i> Avatar Updated');
+                    showToast(t('toast.avatarUpdated'));
                     loadProfileView();
                     renderNavAuth();
-                } else showToast(d.message || 'Upload failed', 'error');
+                } else showToast(d.message || t('toast.uploadFailed'), 'error');
             } catch (err) { showToast('Server problem', 'error'); }
         }
 
@@ -477,27 +539,26 @@
                     const user = getUser();
                     user.coverPhoto = d.coverPhoto;
                     localStorage.setItem('rtbd_user', JSON.stringify(user));
-                    showToast('<i class="fa-solid fa-check"></i> Cover Photo Updated');
+                    showToast(t('toast.coverUpdated'));
                     loadProfileView();
-                } else showToast(d.message || 'Upload failed', 'error');
+                } else showToast(d.message || t('toast.uploadFailed'), 'error');
             } catch (err) { showToast('Server problem', 'error'); }
         }
 
         async function removePost(id) {
-            if (!confirm('Are you sure you want to permanently delete this report from your timeline?')) return;
+            if (!confirm(t('profile.delPostConfirm'))) return;
             try {
                 const d = await apiFetch('/api/reports/' + id, { method: 'DELETE' });
                 if (d.success) {
-                    showToast('<i class="fa-solid fa-check"></i> Report deleted');
+                    showToast(t('toast.reportDeleted'));
                     const el = document.getElementById('tr-' + id);
                     if(el) el.remove();
-                    
                     
                     const countEl = document.getElementById('profReportCount');
                     const cur = parseInt(countEl.textContent) || 1;
                     countEl.textContent = cur - 1;
-                } else showToast(d.message || 'Delete failed', 'error');
-            } catch(e) { showToast('Error', 'error'); }
+                } else showToast(d.message || t('toast.deleteFailed'), 'error');
+            } catch(e) { showToast(t('toast.error'), 'error'); }
         }
 
         function openEditModal() {
@@ -509,14 +570,14 @@
         }
 
         async function handleDeleteProfile() {
-            if(!confirm('<i class="fa-solid fa-triangle-exclamation"></i> Warning: This is permanent. It removes you from the app. Proceed?')) return;
+            if(!confirm(t('profile.delAccountConfirm'))) return;
             try {
                 const d = await apiFetch('/api/auth/profile', { method: 'DELETE' });
                 if (d.success) {
-                    showToast('Profile deleted');
+                    showToast(t('toast.profileDeleted'));
                     logout();
-                } else showToast('Failed to delete', 'error');
-            } catch(e) { showToast('Error', 'error'); }
+                } else showToast(t('toast.deleteProfileFailed'), 'error');
+            } catch(e) { showToast(t('toast.error'), 'error'); }
         }
 
     </script>
