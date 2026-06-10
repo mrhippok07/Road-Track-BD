@@ -117,7 +117,7 @@ const RTBD_TRANSLATIONS = {
     'feed.send':         { bn: 'পাঠান', en: 'Send' },
     'feed.update':       { bn: '<i class="fa-solid fa-rotate"></i> অবস্থা আপডেট', en: '<i class="fa-solid fa-rotate"></i> Update Status' },
     'feed.doUpdate':     { bn: '<i class="fa-solid fa-check"></i> আপডেট করুন', en: '<i class="fa-solid fa-check"></i> Update' },
-    'feed.share':        { bn: '<i class="fa-solid fa-link"></i> শেয়ার', en: '<i class="fa-solid fa-link"></i> Share' },
+    'feed.share':        { bn: 'শেয়ার', en: 'Share' },
     'feed.noComment':    { bn: 'কোনো মন্তব্য নেই', en: 'No comments yet' },
 
     

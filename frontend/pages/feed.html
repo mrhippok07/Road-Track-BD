@@ -829,7 +829,7 @@
       <button class="action-btn ${(r.userLiked)?'liked':''}" onclick="toggleLike('${r._id}',this)"><i class="fa-solid fa-heart"></i> <span id="like-${r._id}">${r.likes||0}</span></button>
       <button class="action-btn ${(r.userReacted)?'reacted':''}" onclick="toggleReact('${r._id}',this)">${getReactionEmoji(r.problemType)} <span id="react-${r._id}">${r.reactions||0}</span></button>
       <button class="action-btn" onclick="toggleComments('${r._id}')"><i class="fa-regular fa-comments"></i> ${t('feed.commentLabel')} <span id="cmtCount-${r._id}">${r.commentCount||0}</span></button>
-      <button class="action-btn" onclick="openShare('${r._id}')"><i class="fa-solid fa-link"></i> <span>${t('feed.share')}</span></button>
+      <button class="action-btn" onclick="openShare('${r._id}')"><i class="fa-solid fa-share-nodes"></i> <span>${t('feed.share')}</span></button>
       ${r.problemType !== 'opinion' ? updateBtnHtml : ''}
     </div>
     <div class="feed-comments" id="comments-${r._id}">

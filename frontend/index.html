@@ -905,8 +905,8 @@
 
         .modal-close {
             position: absolute;
-            top: 14px;
-            right: 14px;
+            top: 20px;
+            right: 20px;
             background: none;
             border: 1px solid var(--glass-border);
             border-radius: 4px;
@@ -916,6 +916,9 @@
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-close:hover {
@@ -1173,6 +1176,7 @@
             }
 
             .hud-side-panels {
+                grid-template-columns: 1fr !important;
                 flex-direction: column;
             }
 

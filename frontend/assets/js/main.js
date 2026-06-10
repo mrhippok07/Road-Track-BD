@@ -514,7 +514,7 @@ i.fa-solid, i.fa-regular { line-height: inherit; }
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
 .modal-overlay.open{display:flex;}
 .modal-box{background:#021008;border:1px solid var(--green-neon);border-radius:16px;padding:2rem;max-width:500px;width:90%;position:relative;box-shadow:var(--glow-green);animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto;}
-.modal-close{position:absolute;top:14px;right:14px;background:none;border:1px solid var(--glass-border);border-radius:4px;color:var(--text-muted);width:28px;height:28px;cursor:pointer;font-size:0.9rem;transition:all 0.2s;}
+.modal-close{position:absolute;top:20px;right:20px;background:none;border:1px solid var(--glass-border);border-radius:4px;color:var(--text-muted);width:28px;height:28px;cursor:pointer;font-size:0.9rem;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
 .modal-close:hover{border-color:var(--red-neon);color:var(--red-neon);}
 .modal-title{font-family:'Exo 2',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--green-neon);text-transform:uppercase;margin-bottom:1rem;}
 .auth-tabs{display:flex;margin-bottom:1.5rem;border:1px solid var(--glass-border);border-radius:6px;overflow:hidden;}
