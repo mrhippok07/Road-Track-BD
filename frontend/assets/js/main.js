@@ -767,8 +767,86 @@ if (document.readyState === 'loading') {
     setupHamburgerMenu();
 }
 
-window.getFuturisticIcon = function(color) {
+window.getFuturisticIcon = function(color, problemType) {
     const cleanColor = color.replace('#', '');
+    
+    // Default fallback icon path (center target circle)
+    let innerIconSvg = `
+        <circle cx="20" cy="15" r="5" fill="#021008" stroke="${color}" stroke-width="1.2"/>
+        <circle cx="20" cy="15" r="2.5" fill="#ffffff"/>
+        <circle cx="20" cy="15" r="1" fill="${color}"/>
+    `;
+
+    // Category mapping
+    const waterTypes = ['waterlogged', 'canal_small', 'canal_large', 'tube_well_needed', 'tube_well_repair'];
+    const roadTypes = ['broken', 'pothole', 'unpaved', 'narrow', 'under_repair'];
+    const dangerTypes = ['dangerous'];
+    const bridgeTypes = ['bridge_repair', 'bridge_new', 'road_bridge_new', 'culvert_new', 'culvert_repair'];
+    const lightTypes = ['nolight'];
+    const earthTypes = ['erosion', 'embankment_new', 'embankment_repair'];
+    const railwayTypes = ['railway_repair', 'railway_new', 'railway_station_new'];
+    const busTypes = ['bus_station_repair', 'bus_station_new'];
+    const opinionTypes = ['opinion'];
+
+    if (problemType) {
+        let pathData = '';
+        let fillType = 'none';
+        let strokeWidth = '1.5';
+        
+        if (waterTypes.includes(problemType)) {
+            // Droplet
+            pathData = 'M20,9.5 C17.5,13 16,15 16,17 C16,19.2 17.8,21 20,21 C22.2,21 24,19.2 24,17 C24,15 22.5,13 20,9.5 Z';
+            fillType = color;
+        } else if (roadTypes.includes(problemType)) {
+            // Cracked road road lanes
+            pathData = 'M18,9 L22,9 L24,21 L16,21 Z M20,10 L20,13 M20,15 L20,18 M20,19 L20,20';
+            fillType = 'none';
+            strokeWidth = '1.2';
+        } else if (dangerTypes.includes(problemType)) {
+            // Exclamation Warning Triangle
+            pathData = 'M20,9 L25.5,19 L14.5,19 Z M20,12 L20,15 M20,17.2 L20,18';
+            fillType = 'none';
+            strokeWidth = '1.2';
+        } else if (bridgeTypes.includes(problemType)) {
+            // Bridge Arch
+            pathData = 'M14,19 C14,15.5 16.5,13.5 20,13.5 C23.5,13.5 26,15.5 26,19 M13,19.5 L27,19.5';
+            fillType = 'none';
+            strokeWidth = '1.2';
+        } else if (lightTypes.includes(problemType)) {
+            // Lightbulb
+            pathData = 'M20,9.5 C18.3,9.5 17,10.8 17,12.5 C17,13.8 18.2,15.2 18.2,16.5 L21.8,16.5 C21.8,15.2 23,13.8 23,12.5 C23,10.8 21.7,9.5 20,9.5 Z M18.5,18 L21.5,18 M19,19.5 L21,19.5';
+            fillType = 'none';
+            strokeWidth = '1.2';
+        } else if (earthTypes.includes(problemType)) {
+            // Mountain / Erosion
+            pathData = 'M14,20 L18.5,13 L21.5,17 L25.5,11 L26.5,12 L21.5,20 Z';
+            fillType = color;
+        } else if (railwayTypes.includes(problemType)) {
+            // Railway tracks
+            pathData = 'M17.5,9 L16.5,21 M22.5,9 L23.5,21 M17,11.5 L23,11.5 M16.7,14.5 L23.3,14.5 M16.4,17.5 L23.6,17.5';
+            fillType = 'none';
+            strokeWidth = '1.2';
+        } else if (busTypes.includes(problemType)) {
+            // Bus profile
+            pathData = 'M16,10 L24,10 C25,10 25,11 25,12 L25,19.5 C25,20 24,20 24,20 L24,21 L23,21 L23,20 L17,20 L17,21 L16,21 L16,20 C15,20 15,19.5 15,19.5 L15,12 C15,11 15,10 16,10 Z M16.5,12 L23.5,12 L23.5,15.5 L16.5,15.5 Z';
+            fillType = 'none';
+            strokeWidth = '1.2';
+        } else if (opinionTypes.includes(problemType)) {
+            // Chat Bubble
+            pathData = 'M15,9.5 L25,9.5 C26.1,9.5 27,10.4 27,11.5 L27,16.5 C27,17.6 26.1,18.5 25,18.5 L21.5,18.5 L18,21 L18,18.5 L15,18.5 C13.9,18.5 13,17.6 13,16.5 L13,11.5 C13,10.4 13.9,9.5 15,9.5 Z';
+            fillType = 'none';
+            strokeWidth = '1.2';
+        }
+
+        if (pathData) {
+            innerIconSvg = `
+                <!-- Background backing for readability -->
+                <circle cx="20" cy="15" r="7.5" fill="#021008" stroke="${color}" stroke-width="0.8" opacity="0.9"/>
+                <path d="${pathData}" fill="${fillType}" stroke="#ffffff" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>
+            `;
+        }
+    }
+
     const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
             <defs>
@@ -789,10 +867,8 @@ window.getFuturisticIcon = function(color) {
             <!-- Location Pin Outer -->
             <path d="M20 3 C12 3 6 9 6 17 C6 26 20 37 20 37 C20 37 34 26 34 17 C34 9 28 3 20 3 Z" 
                   fill="url(#grad-${cleanColor})" stroke="${color}" stroke-width="1.5"/>
-            <!-- Futuristic Center Target -->
-            <circle cx="20" cy="15" r="5" fill="#021008" stroke="${color}" stroke-width="1.2"/>
-            <circle cx="20" cy="15" r="2.5" fill="#ffffff"/>
-            <circle cx="20" cy="15" r="1" fill="${color}"/>
+            <!-- Center Icon -->
+            ${innerIconSvg}
         </svg>
     `;
     return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);

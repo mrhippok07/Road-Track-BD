@@ -1966,7 +1966,7 @@
                 position: { lat: parseFloat(r.lat), lng: parseFloat(r.lng) },
                 map: gMap, title: r.roadName,
                 icon: {
-                    url: getFuturisticIcon(color),
+                    url: getFuturisticIcon(color, r.problemType),
                     size: new google.maps.Size(40, 40),
                     origin: new google.maps.Point(0, 0),
                     anchor: new google.maps.Point(20, 37),
