@@ -1310,6 +1310,109 @@
   .modal-box, .auth-modal-inner { width: 94% !important; padding: 1.4rem !important; max-height: 90vh !important; overflow-y: auto !important; }
 }
 
+/* Map Custom Controls & Layers Panel Styles */
+.map-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.map-btn {
+    background: rgba(2, 10, 5, 0.85);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: var(--text-primary);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: 'Noto Sans Bengali', sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    outline: none;
+}
+
+.map-btn:hover {
+    border-color: var(--green-neon);
+    color: var(--green-neon);
+    transform: translateY(-2px);
+    box-shadow: var(--glow-green);
+}
+
+.map-btn i {
+    font-size: 0.85rem;
+    color: var(--green-neon);
+}
+
+.map-type-grid, .map-details-grid {
+    margin-top: 5px;
+}
+
+.map-type-card, .map-detail-card {
+    background: rgba(0, 15, 8, 0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 10px 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.map-type-card:hover, .map-detail-card:hover {
+    border-color: var(--green-neon);
+    background: rgba(0, 255, 136, 0.05);
+    transform: translateY(-2px);
+}
+
+.map-type-card.active, .map-detail-card.active {
+    border-color: var(--green-neon);
+    background: rgba(0, 255, 136, 0.12);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+.map-type-card .type-icon, .map-detail-card .detail-icon {
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    background: rgba(2, 10, 5, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.25s;
+}
+
+.map-type-card.active .type-icon, .map-detail-card.active .detail-icon {
+    border-color: var(--green-neon);
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+}
+
+.map-type-card .type-label, .map-detail-card .detail-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-family: 'Noto Sans Bengali', sans-serif;
+    transition: all 0.25s;
+}
+
+.map-type-card.active .type-label, .map-detail-card.active .detail-label {
+    color: var(--green-neon);
+    font-weight: 600;
+}
+
 </style>
 
 </head>
@@ -1383,8 +1486,12 @@
                     <div class="map-hud-label" data-i18n="map.liveLabel">LIVE SATELLITE MAP — BANGLADESH</div>
                     <div id="map"></div>
                     <div class="map-controls">
-                        <button class="map-btn" onclick="getGeoLocation()"><span data-i18n="map.myLocation"><i class="fa-solid fa-location-dot"></i> আমার
-                                অবস্থান</span></button>
+                        <button class="map-btn" onclick="openMapLayersModal()">
+                            <i class="fa-solid fa-layer-group"></i> <span data-i18n="map.layersBtn">ম্যাপ ভিউ</span>
+                        </button>
+                        <button class="map-btn" onclick="getGeoLocation()">
+                            <span data-i18n="map.myLocation"><i class="fa-solid fa-location-dot"></i> আমার অবস্থান</span>
+                        </button>
                     </div>
                 </div>
                 <div class="map-legend">
@@ -1578,6 +1685,61 @@
     </footer>
 
 
+    <!-- Map Layers Modal -->
+    <div class="modal-overlay" id="mapLayersModal">
+        <div class="modal-box" style="max-width: 480px;">
+            <button class="modal-close" onclick="closeMapLayersModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-title" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; margin-bottom: 16px;">
+                <span data-i18n="map.layersTitle"><i class="fa-solid fa-layer-group"></i> ম্যাপ কনফিগারেশন</span>
+            </div>
+            
+            <!-- Section: Map Type -->
+            <div class="modal-section-label" data-i18n="map.typeLabel" style="font-size: 0.75rem; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; font-family: 'Exo 2', sans-serif;">Map Type</div>
+            <div class="map-type-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+                <!-- Roadmap -->
+                <div class="map-type-card active" id="mapTypeRoadmap" onclick="setMapType('roadmap')">
+                    <div class="type-icon"><i class="fa-solid fa-map" style="color: #00ff88;"></i></div>
+                    <div class="type-label" data-i18n="map.typeRoadmap">ডিফল্ট</div>
+                </div>
+                <!-- Satellite -->
+                <div class="map-type-card" id="mapTypeSatellite" onclick="setMapType('satellite')">
+                    <div class="type-icon"><i class="fa-solid fa-globe" style="color: #2196f3;"></i></div>
+                    <div class="type-label" data-i18n="map.typeSatellite">স্যাটেলাইট</div>
+                </div>
+                <!-- Hybrid -->
+                <div class="map-type-card" id="mapTypeHybrid" onclick="setMapType('hybrid')">
+                    <div class="type-icon"><i class="fa-solid fa-circle-nodes" style="color: #ffd600;"></i></div>
+                    <div class="type-label" data-i18n="map.typeHybrid">হাইব্রিড</div>
+                </div>
+                <!-- Terrain -->
+                <div class="map-type-card" id="mapTypeTerrain" onclick="setMapType('terrain')">
+                    <div class="type-icon"><i class="fa-solid fa-mountain" style="color: #ff6d00;"></i></div>
+                    <div class="type-label" data-i18n="map.typeTerrain">টেরেইন</div>
+                </div>
+            </div>
+
+            <!-- Section: Map Details -->
+            <div class="modal-section-label" data-i18n="map.detailsLabel" style="font-size: 0.75rem; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; font-family: 'Exo 2', sans-serif;">Map Details</div>
+            <div class="map-details-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                <!-- Traffic -->
+                <div class="map-detail-card" id="mapDetailTraffic" onclick="toggleMapLayer('traffic')">
+                    <div class="detail-icon"><i class="fa-solid fa-car-side" style="color: #ff1744;"></i></div>
+                    <div class="detail-label" data-i18n="map.detailTraffic">ট্রাফিক</div>
+                </div>
+                <!-- Public Transport -->
+                <div class="map-detail-card" id="mapDetailTransit" onclick="toggleMapLayer('transit')">
+                    <div class="detail-icon"><i class="fa-solid fa-bus-simple" style="color: #2196f3;"></i></div>
+                    <div class="detail-label" data-i18n="map.detailTransit">পাবলিক ট্রান্সপোর্ট</div>
+                </div>
+                <!-- Bicycling -->
+                <div class="map-detail-card" id="mapDetailBicycling" onclick="toggleMapLayer('bicycling')">
+                    <div class="detail-icon"><i class="fa-solid fa-bicycle" style="color: #00ff88;"></i></div>
+                    <div class="detail-label" data-i18n="map.detailBicycling">বাইসাইকেল লেন</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <script src="/assets/js/main.js"></script>
@@ -1585,6 +1747,108 @@
         let gMap = null, gInfoWindow = null, userMarker = null, userWatchId = null;
         let mapMarkers = [];
         let _mapInitialized = false;
+
+        let trafficLayer = null;
+        let transitLayer = null;
+        let bicyclingLayer = null;
+        let activeLayers = {
+            traffic: false,
+            transit: false,
+            bicycling: false
+        };
+
+        window.openMapLayersModal = function () {
+            const modal = document.getElementById('mapLayersModal');
+            if (modal) {
+                const currentType = gMap ? gMap.getMapTypeId() : 'hybrid';
+                document.querySelectorAll('.map-type-card').forEach(card => card.classList.remove('active'));
+                
+                let targetId = 'mapTypeHybrid';
+                if (currentType === 'roadmap') targetId = 'mapTypeRoadmap';
+                else if (currentType === 'satellite') targetId = 'mapTypeSatellite';
+                else if (currentType === 'terrain') targetId = 'mapTypeTerrain';
+                
+                const activeCard = document.getElementById(targetId);
+                if (activeCard) activeCard.classList.add('active');
+
+                ['traffic', 'transit', 'bicycling'].forEach(layer => {
+                    const card = document.getElementById('mapDetail' + layer.charAt(0).toUpperCase() + layer.slice(1));
+                    if (card) {
+                        if (activeLayers[layer]) card.classList.add('active');
+                        else card.classList.remove('active');
+                    }
+                });
+
+                modal.classList.add('open');
+            }
+        };
+
+        window.closeMapLayersModal = function () {
+            const modal = document.getElementById('mapLayersModal');
+            if (modal) modal.classList.remove('open');
+        };
+
+        window.setMapType = function (type) {
+            if (!gMap) return;
+            let gType = google.maps.MapTypeId.HYBRID;
+            if (type === 'roadmap') gType = google.maps.MapTypeId.ROADMAP;
+            else if (type === 'satellite') gType = google.maps.MapTypeId.SATELLITE;
+            else if (type === 'terrain') gType = google.maps.MapTypeId.TERRAIN;
+            
+            gMap.setMapTypeId(gType);
+
+            const hudLabel = document.querySelector('.map-hud-label');
+            if (hudLabel) {
+                const lang = typeof getLang === 'function' ? getLang() : 'bn';
+                if (type === 'roadmap') {
+                    hudLabel.textContent = lang === 'en' ? 'LIVE ROAD MAP — BANGLADESH' : 'লাইভ রোড ম্যাপ — বাংলাদেশ';
+                } else if (type === 'satellite') {
+                    hudLabel.textContent = lang === 'en' ? 'LIVE SATELLITE MAP — BANGLADESH' : 'লাইভ স্যাটেলাইট ম্যাপ — বাংলাদেশ';
+                } else if (type === 'terrain') {
+                    hudLabel.textContent = lang === 'en' ? 'LIVE TERRAIN MAP — BANGLADESH' : 'লাইভ টেরেইন ম্যাপ — বাংলাদেশ';
+                } else {
+                    hudLabel.textContent = lang === 'en' ? 'LIVE HYBRID MAP — BANGLADESH' : 'লাইভ হাইব্রিড ম্যাপ — বাংলাদেশ';
+                }
+            }
+
+            document.querySelectorAll('.map-type-card').forEach(card => card.classList.remove('active'));
+            const activeCard = document.getElementById('mapType' + type.charAt(0).toUpperCase() + type.slice(1));
+            if (activeCard) activeCard.classList.add('active');
+        };
+
+        window.toggleMapLayer = function (layer) {
+            if (!gMap) return;
+            activeLayers[layer] = !activeLayers[layer];
+            
+            if (layer === 'traffic') {
+                if (activeLayers.traffic) {
+                    if (!trafficLayer) trafficLayer = new google.maps.TrafficLayer();
+                    trafficLayer.setMap(gMap);
+                } else {
+                    if (trafficLayer) trafficLayer.setMap(null);
+                }
+            } else if (layer === 'transit') {
+                if (activeLayers.transit) {
+                    if (!transitLayer) transitLayer = new google.maps.TransitLayer();
+                    transitLayer.setMap(gMap);
+                } else {
+                    if (transitLayer) transitLayer.setMap(null);
+                }
+            } else if (layer === 'bicycling') {
+                if (activeLayers.bicycling) {
+                    if (!bicyclingLayer) bicyclingLayer = new google.maps.BicyclingLayer();
+                    bicyclingLayer.setMap(gMap);
+                } else {
+                    if (bicyclingLayer) bicyclingLayer.setMap(null);
+                }
+            }
+
+            const card = document.getElementById('mapDetail' + layer.charAt(0).toUpperCase() + layer.slice(1));
+            if (card) {
+                if (activeLayers[layer]) card.classList.add('active');
+                else card.classList.remove('active');
+            }
+        };
 
         window.initGoogleMap = function () {
             if (_mapInitialized) {
@@ -1604,8 +1868,7 @@
                 gMap = new google.maps.Map(mapEl, {
                     center: { lat: 23.685, lng: 90.356 }, zoom: 7,
                     mapTypeId: 'hybrid',
-                    mapTypeControl: true,
-                    mapTypeControlOptions: { mapTypeIds: ['hybrid', 'roadmap'], position: google.maps.ControlPosition.TOP_RIGHT },
+                    mapTypeControl: false,
                     streetViewControl: false, fullscreenControl: false,
                     zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM }
                 });
