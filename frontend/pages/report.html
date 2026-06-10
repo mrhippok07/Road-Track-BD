@@ -1001,12 +1001,13 @@
                     zoomControl: true
                 });
 
+                const initialType = document.getElementById('selectedType').value || 'broken';
                 marker = new google.maps.Marker({
                     position: { lat: parseFloat(geoLat), lng: parseFloat(geoLng) },
                     map: map,
                     draggable: true,
                     icon: {
-                        url: getFuturisticIcon('#ff1744'),
+                        url: getFuturisticIcon('#ff1744', initialType),
                         size: new google.maps.Size(40, 40),
                         origin: new google.maps.Point(0, 0),
                         anchor: new google.maps.Point(20, 37),
@@ -1039,8 +1040,9 @@
             if (marker && typeof getFuturisticIcon === 'function') {
                 const statusColors = { pending: '#ff1744', under_repair: '#2196f3', repaired: '#00ff88' };
                 const color = statusColors[val] || '#ff1744';
+                const typeVal = document.getElementById('selectedType').value || 'broken';
                 marker.setIcon({
-                    url: getFuturisticIcon(color),
+                    url: getFuturisticIcon(color, typeVal),
                     size: new google.maps.Size(40, 40),
                     origin: new google.maps.Point(0, 0),
                     anchor: new google.maps.Point(20, 37),
@@ -1055,6 +1057,19 @@
             const val = btn.dataset.value;
             document.getElementById('selectedType').value = val;
             document.getElementById('chorNeeds').style.display = (val === 'chor_development') ? 'block' : 'none';
+
+            if (marker && typeof getFuturisticIcon === 'function') {
+                const statusVal = document.getElementById('reportStatus').value || 'pending';
+                const statusColors = { pending: '#ff1744', under_repair: '#2196f3', repaired: '#00ff88' };
+                const color = statusColors[statusVal] || '#ff1744';
+                marker.setIcon({
+                    url: getFuturisticIcon(color, val),
+                    size: new google.maps.Size(40, 40),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(20, 37),
+                    scaledSize: new google.maps.Size(40, 40)
+                });
+            }
         }
 
         function updateCoords(lat, lng) {
