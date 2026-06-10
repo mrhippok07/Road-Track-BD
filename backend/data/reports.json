@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "_id": "25b5470d-a4ed-429c-8d3f-a4aba18055f6",
+    "problemType": "broken",
+    "status": "pending",
+    "roadName": "Test Road",
+    "roadNumber": "",
+    "district": "Dhaka",
+    "area": "Mirpur",
+    "description": "Test description",
+    "reporterName": "",
+    "reporterPhone": "",
+    "lat": null,
+    "lng": null,
+    "photos": [],
+    "userId": "42bd90d9-1fd8-4793-bc63-3f46ee23d0c6",
+    "likes": 0,
+    "reactions": 0,
+    "commentCount": 0,
+    "likedBy": [],
+    "reactedBy": [],
+    "createdAt": "2026-06-10T17:20:38.743Z",
+    "updatedAt": "2026-06-10T17:20:38.743Z",
+    "resolvedAt": null
+  }
+]

@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "42bd90d9-1fd8-4793-bc63-3f46ee23d0c6",
+    "name": "Test User",
+    "phone": "01712345678",
+    "password": "$2a$12$D19z9.O.6h7.AC4A1cHUSOjwQxTmx779yYNpxVRhro/zshAlJ4G6W",
+    "role": "সাধারণ",
+    "nid": "1234567890",
+    "dob": "1995-05-15",
+    "job": "Tester",
+    "address": "Dhaka",
+    "points": 0,
+    "reportCount": 0,
+    "avatar": null,
+    "icon": "<i class=\"fa-solid fa-handshake\"></i>",
+    "isFirstLogin": true,
+    "createdAt": "2026-06-10T17:16:00.716Z"
+  }
+]

@@ -1160,6 +1160,10 @@
         }
 
         @media screen and (max-width: 768px) {
+            .hud-corner {
+                display: none !important;
+            }
+
             .hero-title h1 {
                 font-size: 1.8rem;
             }
@@ -1333,8 +1337,8 @@
         </div>
         <div style="display:flex;gap:10px;align-items:center;">
             <div id="whiteboxTrigger" onclick="openWhiteboxModal()"
-                style="cursor:pointer; display:flex; align-items:center; gap:5px; padding:5px 10px; border:1px solid var(--green-neon); border-radius:4px; font-size:0.75rem; color:var(--green-neon); background:rgba(0,255,136,0.05);" data-i18n="ui.howItWorks">
-                <span><i class="fa-solid fa-circle-info"></i></span> <span>এটি কীভাবে কাজ করে?</span>
+                style="cursor:pointer; display:flex; align-items:center; gap:5px; padding:5px 10px; border:1px solid var(--green-neon); border-radius:4px; font-size:0.75rem; color:var(--green-neon); background:rgba(0,255,136,0.05);">
+                <span><i class="fa-solid fa-circle-info"></i></span> <span data-i18n="ui.howItWorksText">এটি কীভাবে কাজ করে?</span>
             </div>
             <div id="navRight" style="display:flex;gap:10px;align-items:center;">
                 <div class="nav-status">
@@ -1649,7 +1653,13 @@
             const m = new google.maps.Marker({
                 position: { lat: parseFloat(r.lat), lng: parseFloat(r.lng) },
                 map: gMap, title: r.roadName,
-                icon: { path: google.maps.SymbolPath.CIRCLE, scale: 12, fillColor: color, fillOpacity: 0.9, strokeWeight: 2, strokeColor: '#ffffff' },
+                icon: {
+                    url: getFuturisticIcon(color),
+                    size: new google.maps.Size(40, 40),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(20, 37),
+                    scaledSize: new google.maps.Size(40, 40)
+                },
                 animation: google.maps.Animation.DROP
             });
             m.addListener('click', () => {

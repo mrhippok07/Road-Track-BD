@@ -83,7 +83,9 @@ router.get('/', optionalAuth, (req, res) => {
     const { users } = require('./auth');
     let slice = filtered.slice(start, start + parseInt(limit)).map(r => {
         const u = users.find(u => u.id === r.userId);
-        return { ...r, avatar: u?.avatar || null, icon: u?.icon || null, role: u?.role || null };
+        const userLiked = req.user ? (r.likedBy || []).includes(req.user.id) : false;
+        const userReacted = req.user ? (r.reactedBy || []).includes(req.user.id) : false;
+        return { ...r, avatar: u?.avatar || null, icon: u?.icon || null, role: u?.role || null, userLiked, userReacted };
     });
     if (!req.user) {
         slice = slice.map(r => ({ ...r, reporterPhone: 'লগইন করুন' }));

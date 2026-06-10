@@ -766,3 +766,34 @@ if (document.readyState === 'loading') {
 } else {
     setupHamburgerMenu();
 }
+
+window.getFuturisticIcon = function(color) {
+    const cleanColor = color.replace('#', '');
+    const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+            <defs>
+                <radialGradient id="glow-${cleanColor}" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="${color}" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="grad-${cleanColor}" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="40%" stop-color="${color}"/>
+                    <stop offset="100%" stop-color="${color}" stop-opacity="0.7"/>
+                </linearGradient>
+            </defs>
+            <!-- Pulsing outer glow -->
+            <circle cx="20" cy="35" r="5" fill="url(#glow-${cleanColor})"/>
+            <!-- Radar ring -->
+            <circle cx="20" cy="15" r="13" fill="none" stroke="${color}" stroke-width="1.2" stroke-dasharray="3,3" opacity="0.7"/>
+            <!-- Location Pin Outer -->
+            <path d="M20 3 C12 3 6 9 6 17 C6 26 20 37 20 37 C20 37 34 26 34 17 C34 9 28 3 20 3 Z" 
+                  fill="url(#grad-${cleanColor})" stroke="${color}" stroke-width="1.5"/>
+            <!-- Futuristic Center Target -->
+            <circle cx="20" cy="15" r="5" fill="#021008" stroke="${color}" stroke-width="1.2"/>
+            <circle cx="20" cy="15" r="2.5" fill="#ffffff"/>
+            <circle cx="20" cy="15" r="1" fill="${color}"/>
+        </svg>
+    `;
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+};

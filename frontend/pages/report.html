@@ -418,7 +418,64 @@
             background: #021008;
         }
 
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .status-btn {
+            padding: 12px 14px;
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+        }
+
+        .status-btn:hover {
+            border-color: rgba(0, 255, 136, 0.4);
+            color: var(--text-primary);
+        }
+
+        .status-btn.selected.pending {
+            border-color: var(--red-neon);
+            background: rgba(255, 23, 68, 0.1);
+            color: var(--red-neon);
+            box-shadow: 0 0 10px rgba(255, 23, 68, 0.2);
+            text-shadow: 0 0 5px rgba(255, 23, 68, 0.5);
+        }
+
+        .status-btn.selected.under-repair {
+            border-color: #2196f3;
+            background: rgba(33, 150, 243, 0.1);
+            color: #2196f3;
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.2);
+            text-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
+        }
+
+        .status-btn.selected.repaired {
+            border-color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--green-neon);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+            text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+        }
+
         @media(max-width:600px) {
+            .status-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -760,13 +817,21 @@
             <input type="hidden" id="selectedType">
             <hr class="section-sep">
             <div class="section-label" data-i18n="report.statusLabel">▸ অবস্থা নির্বাচন করুন</div>
-            <div class="form-group">
-                <select id="reportStatus">
-                    <option value="pending" data-i18n="status.pending.dot">মেরামত বাকি (লাল ডট)</option>
-                    <option value="under_repair" data-i18n="status.repair.dot">সংস্কার কাজ চলছে (নীল ডট)</option>
-                    <option value="repaired" data-i18n="status.done.dot">সংস্কার সম্পন্ন (সবুজ ডট)</option>
-                </select>
+            <div class="status-grid" id="statusGrid">
+                <button type="button" class="status-btn pending selected" data-value="pending" onclick="selectStatus(this)">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--red-neon); filter: drop-shadow(0 0 5px var(--red-neon)); margin-right: 6px;"></i>
+                    <span data-i18n="status.pending">মেরামত বাকি</span>
+                </button>
+                <button type="button" class="status-btn under-repair" data-value="under_repair" onclick="selectStatus(this)">
+                    <i class="fa-solid fa-screwdriver-wrench" style="color: #2196f3; filter: drop-shadow(0 0 5px #2196f3); margin-right: 6px;"></i>
+                    <span data-i18n="status.under_repair">সংস্কার চলছে</span>
+                </button>
+                <button type="button" class="status-btn repaired" data-value="repaired" onclick="selectStatus(this)">
+                    <i class="fa-solid fa-circle-check" style="color: var(--green-neon); filter: drop-shadow(0 0 5px var(--green-neon)); margin-right: 6px;"></i>
+                    <span data-i18n="status.repaired">সংস্কার সম্পন্ন</span>
+                </button>
             </div>
+            <input type="hidden" id="reportStatus" value="pending">
             <hr class="section-sep">
             <div class="section-label" data-i18n="report.roadInfo">▸ রাস্তার তথ্য</div>
             <div class="form-grid">
@@ -940,7 +1005,13 @@
                     position: { lat: parseFloat(geoLat), lng: parseFloat(geoLng) },
                     map: map,
                     draggable: true,
-                    icon: { path: google.maps.SymbolPath.CIRCLE, scale: 8, fillOpacity: 1, fillColor: '#ff1744', strokeColor: '#fff', strokeWeight: 2 }
+                    icon: {
+                        url: getFuturisticIcon('#ff1744'),
+                        size: new google.maps.Size(40, 40),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(20, 37),
+                        scaledSize: new google.maps.Size(40, 40)
+                    }
                 });
 
                 google.maps.event.addListener(map, 'click', (e) => {
@@ -958,6 +1029,25 @@
                 _miniMapReady = false;
             }
         };
+
+        function selectStatus(btn) {
+            document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const val = btn.dataset.value;
+            document.getElementById('reportStatus').value = val;
+
+            if (marker && typeof getFuturisticIcon === 'function') {
+                const statusColors = { pending: '#ff1744', under_repair: '#2196f3', repaired: '#00ff88' };
+                const color = statusColors[val] || '#ff1744';
+                marker.setIcon({
+                    url: getFuturisticIcon(color),
+                    size: new google.maps.Size(40, 40),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(20, 37),
+                    scaledSize: new google.maps.Size(40, 40)
+                });
+            }
+        }
 
         function selectType(btn) {
             document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
