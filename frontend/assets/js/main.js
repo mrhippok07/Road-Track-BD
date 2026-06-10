@@ -32,38 +32,40 @@ const PROBLEM_COLORS = {
 const PROBLEM_LABELS = {
     broken: '<i class="fa-solid fa-road-circle-exclamation"></i> ভাঙা রাস্তা', pothole: '<i class="fa-solid fa-road-spikes"></i> বড় গর্ত', waterlogged: '<i class="fa-solid fa-water"></i> পানি জমা',
     dangerous: '<i class="fa-solid fa-triangle-exclamation"></i> ঝুঁকিপূর্ণ', unpaved: '<i class="fa-solid fa-road"></i> কাঁচা রাস্তা', narrow: '<i class="fa-solid fa-compress"></i> সংকীর্ণ রাস্তা',
-    nolight: '<i class="fa-regular fa-lightbulb"></i> আলো নেই', erosion: '<i class="fa-solid fa-hill-rockslide"></i> মাটি ক্ষয়',
-    bridge_repair: '<i class="fa-solid fa-bridge-circle-exclamation"></i> ব্রিজ সংস্কার প্রয়োজন', bridge_new: '<i class="fa-solid fa-bridge"></i> নতুন ব্রিজ প্রয়োজন',
-    road_bridge_new: '<i class="fa-solid fa-bridge-water"></i> নতুন রাস্তা ও ব্রিজ', culvert_new: '<i class="fa-solid fa-wrench"></i> কালভার্ট প্রয়োজন',
-    culvert_repair: '<i class="fa-solid fa-screwdriver-wrench"></i> কালভার্ট সংস্কার', embankment_new: '<i class="fa-solid fa-mound"></i> বেড়িবাঁধ প্রয়োজন',
-    embankment_repair: '<i class="fa-solid fa-trowel"></i> বেড়িবাঁধ সংস্কার', canal_small: '<i class="fa-solid fa-water"></i> ছোট খাল খনন',
-    canal_large: '<i class="fa-solid fa-water"></i> বড় খাল খনন', under_repair: '<i class="fa-solid fa-person-digging"></i> সংস্কার কাজ চলছে',
-    tube_well_needed: '<i class="fa-solid fa-faucet-drip"></i> নলকূপ প্রয়োজন',
-    tube_well_repair: '<i class="fa-solid fa-wrench"></i> নলকূপ মেরামত',
-    railway_repair: '<i class="fa-solid fa-train-tram"></i> রেললাইন মেরামত',
+    nolight: '<i class="fa-solid fa-lightbulb"></i> আলো নেই', erosion: '<i class="fa-solid fa-cloud-showers-heavy"></i> মাটি ক্ষয়',
+    bridge_repair: '<i class="fa-solid fa-bridge"></i> ব্রিজ সংস্কার প্রয়োজন', bridge_new: '<i class="fa-solid fa-bridge"></i> নতুন ব্রিজ প্রয়োজন',
+    road_bridge_new: '<i class="fa-solid fa-road"></i> নতুন রাস্তা ও ব্রিজ', culvert_new: '<i class="fa-solid fa-screwdriver-wrench"></i> কালভার্ট প্রয়োজন',
+    culvert_repair: '<i class="fa-solid fa-screwdriver-wrench"></i> কালভার্ট সংস্কার', embankment_new: '<i class="fa-solid fa-mountain"></i> বেড়িবাঁধ প্রয়োজন',
+    embankment_repair: '<i class="fa-solid fa-mountain"></i> বেড়িবাঁধ সংস্কার', canal_small: '<i class="fa-solid fa-droplet"></i> ছোট খাল খনন',
+    canal_large: '<i class="fa-solid fa-droplet"></i> বড় খাল খনন', under_repair: '<i class="fa-solid fa-person-digging"></i> সংস্কার কাজ চলছে',
+    tube_well_needed: '<i class="fa-solid fa-faucet"></i> নলকূপ প্রয়োজন',
+    tube_well_repair: '<i class="fa-solid fa-screwdriver-wrench"></i> নলকূপ মেরামত',
+    railway_repair: '<i class="fa-solid fa-train"></i> রেললাইন মেরামত',
     railway_new: '<i class="fa-solid fa-train"></i> নতুন রেললাইন',
-    railway_station_new: '<i class="fa-building-shield"></i> নতুন রেল স্টেশন',
+    railway_station_new: '<i class="fa-solid fa-building-shield"></i> নতুন রেল স্টেশন',
     bus_station_repair: '<i class="fa-solid fa-bus"></i> বাস স্টেশন মেরামত',
-    bus_station_new: '<i class="fa-solid fa-building"></i> নতুন বাস স্টেশন',
+    bus_station_new: '<i class="fa-solid fa-signs-post"></i> নতুন বাস স্টেশন',
+    chor_development: '<i class="fa-solid fa-wheat-awn"></i> চর এলাকায় সংস্কার',
     opinion: '<i class="fa-regular fa-comments"></i> জনমতামত'
 };
 
 const PROBLEM_LABELS_EN = {
     broken: '<i class="fa-solid fa-road-circle-exclamation"></i> Broken Road', pothole: '<i class="fa-solid fa-road-spikes"></i> Pothole', waterlogged: '<i class="fa-solid fa-water"></i> Waterlogged',
     dangerous: '<i class="fa-solid fa-triangle-exclamation"></i> Dangerous', unpaved: '<i class="fa-solid fa-road"></i> Unpaved Road', narrow: '<i class="fa-solid fa-compress"></i> Narrow Road',
-    nolight: '<i class="fa-regular fa-lightbulb"></i> No Street Light', erosion: '<i class="fa-solid fa-hill-rockslide"></i> Soil Erosion',
-    bridge_repair: '<i class="fa-solid fa-bridge-circle-exclamation"></i> Bridge Repair Needed', bridge_new: '<i class="fa-solid fa-bridge"></i> New Bridge Needed',
-    road_bridge_new: '<i class="fa-solid fa-bridge-water"></i> New Road & Bridge', culvert_new: '<i class="fa-solid fa-wrench"></i> Culvert Needed',
-    culvert_repair: '<i class="fa-solid fa-screwdriver-wrench"></i> Culvert Repair', embankment_new: '<i class="fa-solid fa-mound"></i> Embankment Needed',
-    embankment_repair: '<i class="fa-solid fa-trowel"></i> Embankment Repair', canal_small: '<i class="fa-solid fa-water"></i> Small Canal',
-    canal_large: '<i class="fa-solid fa-water"></i> Large Canal', under_repair: '<i class="fa-solid fa-person-digging"></i> Repair In Progress',
-    tube_well_needed: '<i class="fa-solid fa-faucet-drip"></i> Tube Well Needed',
-    tube_well_repair: '<i class="fa-solid fa-wrench"></i> Tube Well Repair',
-    railway_repair: '<i class="fa-solid fa-train-tram"></i> Railway Repair',
+    nolight: '<i class="fa-solid fa-lightbulb"></i> No Street Light', erosion: '<i class="fa-solid fa-cloud-showers-heavy"></i> Soil Erosion',
+    bridge_repair: '<i class="fa-solid fa-bridge"></i> Bridge Repair Needed', bridge_new: '<i class="fa-solid fa-bridge"></i> New Bridge Needed',
+    road_bridge_new: '<i class="fa-solid fa-road"></i> New Road & Bridge', culvert_new: '<i class="fa-solid fa-screwdriver-wrench"></i> Culvert Needed',
+    culvert_repair: '<i class="fa-solid fa-screwdriver-wrench"></i> Culvert Repair', embankment_new: '<i class="fa-solid fa-mountain"></i> Embankment Needed',
+    embankment_repair: '<i class="fa-solid fa-mountain"></i> Embankment Repair', canal_small: '<i class="fa-solid fa-droplet"></i> Small Canal Needed',
+    canal_large: '<i class="fa-solid fa-droplet"></i> Large Canal Needed', under_repair: '<i class="fa-solid fa-person-digging"></i> Repair In Progress',
+    tube_well_needed: '<i class="fa-solid fa-faucet"></i> Tube Well Needed',
+    tube_well_repair: '<i class="fa-solid fa-screwdriver-wrench"></i> Tube Well Repair',
+    railway_repair: '<i class="fa-solid fa-train"></i> Railway Repair',
     railway_new: '<i class="fa-solid fa-train"></i> New Railway',
-    railway_station_new: '<i class="fa-building-shield"></i> New Railway Station',
-    bus_station_repair: '<i class="fa-solid fa-bus"></i> Bus Station Repair',
-    bus_station_new: '<i class="fa-solid fa-building"></i> New Bus Station',
+    railway_station_new: '<i class="fa-solid fa-building-shield"></i> New Railway Station',
+    bus_station_repair: '<i class="fa-solid fa-bus"></i> Bus Repair',
+    bus_station_new: '<i class="fa-solid fa-signs-post"></i> New Bus Station',
+    chor_development: '<i class="fa-solid fa-wheat-awn"></i> Char Area Reform',
     opinion: '<i class="fa-regular fa-comments"></i> Public Opinion'
 };
 
@@ -87,11 +89,10 @@ function getStatusLabel(status) {
 
 
 function getMarkerColor(r) {
-    if (r.problemType === 'opinion') return '#00f2ff';
     if (r.status === 'under_repair') return '#2196f3';
     if (r.status === 'repaired') return '#00ff88';
     if (r.status === 'rejected') return '#546e7a';
-    return PROBLEM_COLORS[r.problemType] || '#ff1744';
+    return '#ff1744'; // default to red (pending)
 }
 
 
@@ -777,72 +778,161 @@ window.getFuturisticIcon = function(color, problemType) {
         <circle cx="20" cy="15" r="1" fill="${color}"/>
     `;
 
-    // Category mapping
-    const waterTypes = ['waterlogged', 'canal_small', 'canal_large', 'tube_well_needed', 'tube_well_repair'];
-    const roadTypes = ['broken', 'pothole', 'unpaved', 'narrow', 'under_repair'];
-    const dangerTypes = ['dangerous'];
-    const bridgeTypes = ['bridge_repair', 'bridge_new', 'road_bridge_new', 'culvert_new', 'culvert_repair'];
-    const lightTypes = ['nolight'];
-    const earthTypes = ['erosion', 'embankment_new', 'embankment_repair'];
-    const railwayTypes = ['railway_repair', 'railway_new', 'railway_station_new'];
-    const busTypes = ['bus_station_repair', 'bus_station_new'];
-    const opinionTypes = ['opinion'];
-
     if (problemType) {
-        let pathData = '';
-        let fillType = 'none';
-        let strokeWidth = '1.5';
+        let customSvg = '';
         
-        if (waterTypes.includes(problemType)) {
-            // Droplet
-            pathData = 'M20,9.5 C17.5,13 16,15 16,17 C16,19.2 17.8,21 20,21 C22.2,21 24,19.2 24,17 C24,15 22.5,13 20,9.5 Z';
-            fillType = color;
-        } else if (roadTypes.includes(problemType)) {
-            // Cracked road road lanes
-            pathData = 'M18,9 L22,9 L24,21 L16,21 Z M20,10 L20,13 M20,15 L20,18 M20,19 L20,20';
-            fillType = 'none';
-            strokeWidth = '1.2';
-        } else if (dangerTypes.includes(problemType)) {
-            // Exclamation Warning Triangle
-            pathData = 'M20,9 L25.5,19 L14.5,19 Z M20,12 L20,15 M20,17.2 L20,18';
-            fillType = 'none';
-            strokeWidth = '1.2';
-        } else if (bridgeTypes.includes(problemType)) {
-            // Bridge Arch
-            pathData = 'M14,19 C14,15.5 16.5,13.5 20,13.5 C23.5,13.5 26,15.5 26,19 M13,19.5 L27,19.5';
-            fillType = 'none';
-            strokeWidth = '1.2';
-        } else if (lightTypes.includes(problemType)) {
-            // Lightbulb
-            pathData = 'M20,9.5 C18.3,9.5 17,10.8 17,12.5 C17,13.8 18.2,15.2 18.2,16.5 L21.8,16.5 C21.8,15.2 23,13.8 23,12.5 C23,10.8 21.7,9.5 20,9.5 Z M18.5,18 L21.5,18 M19,19.5 L21,19.5';
-            fillType = 'none';
-            strokeWidth = '1.2';
-        } else if (earthTypes.includes(problemType)) {
-            // Mountain / Erosion
-            pathData = 'M14,20 L18.5,13 L21.5,17 L25.5,11 L26.5,12 L21.5,20 Z';
-            fillType = color;
-        } else if (railwayTypes.includes(problemType)) {
-            // Railway tracks
-            pathData = 'M17.5,9 L16.5,21 M22.5,9 L23.5,21 M17,11.5 L23,11.5 M16.7,14.5 L23.3,14.5 M16.4,17.5 L23.6,17.5';
-            fillType = 'none';
-            strokeWidth = '1.2';
-        } else if (busTypes.includes(problemType)) {
-            // Bus profile
-            pathData = 'M16,10 L24,10 C25,10 25,11 25,12 L25,19.5 C25,20 24,20 24,20 L24,21 L23,21 L23,20 L17,20 L17,21 L16,21 L16,20 C15,20 15,19.5 15,19.5 L15,12 C15,11 15,10 16,10 Z M16.5,12 L23.5,12 L23.5,15.5 L16.5,15.5 Z';
-            fillType = 'none';
-            strokeWidth = '1.2';
-        } else if (opinionTypes.includes(problemType)) {
-            // Chat Bubble
-            pathData = 'M15,9.5 L25,9.5 C26.1,9.5 27,10.4 27,11.5 L27,16.5 C27,17.6 26.1,18.5 25,18.5 L21.5,18.5 L18,21 L18,18.5 L15,18.5 C13.9,18.5 13,17.6 13,16.5 L13,11.5 C13,10.4 13.9,9.5 15,9.5 Z';
-            fillType = 'none';
-            strokeWidth = '1.2';
+        switch (problemType) {
+            case 'broken':
+                // fa-road-circle-exclamation
+                customSvg = `
+                    <path d="M16,9 L24,9 L26,21 L14,21 Z" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M20,10 L20,13 M20,15 L20,17 M20,19 L20,20" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="1.5,1.5"/>
+                    <circle cx="25" cy="16" r="4" fill="${color}" stroke="#ffffff" stroke-width="0.8"/>
+                    <path d="M25,14 L25,16 M25,18 L25,18.5" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                `;
+                break;
+            case 'pothole':
+                // fa-road-spikes (potholes)
+                customSvg = `
+                    <path d="M16,9 L24,9 L26,21 L14,21 Z" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                    <circle cx="18" cy="13" r="1.2" fill="${color}"/>
+                    <circle cx="22" cy="16" r="1.5" fill="${color}"/>
+                    <circle cx="19" cy="19" r="1" fill="${color}"/>
+                `;
+                break;
+            case 'waterlogged':
+                // fa-water (three waves)
+                customSvg = `
+                    <path d="M13,12 C15,10.5 16,13.5 18,12 C20,10.5 21,13.5 23,12 C25,10.5 26,13.5 27,12" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M13,15.5 C15,14 16,17 18,15.5 C20,14 21,17 23,15.5 C25,14 26,17 27,15.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M13,19 C15,17.5 16,20.5 18,19 C20,17.5 21,20.5 23,19 C25,17.5 26,20.5 27,19" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                `;
+                break;
+            case 'dangerous':
+                // fa-triangle-exclamation
+                customSvg = `
+                    <path d="M20,8 L27,20 L13,20 Z" fill="${color}" stroke="#ffffff" stroke-width="1.2" stroke-linejoin="round"/>
+                    <path d="M20,12 L20,16 M20,18 L20,18.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                `;
+                break;
+            case 'unpaved':
+                // fa-road (simple road)
+                customSvg = `
+                    <path d="M16,9 L24,9 L26,21 L14,21 Z" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M20,10 L20,20" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2,2"/>
+                `;
+                break;
+            case 'narrow':
+                // fa-compress
+                customSvg = `
+                    <path d="M13,15 L18,15 M17,12 L19,15 L17,18 M27,15 L22,15 M23,12 L21,15 L23,18" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                `;
+                break;
+            case 'nolight':
+                // fa-lightbulb
+                customSvg = `
+                    <path d="M20,10 C18.3,10 17,11.3 17,13 C17,14.2 18,15.2 18.2,16 L21.8,16 C22,15.2 23,14.2 23,13 C23,11.3 21.7,10 20,10 Z M18.5,17.5 L21.5,17.5" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M15,18 L25,11" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                `;
+                break;
+            case 'erosion':
+                // fa-cloud-showers-heavy (rain causing erosion)
+                customSvg = `
+                    <path d="M16,14 C15.5,14 15,13.5 15,13 C15,12.5 15.5,12 16,12 C15.8,11.8 15.7,11.5 15.7,11.2 C15.7,10.3 16.5,9.5 17.5,9.5 C18,9.5 18.5,9.7 18.8,10.2 C19.2,9.7 19.8,9.5 20.5,9.5 C21.5,9.5 22.3,10.3 22.3,11.2 C22.3,11.3 22.3,11.4 22.3,11.5 C22.8,11.7 23.1,12.1 23.1,12.6 C23.1,13.3 22.5,13.9 21.8,13.9 Z" fill="#ffffff"/>
+                    <path d="M17,15 L16,18 M19.5,15 L18.5,18 M22,15 L21,18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                `;
+                break;
+            case 'bridge_repair':
+            case 'bridge_new':
+                // fa-bridge
+                customSvg = `
+                    <path d="M13,17 C13,14 16,12.5 20,12.5 C24,12.5 27,14 27,17 M12,18 L28,18" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                `;
+                break;
+            case 'road_bridge_new':
+                // fa-road overlapping a bridge
+                customSvg = `
+                    <path d="M13,16 C13,14 16,13 20,13 C24,13 27,14 27,16 M12,17 L28,17" fill="none" stroke="${color}" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M17,10 L23,10 L25,18 L15,18 Z" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                `;
+                break;
+            case 'culvert_new':
+            case 'culvert_repair':
+            case 'tube_well_repair':
+                // fa-screwdriver-wrench
+                customSvg = `
+                    <path d="M14,18 L19,13 M15,13 L18,16" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M23.5,9.5 C23,9 22.2,9 21.7,9.5 L18.5,12.7 L20.3,14.5 L23.5,11.3 C24,10.8 24,10 23.5,9.5 Z" fill="${color}" stroke="#ffffff" stroke-width="0.8"/>
+                `;
+                break;
+            case 'embankment_new':
+            case 'embankment_repair':
+                // fa-mountain
+                customSvg = `
+                    <path d="M13,18 L18,11 L21,15 L24,10 L27,18 Z" fill="${color}" stroke="#ffffff" stroke-width="1" stroke-linejoin="round"/>
+                `;
+                break;
+            case 'canal_small':
+            case 'canal_large':
+                // fa-droplet
+                customSvg = `
+                    <path d="M20,9.5 C17.5,13 16,15 16,17 C16,19.2 17.8,21 20,21 C22.2,21 24,19.2 24,17 C24,15 22.5,13 20,9.5 Z" fill="${color}" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                `;
+                break;
+            case 'tube_well_needed':
+                // fa-faucet
+                customSvg = `
+                    <path d="M15,16 L21,16 M21,14 L21,18 M21,14 C21,12 19.5,10.5 17.5,10.5 C16,10.5 15,11.5 15,12.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                    <circle cx="15" cy="13.5" r="0.8" fill="${color}"/>
+                `;
+                break;
+            case 'railway_repair':
+            case 'railway_new':
+                // fa-train
+                customSvg = `
+                    <path d="M16,11 L24,11 C25,11 25,12 25,13 L25,19 C25,19.5 24.5,20 24,20 L24,21 L23,21 L23,20 L17,20 L17,21 L16,21 L16,20 C15.5,20 15,19.5 15,19 L15,13 C15,12 15,11 16,11 Z" fill="${color}" stroke="#ffffff" stroke-width="1"/>
+                    <rect x="17" y="13" width="6" height="3" fill="#021008" stroke="#ffffff" stroke-width="0.6"/>
+                    <circle cx="17.5" cy="18" r="0.8" fill="#ffffff"/>
+                    <circle cx="22.5" cy="18" r="0.8" fill="#ffffff"/>
+                `;
+                break;
+            case 'railway_station_new':
+                // fa-building-shield
+                customSvg = `
+                    <path d="M13,19 L13,11 L21,11 L21,19 Z" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+                    <path d="M20,11 L20,19 C20,19 22,17 24,17 C24,17 24,11 20,11 Z" fill="${color}" stroke="#ffffff" stroke-width="0.8"/>
+                `;
+                break;
+            case 'bus_station_repair':
+            case 'bus_station_new':
+                // fa-bus / fa-signs-post
+                customSvg = `
+                    <path d="M16,11 L24,11 C25,11 25,12 25,13 L25,19 L15,19 L15,13 C15,12 15,11 16,11 Z" fill="${color}" stroke="#ffffff" stroke-width="1"/>
+                    <rect x="17" y="13" width="6" height="3" fill="#021008" stroke="#ffffff" stroke-width="0.6"/>
+                    <circle cx="17.5" cy="17.5" r="1" fill="#ffffff"/>
+                    <circle cx="22.5" cy="17.5" r="1" fill="#ffffff"/>
+                `;
+                break;
+            case 'chor_development':
+                // fa-wheat-awn
+                customSvg = `
+                    <path d="M20,19 L20,9 M20,11 L17,9 M20,11 L23,9 M20,14 L17,12 M20,14 L23,12 M20,17 L17,15 M20,17 L23,15" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                `;
+                break;
+            case 'opinion':
+                // fa-comments
+                customSvg = `
+                    <path d="M15,9.5 L25,9.5 C26,9.5 27,10.3 27,11.2 L27,15.8 C27,16.7 26,17.5 25,17.5 L22,17.5 L19,19.5 L19,17.5 L15,17.5 C14,17.5 13,16.7 13,15.8 L13,11.2 C13,10.3 14,9.5 15,9.5 Z" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                `;
+                break;
+            default:
+                break;
         }
-
-        if (pathData) {
+        
+        if (customSvg) {
             innerIconSvg = `
-                <!-- Background backing for readability -->
                 <circle cx="20" cy="15" r="7.5" fill="#021008" stroke="${color}" stroke-width="0.8" opacity="0.9"/>
-                <path d="${pathData}" fill="${fillType}" stroke="#ffffff" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>
+                ${customSvg}
             `;
         }
     }

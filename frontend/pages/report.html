@@ -724,7 +724,7 @@
         <div class="report-card">
             <div class="section-label" data-i18n="report.typeLabel">▸ সমস্যার ধরন নির্বাচন করুন</div>
             <div class="type-grid" id="typeGrid">
-                <button class="type-btn" data-value="broken" onclick="selectType(this)" data-i18n="type.broken"><i class="fa-solid fa-traffic-cone"></i> ভাঙা
+                <button class="type-btn" data-value="broken" onclick="selectType(this)" data-i18n="type.broken"><i class="fa-solid fa-road-circle-exclamation"></i> ভাঙা
                     রাস্তা</button>
                 <button class="type-btn" data-value="pothole" onclick="selectType(this)" data-i18n="type.pothole"><i class="fa-solid fa-road-spikes"></i>
                     বড় গর্ত</button>
@@ -762,18 +762,12 @@
                     data-i18n="type.tube_well_needed"><i class="fa-solid fa-faucet"></i> নলকূপ প্রয়োজন</button>
                 <button class="type-btn water" data-value="tube_well_repair" onclick="selectType(this)"
                     data-i18n="type.tube_well_repair"><i class="fa-solid fa-screwdriver-wrench"></i> নলকূপ মেরামত</button>
-                <button class="type-btn" data-value="railway_repair"
-                    onclick="selectType(this)"><i class="fa-solid fa-train"></i> রেললাইন মেরামত</button>
-                <button class="type-btn" data-value="railway_new"
-                    onclick="selectType(this)"><i class="fa-solid fa-train"></i> নতুন রেললাইন</button>
-                <button class="type-btn" data-value="railway_station_new"
-                    onclick="selectType(this)"><i class="fa-solid fa-building-shield"></i> নতুন রেল স্টেশন</button>
-                <button class="type-btn" data-value="bus_station_repair"
-                    onclick="selectType(this)"><i class="fa-solid fa-bus"></i> বাস স্টেশন মেরামত</button>
-                <button class="type-btn" data-value="bus_station_new"
-                    onclick="selectType(this)"><i class="fa-solid fa-signs-post"></i> নতুন বাস স্টেশন</button>
-                <button class="type-btn chor" data-value="chor_development" onclick="selectType(this)"
-                    ><i class="fa-solid fa-wheat-awn"></i> চর এলাকায় সংস্কার</button>
+                <button class="type-btn" data-value="railway_repair" onclick="selectType(this)" data-i18n="type.railway_repair"><i class="fa-solid fa-train"></i> রেললাইন মেরামত</button>
+                <button class="type-btn" data-value="railway_new" onclick="selectType(this)" data-i18n="type.railway_new"><i class="fa-solid fa-train"></i> নতুন রেললাইন</button>
+                <button class="type-btn" data-value="railway_station_new" onclick="selectType(this)" data-i18n="type.railway_station_new"><i class="fa-solid fa-building-shield"></i> নতুন রেল স্টেশন</button>
+                <button class="type-btn" data-value="bus_station_repair" onclick="selectType(this)" data-i18n="type.bus_station_repair"><i class="fa-solid fa-bus"></i> বাস স্টেশন মেরামত</button>
+                <button class="type-btn" data-value="bus_station_new" onclick="selectType(this)" data-i18n="type.bus_station_new"><i class="fa-solid fa-signs-post"></i> নতুন বাস স্টেশন</button>
+                <button class="type-btn chor" data-value="chor_development" onclick="selectType(this)" data-i18n="type.chor_development"><i class="fa-solid fa-wheat-awn"></i> চর এলাকায় সংস্কার</button>
             </div>
 
             <div id="chorNeeds"

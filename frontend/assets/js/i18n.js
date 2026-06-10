@@ -79,7 +79,7 @@ const RTBD_TRANSLATIONS = {
     'status.reject.dot':   { bn: 'বাতিল', en: 'Rejected' },
 
     
-    'type.broken':             { bn: '<i class="fa-solid fa-traffic-cone"></i> ভাঙা রাস্তা', en: '<i class="fa-solid fa-traffic-cone"></i> Broken Road' },
+    'type.broken':             { bn: '<i class="fa-solid fa-road-circle-exclamation"></i> ভাঙা রাস্তা', en: '<i class="fa-solid fa-road-circle-exclamation"></i> Broken Road' },
     'type.pothole':            { bn: '<i class="fa-solid fa-road-spikes"></i> বড় গর্ত', en: '<i class="fa-solid fa-road-spikes"></i> Pothole' },
     'type.waterlogged':        { bn: '<i class="fa-solid fa-water"></i> পানি জমা', en: '<i class="fa-solid fa-water"></i> Waterlogged' },
     'type.dangerous':          { bn: '<i class="fa-solid fa-triangle-exclamation"></i> ঝুঁকিপূর্ণ', en: '<i class="fa-solid fa-triangle-exclamation"></i> Dangerous Road' },
@@ -329,6 +329,7 @@ const RTBD_TRANSLATIONS = {
     'type.bus_station_repair': { bn: '<i class="fa-solid fa-bus"></i> বাস স্টেশন মেরামত', en: '<i class="fa-solid fa-bus"></i> Bus Repair' },
     'type.bus_station_new': { bn: '<i class="fa-solid fa-signs-post"></i> নতুন বাস স্টেশন', en: '<i class="fa-solid fa-signs-post"></i> New Bus Station' },
     'type.char_repair': { bn: '<i class="fa-solid fa-wheat-awn"></i> চর এলাকায় সংস্কার', en: '<i class="fa-solid fa-wheat-awn"></i> Char Area Reform' },
+    'type.chor_development': { bn: '<i class="fa-solid fa-wheat-awn"></i> চর এলাকায় সংস্কার', en: '<i class="fa-solid fa-wheat-awn"></i> Char Area Reform' },
     'toast.commentRequired': { bn: 'দয়া করে কিছু লিখুন', en: 'Please write something' },
     'toast.commentError': { bn: 'মন্তব্য পাঠাতে সমস্যা', en: 'Error sending comment' },
     'toast.linkCopied': { bn: '<i class="fa-solid fa-check"></i> লিংক কপি হয়েছে', en: '<i class="fa-solid fa-check"></i> Link copied' },
