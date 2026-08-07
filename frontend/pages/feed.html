@@ -207,6 +207,155 @@
             color: var(--bg-deep);
         }
 
+        /* Feed Post Creation Box */
+        .feed-post-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 1.2rem;
+            backdrop-filter: blur(16px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+        .feed-post-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--green-neon), var(--blue-neon), var(--green-neon));
+        }
+        .post-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .post-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-dark), #004d38);
+            border: 1.5px solid var(--green-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--green-neon);
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+        }
+        .post-user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .post-user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .post-user-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        .post-user-role {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-family: 'Exo 2', sans-serif;
+        }
+        .post-input {
+            width: 100%;
+            min-height: 80px;
+            background: rgba(0, 255, 136, 0.03) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: var(--text-primary) !important;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            resize: vertical;
+            transition: all 0.25s;
+            margin-bottom: 10px;
+        }
+        .post-input:focus {
+            border-color: var(--green-neon) !important;
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.15) !important;
+            background: rgba(0, 255, 136, 0.06) !important;
+        }
+        .post-attachments-preview {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .post-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .post-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .post-type-select {
+            background: rgba(0, 15, 8, 0.9) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 8px;
+            padding: 6px 12px;
+            color: var(--text-primary) !important;
+            font-size: 0.78rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            outline: none;
+            cursor: pointer;
+        }
+        .post-photo-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        .post-photo-btn:hover {
+            border-color: var(--green-neon);
+            color: var(--green-neon);
+            background: rgba(0, 255, 136, 0.1);
+        }
+        .post-submit-btn {
+            padding: 8px 22px;
+            background: linear-gradient(135deg, var(--green-dark), #005a40);
+            border: 1px solid var(--green-neon);
+            border-radius: 8px;
+            color: var(--green-neon);
+            font-size: 0.82rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: var(--glow-green);
+        }
+        .post-submit-btn:hover {
+            background: var(--green-neon);
+            color: var(--bg-deep);
+            transform: translateY(-1px);
+        }
+
         .feed-list {
             display: flex;
             flex-direction: column;
@@ -751,6 +900,43 @@
                 <button onclick="openOpinionModal()" class="new-report-btn" style="background:transparent; border-color:var(--blue-neon); color:var(--text-primary); cursor:pointer;" data-i18n="feed.opinionBtn"><i class="fa-regular fa-comments"></i> জনমতামত দিন</button>
             </div>
         </div>
+
+        <!-- Cyber/Neon Feed Post Creation Card -->
+        <div class="feed-post-card" id="feedPostCard">
+            <div class="post-card-header">
+                <div class="post-user-avatar" id="feedUserAvatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="post-user-info">
+                    <div class="post-user-name" id="feedUserName">আপনার মতামত বা আপডেট শেয়ার করুন</div>
+                    <div class="post-user-role" id="feedUserRole"><i class="fa-solid fa-earth-americas"></i> পাবলিক পোস্ট</div>
+                </div>
+            </div>
+            <textarea class="post-input" id="inlinePostText" placeholder="আপনার এলাকার রাস্তার সমস্যা, নতুন সংস্কার বা জনমতামত শেয়ার করুন..."></textarea>
+            <div class="post-attachments-preview" id="inlinePhotosPreview"></div>
+            <div class="post-card-footer">
+                <div class="post-options">
+                    <select id="inlineProblemType" class="post-type-select">
+                        <option value="opinion">💬 সাধারণ মতামত</option>
+                        <option value="broken">⚠️ ভাঙা রাস্তা</option>
+                        <option value="pothole">🕳️ বড় গর্ত</option>
+                        <option value="waterlogged">🌊 পানি জমা</option>
+                        <option value="dangerous">🚨 ঝুঁকিপূর্ণ</option>
+                        <option value="bridge_repair">🌉 ব্রিজ সংস্কার</option>
+                        <option value="canal_large">💧 খাল খনন</option>
+                        <option value="tube_well_needed">🚰 নলকূপ প্রয়োজন</option>
+                    </select>
+                    <label class="post-photo-btn" title="ছবি যোগ করুন (সর্বোচ্চ ৩টি)">
+                        <i class="fa-solid fa-image" style="color:var(--green-neon);"></i> <span>ছবি</span>
+                        <input type="file" id="inlinePhotoInput" accept="image/*" multiple style="display:none;" onchange="handleInlinePhotos(event)">
+                    </label>
+                </div>
+                <button class="post-submit-btn" id="inlinePostBtn" onclick="submitInlinePost()">
+                    <i class="fa-solid fa-paper-plane"></i> <span>প্রকাশ করুন</span>
+                </button>
+            </div>
+        </div>
+
         <div class="filter-row">
             <button class="filter-chip active" onclick="filterFeed('all',this)" data-i18n="feed.all">সব</button>
             <button class="filter-chip" onclick="filterFeed('pending',this)" data-i18n="feed.pending">মেরামত বাকি</button>
@@ -795,6 +981,7 @@
     <script>
         let currentPage = 1, currentFilter = 'all', allDone = false;
         let currentShareUrl = '';
+        let inlineSelectedFiles = [];
 
         function statusColor(s, type) {
             if (type === 'opinion') return '#00f2ff';
@@ -813,16 +1000,33 @@
             const isOwner = u && (u.id === r.userId || u.role === 'সরকারিকর্মকর্তা');
             const updateBtnHtml = isOwner ? `<button class="update-btn" onclick="toggleUpdate('${r._id}')">${t('feed.update')}</button>` : '';
 
+            const authorName = r.reporterName || 'অজ্ঞাত';
+            const roleBadge = r.role ? `<span style="padding:1px 7px;background:rgba(0,255,136,0.1);border:1px solid var(--glass-border);border-radius:10px;font-size:0.6rem;color:var(--green-neon);font-family:'Noto Sans Bengali',sans-serif;font-weight:normal;">${r.role}</span>` : '';
+            const avatarHtml = r.avatar 
+                ? `<img src="${r.avatar}" alt="" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:1.5px solid var(--green-neon);box-shadow:0 0 8px rgba(0,255,136,0.2);flex-shrink:0;">`
+                : `<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),#004d38);border:1.5px solid var(--green-neon);display:flex;align-items:center;justify-content:center;color:var(--green-neon);font-size:1.1rem;flex-shrink:0;">${r.icon || '<i class="fa-solid fa-user"></i>'}</div>`;
+
             return `<div class="feed-card" id="card-${r._id}">
-    <div class="feed-card-top">
-      <div class="feed-dot" style="background:${color};box-shadow:0 0 8px ${color}"></div>
-      <div class="feed-meta">
-        <div class="feed-road">${r.roadName}</div>
-        <div class="feed-loc">${r.problemType !== 'opinion' ? `<i class="fa-solid fa-location-dot"></i> ${r.district || ''} ${r.area ? '— ' + r.area : ''} &nbsp;·&nbsp; ` : ''}<i class="fa-regular fa-clock"></i> ${formatTime(r.createdAt)}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 8px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        ${avatarHtml}
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--text-primary);font-family:'Noto Sans Bengali',sans-serif;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            ${authorName} ${roleBadge}
+          </div>
+          <div class="feed-loc">
+            ${r.problemType !== 'opinion' ? `<i class="fa-solid fa-location-dot" style="color:var(--green-neon)"></i> <strong>${r.roadName}</strong> — ${r.district || ''} ${r.area ? ' (' + r.area + ')' : ''} &nbsp;·&nbsp; ` : ''}
+            <i class="fa-regular fa-clock"></i> ${formatTime(r.createdAt)}
+          </div>
+        </div>
       </div>
-      ${r.problemType !== 'opinion' ? `<div class="feed-badge" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">${sLabel}</div>` : ''}
+      <div>
+        ${r.problemType !== 'opinion' ? `<div class="feed-badge" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">${sLabel}</div>` : ''}
+      </div>
     </div>
-    <span class="feed-type-chip">${typeLabel}</span>
+    <div style="padding:0 16px 4px;">
+      <span class="feed-type-chip">${typeLabel}</span>
+    </div>
     ${r.description ? `<div class="feed-desc">${r.description}</div>` : ''}
     ${photosHtml}
     <div class="feed-actions">
@@ -903,7 +1107,11 @@
             const text = inp.value.trim();
             if (!text) return;
             const u = getUser();
-            if (!u) { showToast(t('toast.commentLoginReq'), 'error'); return; }
+            if (!u) {
+                showToast(t('toast.commentLoginReq'), 'error');
+                if (typeof openAuthModal === 'function') openAuthModal();
+                return;
+            }
             try {
                 const d = await apiPost(`/api/feed/${id}/comments`, { text });
                 if (d.success) { inp.value = ''; loadComments(id); const span = document.getElementById('cmtCount-' + id); if (span) span.textContent = parseInt(span.textContent || 0) + 1; }
@@ -912,7 +1120,12 @@
         }
 
         async function toggleLike(id, btn) {
-            const u = getUser(); if (!u) { showToast(t('toast.likeLoginReq'), 'error'); return; }
+            const u = getUser();
+            if (!u) {
+                showToast(t('toast.likeLoginReq'), 'error');
+                if (typeof openAuthModal === 'function') openAuthModal();
+                return;
+            }
             try {
                 const d = await apiPost(`/api/feed/${id}/like`, {});
                 if (d.success) {
@@ -923,7 +1136,12 @@
         }
 
         async function toggleReact(id, btn) {
-            const u = getUser(); if (!u) { showToast(t('toast.reactLoginReq'), 'error'); return; }
+            const u = getUser();
+            if (!u) {
+                showToast(t('toast.reactLoginReq'), 'error');
+                if (typeof openAuthModal === 'function') openAuthModal();
+                return;
+            }
             try {
                 const d = await apiPost(`/api/feed/${id}/react`, {});
                 if (d.success) {
@@ -960,7 +1178,11 @@
 
         function openOpinionModal() {
             const u = getUser();
-            if (!u) { showToast(t('toast.opinionLoginReq'), 'error'); return; }
+            if (!u) {
+                showToast(t('toast.opinionLoginReq'), 'error');
+                if (typeof openAuthModal === 'function') openAuthModal();
+                return;
+            }
             document.getElementById('opinionText').value = '';
             document.getElementById('opinionPopup').classList.add('open');
         }
@@ -994,6 +1216,92 @@
             }
         }
 
+        function handleInlinePhotos(e) {
+            inlineSelectedFiles = Array.from(e.target.files).slice(0, 3);
+            const prev = document.getElementById('inlinePhotosPreview');
+            prev.innerHTML = '';
+            inlineSelectedFiles.forEach(f => {
+                const r = new FileReader();
+                r.onload = ev => {
+                    const img = document.createElement('img');
+                    img.src = ev.target.result;
+                    img.className = 'feed-photo';
+                    prev.appendChild(img);
+                };
+                r.readAsDataURL(f);
+            });
+        }
+
+        async function submitInlinePost() {
+            const u = getUser();
+            if (!u) {
+                showToast(t('toast.opinionLoginReq'), 'error');
+                if (typeof openAuthModal === 'function') openAuthModal();
+                return;
+            }
+            const text = document.getElementById('inlinePostText').value.trim();
+            const problemType = document.getElementById('inlineProblemType').value || 'opinion';
+
+            if (!text && inlineSelectedFiles.length === 0) {
+                showToast(t('toast.writeSomething'), 'error');
+                return;
+            }
+
+            const btn = document.getElementById('inlinePostBtn');
+            btn.disabled = true;
+            btn.querySelector('span').textContent = 'প্রকাশ হচ্ছে...';
+
+            const fd = new FormData();
+            fd.append('problemType', problemType);
+            fd.append('description', text);
+            fd.append('roadName', problemType === 'opinion' ? 'সাধারণ মতামত' : 'ফিড আপডেট');
+            fd.append('district', '-');
+            fd.append('area', '-');
+            inlineSelectedFiles.forEach(f => fd.append('photos', f));
+
+            try {
+                const d = await apiFormPost('/api/reports', fd);
+                if (d.success) {
+                    showToast('<i class="fa-solid fa-check"></i> পোস্ট সফলভাবে প্রকাশ হয়েছে!');
+                    document.getElementById('inlinePostText').value = '';
+                    document.getElementById('inlinePhotosPreview').innerHTML = '';
+                    inlineSelectedFiles = [];
+                    if (window._socket) window._socket.emit('report_new', d.data);
+                    loadFeed(true);
+                } else {
+                    showToast(d.message || t('toast.publishedFailed'), 'error');
+                }
+            } catch (e) {
+                showToast(t('toast.serverError'), 'error');
+            } finally {
+                btn.disabled = false;
+                btn.querySelector('span').textContent = 'প্রকাশ করুন';
+            }
+        }
+
+        function updatePostUserHeader() {
+            const u = getUser();
+            const avatarEl = document.getElementById('feedUserAvatar');
+            const nameEl = document.getElementById('feedUserName');
+            const roleEl = document.getElementById('feedUserRole');
+            if (!avatarEl || !nameEl) return;
+            if (u) {
+                nameEl.textContent = u.name;
+                roleEl.innerHTML = `<i class="fa-solid fa-shield-halved"></i> ${u.role || 'সাধারণ'} &nbsp;·&nbsp; ${u.address || 'বাংলাদেশ'}`;
+                if (u.avatar) {
+                    avatarEl.innerHTML = `<img src="${u.avatar}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                } else if (u.icon) {
+                    avatarEl.innerHTML = u.icon;
+                } else {
+                    avatarEl.innerHTML = '<i class="fa-solid fa-user"></i>';
+                }
+            } else {
+                nameEl.textContent = 'আপনার মতামত বা আপডেট শেয়ার করুন';
+                roleEl.innerHTML = '<i class="fa-solid fa-earth-americas"></i> পোস্ট করতে ক্লিক/লগইন করুন';
+                avatarEl.innerHTML = '<i class="fa-solid fa-user"></i>';
+            }
+        }
+
         initSocket(sk=>{
             sk.on('report_update',r=>{
                 const existing=document.getElementById('card-'+r._id);
@@ -1016,6 +1324,7 @@
 
         window.addEventListener('DOMContentLoaded',()=>{
             renderNavAuth(); injectLangToggle('nav'); applyLang();
+            updatePostUserHeader();
             loadFeed(true);
         });
     </script>

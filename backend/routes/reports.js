@@ -85,7 +85,8 @@ router.get('/', optionalAuth, (req, res) => {
         const u = users.find(u => u.id === r.userId);
         const userLiked = req.user ? (r.likedBy || []).includes(req.user.id) : false;
         const userReacted = req.user ? (r.reactedBy || []).includes(req.user.id) : false;
-        return { ...r, avatar: u?.avatar || null, icon: u?.icon || null, role: u?.role || null, userLiked, userReacted };
+        const authorName = r.reporterName || u?.name || 'অজ্ঞাত';
+        return { ...r, reporterName: authorName, avatar: u?.avatar || null, icon: u?.icon || null, role: u?.role || null, userLiked, userReacted };
     });
     if (!req.user) {
         slice = slice.map(r => ({ ...r, reporterPhone: 'লগইন করুন' }));
@@ -175,6 +176,11 @@ router.post('/', requireAuth, upload.array('photos', 3), [
     }
     const photos = (req.files || []).map(f => `/uploads/${f.filename}`);
     const now = new Date().toISOString();
+    const { users } = require('./auth');
+    const fullUser = users.find(u => u.id === req.user.id);
+    const reporterName = (req.body.reporterName || '').trim() || fullUser?.name || req.user.name || 'অজ্ঞাত';
+    const reporterPhone = (req.body.reporterPhone || '').trim() || fullUser?.phone || req.user.phone || '';
+
     const report = {
         _id: uuidv4(),
         problemType: req.body.problemType,
@@ -184,8 +190,8 @@ router.post('/', requireAuth, upload.array('photos', 3), [
         district: req.body.district.trim(),
         area: req.body.area.trim(),
         description: (req.body.description || '').trim(),
-        reporterName: (req.body.reporterName || '').trim(),
-        reporterPhone: (req.body.reporterPhone || '').trim(),
+        reporterName,
+        reporterPhone,
         lat: req.body.lat ? lat : null,
         lng: req.body.lng ? lng : null,
         photos,
@@ -201,11 +207,20 @@ router.post('/', requireAuth, upload.array('photos', 3), [
     res.status(201).json({ success: true, message: 'Report submitted successfully', data: report });
 });
 
-router.put('/:id/status', optionalAuth, (req, res) => {
+router.put('/:id/status', requireAuth, (req, res) => {
     const { status } = req.body;
     if (!VALID_STATUSES.includes(status)) return res.status(400).json({ success: false, message: 'Invalid status' });
     const idx = reports.findIndex(r => r._id === req.params.id);
     if (idx === -1) return res.status(404).json({ success: false, message: 'Report not found' });
+    
+    // Authorization check
+    const r = reports[idx];
+    const isOwner = r.userId === req.user.id;
+    const isOfficialOrVol = req.user.role === 'সরকারিকর্মকর্তা' || req.user.role === 'স্বেচ্ছাসেবক';
+    if (!isOwner && !isOfficialOrVol) {
+        return res.status(403).json({ success: false, message: 'এই অ্যাকশনটির অনুমতি আপনার নেই' });
+    }
+
     const now = new Date().toISOString();
     reports[idx].status = status;
     reports[idx].updatedAt = now;

@@ -1,4 +1,4 @@
-﻿const express = require("express");
+const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
@@ -74,6 +74,9 @@ router.post("/:id/like", requireAuth, (req, res) => {
     let liked;
     if (idx === -1) { report.likedBy.push(uid); report.likes = (report.likes || 0) + 1; liked = true; }
     else { report.likedBy.splice(idx, 1); report.likes = Math.max(0, (report.likes || 1) - 1); liked = false; }
+    if (typeof reportsModule.saveReports === "function") reportsModule.saveReports(reports);
+    const io = req.app.get("socketio");
+    if (io) io.emit("report_update", report);
     res.json({ success: true, likes: report.likes, liked });
 });
 
@@ -88,6 +91,9 @@ router.post("/:id/react", requireAuth, (req, res) => {
     let reacted;
     if (idx === -1) { report.reactedBy.push(uid); report.reactions = (report.reactions || 0) + 1; reacted = true; }
     else { report.reactedBy.splice(idx, 1); report.reactions = Math.max(0, (report.reactions || 1) - 1); reacted = false; }
+    if (typeof reportsModule.saveReports === "function") reportsModule.saveReports(reports);
+    const io = req.app.get("socketio");
+    if (io) io.emit("report_update", report);
     res.json({ success: true, reactions: report.reactions, reacted });
 });
 
