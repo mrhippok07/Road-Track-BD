@@ -104,6 +104,74 @@
             text-decoration: none;
         }
 
+        .mithi-heart-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 6px;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .mithi-heart-btn .heart-icon {
+            font-size: 1.35rem;
+            color: #ff4d6d;
+            text-shadow: 0 0 12px rgba(255, 77, 109, 0.8), 0 0 30px rgba(255, 77, 109, 0.4);
+            animation: heartbeat 1.4s ease-in-out infinite;
+            transition: transform 0.2s;
+        }
+
+        .mithi-heart-btn:hover .heart-icon {
+            transform: scale(1.25);
+        }
+
+        .mithi-heart-btn .heart-tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff4d6d, #c9184a);
+            color: #fff;
+            font-size: 0.68rem;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            padding: 5px 10px;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(255, 77, 109, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s, bottom 0.25s;
+        }
+
+        .mithi-heart-btn .heart-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #c9184a;
+        }
+
+        .mithi-heart-btn:hover .heart-tooltip {
+            opacity: 1;
+            bottom: calc(100% + 14px);
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.18); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.12); }
+            70% { transform: scale(1); }
+        }
+
         .brand-logo { height: 36px; width: auto; object-fit: contain; }
 
         .brand-text {
@@ -1434,6 +1502,10 @@
                 <span class="brand-title">Road Track BD</span>
                 <span class="brand-sub" data-i18n="ui.brandSub">জাতীয় রাস্তা পর্যবেক্ষণ</span>
             </div>
+            <a href="/pages/mithi wish/mithi_birthday.html" class="mithi-heart-btn" title="Hello Rudayana Hoque">
+                <span class="heart-icon">&#10084;&#65039;</span>
+                <span class="heart-tooltip">Hello Rudayana Hoque 💕</span>
+            </a>
         </div>
         <div class="nav-links">
             <a class="nav-link active" href="/" data-i18n="nav.map">ম্যাপ</a>
