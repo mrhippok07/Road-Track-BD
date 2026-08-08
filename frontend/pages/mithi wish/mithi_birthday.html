@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hello Rudayana Hoque 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 20% 30%, #1a0025 0%, #0d0015 40%, #000008 100%);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--d) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.1; transform: scale(0.8); }
+      to   { opacity: 0.9; transform: scale(1.3); }
+    }
+    .petals { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+    .petal {
+      position: absolute;
+      top: -40px;
+      animation: fall linear infinite;
+      opacity: 0.75;
+      user-select: none;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.8; }
+      100% { transform: translateY(110vh) rotate(360deg) scale(0.6); opacity: 0; }
+    }
+    .card-wrap {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 3rem;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+    .big-heart {
+      font-size: 5rem;
+      line-height: 1;
+      margin-bottom: 1.2rem;
+      animation: bigbeat 1.2s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px #ff4d6d) drop-shadow(0 0 60px #ff006688);
+    }
+    @keyframes bigbeat {
+      0%, 100% { transform: scale(1); }
+      15%       { transform: scale(1.22); }
+      30%       { transform: scale(1); }
+      45%       { transform: scale(1.14); }
+      60%       { transform: scale(1); }
+    }
+    .name-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.4rem, 7vw, 4.2rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff8fab, #ffb3c1, #ff4d6d, #c9184a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.15;
+      margin-bottom: 0.3rem;
+      animation: fadeSlideDown 1s ease both;
+    }
+    .name-sub {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: rgba(255,200,220,0.65);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      animation: fadeSlideDown 1.2s ease both;
+    }
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .divider {
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #ff4d6d, transparent);
+      margin: 0 auto 2.2rem;
+    }
+    .message-box {
+      background: rgba(255,77,109,0.06);
+      border: 1px solid rgba(255,77,109,0.2);
+      border-radius: 24px;
+      padding: 2rem 2.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 40px rgba(255,77,109,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: fadeSlideUp 1.4s ease both;
+      margin-bottom: 2rem;
+    }
+    .message-box p {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      font-weight: 300;
+      color: rgba(255,220,230,0.92);
+      line-height: 1.9;
+    }
+    .message-box p strong { color: #ff8fab; font-weight: 600; }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .heart-row {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+    }
+    .heart-row span { animation: heartPop var(--delay, 0.4s) ease-in-out infinite alternate; }
+    @keyframes heartPop {
+      from { transform: scale(1); }
+      to   { transform: scale(1.3); }
+    }
+    .wish-btn {
+      display: inline-block;
+      padding: 14px 40px;
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 30px rgba(255,77,109,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wish-btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 12px 40px rgba(255,77,109,0.7);
+    }
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+    .popup-overlay.active { display: flex; }
+    .popup-box {
+      background: linear-gradient(135deg, #1a0020, #12000e);
+      border: 1px solid rgba(255,77,109,0.35);
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 80px rgba(255,77,109,0.3);
+      animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .popup-box .pop-heart { font-size: 3.5rem; margin-bottom: 1rem; animation: bigbeat 1.2s infinite; }
+    .popup-box h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #ff8fab;
+      margin-bottom: 0.8rem;
+    }
+    .popup-box p {
+      color: rgba(255,200,220,0.85);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .popup-close {
+      padding: 10px 30px;
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
+      border: none;
+      border-radius: 50px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .popup-close:hover { transform: scale(1.05); }
+    .footer-note {
+      position: fixed;
+      bottom: 16px;
+      font-size: 0.72rem;
+      color: rgba(255,180,200,0.35);
+      letter-spacing: 1px;
+      z-index: 10;
+    }
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      background: rgba(255,77,109,0.12);
+      border: 1px solid rgba(255,77,109,0.3);
+      color: rgba(255,180,200,0.8);
+      font-size: 0.8rem;
+      padding: 7px 16px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,77,109,0.25); color: #fff; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="back-btn">← Back</a>
+  <div class="stars" id="stars"></div>
+  <div class="petals" id="petals"></div>
+
+  <div class="card-wrap">
+    <div class="big-heart">❤️</div>
+
+    <h1 class="name-title">Hello, Rudayana Hoque</h1>
+    <p class="name-sub">with all my love · always &amp; forever</p>
+
+    <div class="divider"></div>
+
+    <div class="message-box">
+      <p>
+        You walked into my life and everything changed. 🌸<br/><br/>
+        <strong>Rudayana</strong>, every single day with you feels like the most beautiful chapter
+        I never knew I was waiting to read. Your smile is my favourite sight,
+        your laughter is my favourite sound, and <strong>you</strong> are my favourite person
+        in the whole world.<br/><br/>
+        No matter where life takes us, my heart will always find its way back to yours.
+        I love you more than words could ever hold — so I made this little corner
+        of the internet, just for you. 💕
+      </p>
+    </div>
+
+    <div class="heart-row">
+      <span style="--delay:0.3s">🌸</span>
+      <span style="--delay:0.5s">❤️</span>
+      <span style="--delay:0.4s">🌺</span>
+      <span style="--delay:0.6s">💕</span>
+      <span style="--delay:0.35s">🌸</span>
+      <span style="--delay:0.55s">❤️</span>
+      <span style="--delay:0.45s">🌺</span>
+    </div>
+
+    <button class="wish-btn" onclick="openWish()">Open Your Surprise 🎁</button>
+  </div>
+
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-box">
+      <div class="pop-heart">💌</div>
+      <h2>My Dearest Mithi</h2>
+      <p>
+        You are the reason I believe in love stories.<br/>
+        You are my sunshine on the darkest days.<br/>
+        You are <strong style="color:#ff8fab">everything</strong> to me.<br/><br/>
+        This is just a tiny reminder that I think of you every single moment —
+        and I always will. 💞
+      </p>
+      <button class="popup-close" onclick="closeWish()">Close with Love 💝</button>
+    </div>
+  </div>
+
+  <p class="footer-note">made with ❤️ by Kabir · just for you</p>
+
+  <script>
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 160; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2.5 + 0.5;
+      s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s;`;
+      starsEl.appendChild(s);
+    }
+    const petalsEl = document.getElementById('petals');
+    const emojis = ['🌸','🌺','💮','🌼','💕','❤️','🌷'];
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      const dur = (Math.random()*8+7).toFixed(1);
+      const del = (Math.random()*12).toFixed(1);
+      p.style.cssText = `left:${Math.random()*100}%;font-size:${(Math.random()*0.8+0.9).toFixed(1)}rem;animation-duration:${dur}s;animation-delay:-${del}s;`;
+      petalsEl.appendChild(p);
+    }
+    function openWish()  { document.getElementById('popupOverlay').classList.add('active'); }
+    function closeWish() { document.getElementById('popupOverlay').classList.remove('active'); }
+    document.getElementById('popupOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeWish();
+    });
+  </script>
+</body>
+</html>
