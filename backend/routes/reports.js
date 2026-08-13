@@ -196,6 +196,9 @@ router.post('/', requireAuth, upload.array('photos', 3), [
         lng: req.body.lng ? lng : null,
         photos,
         userId: req.user ? req.user.id : null,
+        avatar: fullUser?.avatar || null,
+        icon: fullUser?.icon || null,
+        role: fullUser?.role || null,
         likes: 0, reactions: 0, commentCount: 0,
         likedBy: [], reactedBy: [],
         createdAt: now, updatedAt: now, resolvedAt: null

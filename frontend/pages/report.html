@@ -724,7 +724,7 @@
         <div class="report-card">
             <div class="section-label" data-i18n="report.typeLabel">▸ সমস্যার ধরন নির্বাচন করুন</div>
             <div class="type-grid" id="typeGrid">
-                <button class="type-btn" data-value="broken" onclick="selectType(this)" data-i18n="type.broken"><i class="fa-solid fa-road-circle-exclamation"></i> ভাঙা
+                <button class="type-btn selected" data-value="broken" onclick="selectType(this)" data-i18n="type.broken"><i class="fa-solid fa-road-circle-exclamation"></i> ভাঙা
                     রাস্তা</button>
                 <button class="type-btn" data-value="pothole" onclick="selectType(this)" data-i18n="type.pothole"><i class="fa-solid fa-road-spikes"></i>
                     বড় গর্ত</button>
@@ -808,7 +808,7 @@
                     </label>
                 </div>
             </div>
-            <input type="hidden" id="selectedType">
+            <input type="hidden" id="selectedType" value="broken">
             <hr class="section-sep">
             <div class="section-label" data-i18n="report.statusLabel">▸ অবস্থা নির্বাচন করুন</div>
             <div class="status-grid" id="statusGrid">

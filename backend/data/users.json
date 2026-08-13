@@ -32,5 +32,22 @@
     "icon": "<i class=\"fa-solid fa-handshake\"></i>",
     "isFirstLogin": true,
     "createdAt": "2026-08-07T05:40:02.888Z"
+  },
+  {
+    "id": "eeb8711d-149c-4c38-a1dc-22ec352643dd",
+    "name": "ফিড টেস্ট ইউজার",
+    "phone": "01850407535",
+    "password": "$2a$12$KX5.pqyl9l6AHXFfilVi1uhizBga/EautdTc5Uhw8oris1yAa/gt.",
+    "role": "স্বেচ্ছাসেবক",
+    "nid": "1234567890123",
+    "dob": "1998-08-08",
+    "job": "স্বেচ্ছাসেবক",
+    "address": "মিরপুর, ঢাকা",
+    "points": 0,
+    "reportCount": 0,
+    "avatar": null,
+    "icon": "<i class=\"fa-solid fa-handshake\"></i>",
+    "isFirstLogin": true,
+    "createdAt": "2026-08-13T17:39:31.576Z"
   }
 ]
