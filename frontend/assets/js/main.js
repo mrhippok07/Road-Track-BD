@@ -471,18 +471,20 @@ async function doResetPassword() {
             showToast(d.message || 'পাসওয়ার্ড রিসেট ব্যর্থ (তথ্য মেলেনি)', 'error');
         }
     } catch (e) { 
-        showToast('UI Demo: Password reset API might not be configured, but UI is ready.', 'error');
+        showToast(typeof getLang === 'function' && getLang() === 'en' ? 'Password reset failed. Please try again.' : 'পাসওয়ার্ড রিসেট ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'error');
     }
 }
 
 
 const _faLink = document.createElement('link');
 _faLink.rel = 'stylesheet';
-_faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+_faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css';
 document.head.appendChild(_faLink);
 
 const _globalStyle = document.createElement('style');
 _globalStyle.textContent = `
+html { scroll-behavior: smooth; }
+body { animation: fadeIn 0.3s ease-in-out; }
 @keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 @keyframes markerPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:0.6;}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
@@ -769,197 +771,201 @@ if (document.readyState === 'loading') {
 }
 
 window.getFuturisticIcon = function(color, problemType) {
-    const cleanColor = color.replace('#', '');
-    
-    // Default fallback icon path (center target circle)
-    let innerIconSvg = `
-        <circle cx="20" cy="15" r="5" fill="#021008" stroke="${color}" stroke-width="1.2"/>
-        <circle cx="20" cy="15" r="2.5" fill="#ffffff"/>
-        <circle cx="20" cy="15" r="1" fill="${color}"/>
-    `;
+    // ── Clean, modern map pin icon generator ──
+    // Uses a simple teardrop pin with a clear white-circle center and crisp category icons.
+    // Renders perfectly at 40×40px on Google Maps.
+
+    // Inner icon SVG — drawn inside a white circle at center of pin
+    let iconPath = '';
 
     if (problemType) {
-        let customSvg = '';
-        
         switch (problemType) {
             case 'broken':
-                // fa-road-circle-exclamation
-                customSvg = `
-                    <path d="M16,9 L24,9 L26,21 L14,21 Z" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
-                    <path d="M20,10 L20,13 M20,15 L20,17 M20,19 L20,20" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="1.5,1.5"/>
-                    <circle cx="25" cy="16" r="4" fill="${color}" stroke="#ffffff" stroke-width="0.8"/>
-                    <path d="M25,14 L25,16 M25,18 L25,18.5" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                // Road with exclamation
+                iconPath = `
+                    <path d="M14,12 L18,12 L19,20 L13,20 Z" fill="none" stroke="${color}" stroke-width="1.3" stroke-linecap="round"/>
+                    <path d="M16,13 L16,19" fill="none" stroke="${color}" stroke-width="0.9" stroke-dasharray="1.5,1.5"/>
+                    <circle cx="22" cy="15" r="3.5" fill="${color}"/>
+                    <path d="M22,13 L22,15.5" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+                    <circle cx="22" cy="17.5" r="0.6" fill="#fff"/>
                 `;
                 break;
             case 'pothole':
-                // fa-road-spikes (potholes)
-                customSvg = `
-                    <path d="M16,9 L24,9 L26,21 L14,21 Z" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
-                    <circle cx="18" cy="13" r="1.2" fill="${color}"/>
-                    <circle cx="22" cy="16" r="1.5" fill="${color}"/>
-                    <circle cx="19" cy="19" r="1" fill="${color}"/>
+                // Road with holes
+                iconPath = `
+                    <path d="M14,12 L22,12 L23,20 L13,20 Z" fill="none" stroke="${color}" stroke-width="1.3"/>
+                    <ellipse cx="16" cy="15" rx="1.5" ry="1" fill="${color}" opacity="0.8"/>
+                    <ellipse cx="20" cy="17" rx="2" ry="1.2" fill="${color}" opacity="0.8"/>
+                    <ellipse cx="17" cy="19" rx="1.2" ry="0.7" fill="${color}" opacity="0.6"/>
                 `;
                 break;
             case 'waterlogged':
-                // fa-water (three waves)
-                customSvg = `
-                    <path d="M13,12 C15,10.5 16,13.5 18,12 C20,10.5 21,13.5 23,12 C25,10.5 26,13.5 27,12" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
-                    <path d="M13,15.5 C15,14 16,17 18,15.5 C20,14 21,17 23,15.5 C25,14 26,17 27,15.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
-                    <path d="M13,19 C15,17.5 16,20.5 18,19 C20,17.5 21,20.5 23,19 C25,17.5 26,20.5 27,19" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                // Three water waves
+                iconPath = `
+                    <path d="M12,13 Q14,11 16,13 Q18,15 20,13 Q22,11 24,13" fill="none" stroke="${color}" stroke-width="1.3" stroke-linecap="round"/>
+                    <path d="M12,16 Q14,14 16,16 Q18,18 20,16 Q22,14 24,16" fill="none" stroke="${color}" stroke-width="1.3" stroke-linecap="round"/>
+                    <path d="M12,19 Q14,17 16,19 Q18,21 20,19 Q22,17 24,19" fill="none" stroke="${color}" stroke-width="1.3" stroke-linecap="round"/>
                 `;
                 break;
             case 'dangerous':
-                // fa-triangle-exclamation
-                customSvg = `
-                    <path d="M20,8 L27,20 L13,20 Z" fill="${color}" stroke="#ffffff" stroke-width="1.2" stroke-linejoin="round"/>
-                    <path d="M20,12 L20,16 M20,18 L20,18.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                // Warning triangle
+                iconPath = `
+                    <path d="M18,10 L25,21 L11,21 Z" fill="${color}" stroke="#fff" stroke-width="1" stroke-linejoin="round"/>
+                    <path d="M18,13.5 L18,17" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+                    <circle cx="18" cy="19" r="0.7" fill="#fff"/>
                 `;
                 break;
             case 'unpaved':
-                // fa-road (simple road)
-                customSvg = `
-                    <path d="M16,9 L24,9 L26,21 L14,21 Z" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
-                    <path d="M20,10 L20,20" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2,2"/>
+                // Simple road
+                iconPath = `
+                    <path d="M14,11 L22,11 L24,21 L12,21 Z" fill="none" stroke="${color}" stroke-width="1.3"/>
+                    <path d="M18,12 L18,20" fill="none" stroke="${color}" stroke-width="1" stroke-dasharray="2,2"/>
                 `;
                 break;
             case 'narrow':
-                // fa-compress
-                customSvg = `
-                    <path d="M13,15 L18,15 M17,12 L19,15 L17,18 M27,15 L22,15 M23,12 L21,15 L23,18" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                // Compress arrows
+                iconPath = `
+                    <path d="M11,16 L15,16" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M14,13.5 L16,16 L14,18.5" fill="none" stroke="${color}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M25,16 L21,16" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M22,13.5 L20,16 L22,18.5" fill="none" stroke="${color}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
                 `;
                 break;
             case 'nolight':
-                // fa-lightbulb
-                customSvg = `
-                    <path d="M20,10 C18.3,10 17,11.3 17,13 C17,14.2 18,15.2 18.2,16 L21.8,16 C22,15.2 23,14.2 23,13 C23,11.3 21.7,10 20,10 Z M18.5,17.5 L21.5,17.5" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
-                    <path d="M15,18 L25,11" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                // Lightbulb with slash
+                iconPath = `
+                    <path d="M18,10 C15.8,10 14,11.8 14,14 C14,15.5 15,16.8 15.5,17.5 L20.5,17.5 C21,16.8 22,15.5 22,14 C22,11.8 20.2,10 18,10 Z" fill="none" stroke="${color}" stroke-width="1.2"/>
+                    <path d="M16,19 L20,19" fill="none" stroke="${color}" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M13,20 L23,10" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
                 `;
                 break;
             case 'erosion':
-                // fa-cloud-showers-heavy (rain causing erosion)
-                customSvg = `
-                    <path d="M16,14 C15.5,14 15,13.5 15,13 C15,12.5 15.5,12 16,12 C15.8,11.8 15.7,11.5 15.7,11.2 C15.7,10.3 16.5,9.5 17.5,9.5 C18,9.5 18.5,9.7 18.8,10.2 C19.2,9.7 19.8,9.5 20.5,9.5 C21.5,9.5 22.3,10.3 22.3,11.2 C22.3,11.3 22.3,11.4 22.3,11.5 C22.8,11.7 23.1,12.1 23.1,12.6 C23.1,13.3 22.5,13.9 21.8,13.9 Z" fill="#ffffff"/>
-                    <path d="M17,15 L16,18 M19.5,15 L18.5,18 M22,15 L21,18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                // Cloud with rain
+                iconPath = `
+                    <path d="M14.5,14 C14,14 13.5,13.5 13.5,13 C13.5,12.5 14,12 14.5,12 C14.3,11.5 14.5,10.8 15.2,10.3 C15.9,9.8 16.8,9.8 17.5,10.3 C18,9.7 18.8,9.5 19.5,9.7 C20.5,10 21,10.8 21,11.5 C21.5,11.7 22,12.2 22,13 C22,13.8 21.3,14 20.5,14 Z" fill="${color}"/>
+                    <path d="M15,15.5 L14,18.5 M17.5,15.5 L16.5,18.5 M20,15.5 L19,18.5" fill="none" stroke="${color}" stroke-width="1" stroke-linecap="round"/>
                 `;
                 break;
             case 'bridge_repair':
             case 'bridge_new':
-                // fa-bridge
-                customSvg = `
-                    <path d="M13,17 C13,14 16,12.5 20,12.5 C24,12.5 27,14 27,17 M12,18 L28,18" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                // Bridge arch
+                iconPath = `
+                    <path d="M11,18 L25,18" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M12,18 C12,14 15,12 18,12 C21,12 24,14 24,18" fill="none" stroke="${color}" stroke-width="1.3"/>
+                    <path d="M14,18 L14,13" fill="none" stroke="${color}" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M22,18 L22,13" fill="none" stroke="${color}" stroke-width="1" stroke-linecap="round"/>
                 `;
                 break;
             case 'road_bridge_new':
-                // fa-road overlapping a bridge
-                customSvg = `
-                    <path d="M13,16 C13,14 16,13 20,13 C24,13 27,14 27,16 M12,17 L28,17" fill="none" stroke="${color}" stroke-width="1" stroke-linecap="round"/>
-                    <path d="M17,10 L23,10 L25,18 L15,18 Z" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                // Road + bridge combined
+                iconPath = `
+                    <path d="M12,18 C12,15 15,13.5 18,13.5 C21,13.5 24,15 24,18" fill="none" stroke="${color}" stroke-width="1.2"/>
+                    <path d="M11,19 L25,19" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M15,10 L21,10 L23,18 L13,18 Z" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M18,11 L18,17" fill="none" stroke="#fff" stroke-width="0.8" stroke-dasharray="1.5,1.5"/>
                 `;
                 break;
             case 'culvert_new':
             case 'culvert_repair':
             case 'tube_well_repair':
-                // fa-screwdriver-wrench
-                customSvg = `
-                    <path d="M14,18 L19,13 M15,13 L18,16" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
-                    <path d="M23.5,9.5 C23,9 22.2,9 21.7,9.5 L18.5,12.7 L20.3,14.5 L23.5,11.3 C24,10.8 24,10 23.5,9.5 Z" fill="${color}" stroke="#ffffff" stroke-width="0.8"/>
+                // Wrench tool
+                iconPath = `
+                    <path d="M13,19 L18,14" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M14,14 L17,17" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M22,10 C21.3,9.3 20.2,9.3 19.5,10 L17,12.5 L19.5,15 L22,12.5 C22.7,11.8 22.7,10.7 22,10 Z" fill="${color}" stroke="#fff" stroke-width="0.8"/>
                 `;
                 break;
             case 'embankment_new':
             case 'embankment_repair':
-                // fa-mountain
-                customSvg = `
-                    <path d="M13,18 L18,11 L21,15 L24,10 L27,18 Z" fill="${color}" stroke="#ffffff" stroke-width="1" stroke-linejoin="round"/>
+                // Mountain peaks
+                iconPath = `
+                    <path d="M11,20 L15.5,12 L18,16 L22,10 L25,20 Z" fill="${color}" stroke="#fff" stroke-width="0.8" stroke-linejoin="round"/>
+                    <path d="M20,13 L22,10 L24,13" fill="#fff" opacity="0.3"/>
                 `;
                 break;
             case 'canal_small':
             case 'canal_large':
-                // fa-droplet
-                customSvg = `
-                    <path d="M20,9.5 C17.5,13 16,15 16,17 C16,19.2 17.8,21 20,21 C22.2,21 24,19.2 24,17 C24,15 22.5,13 20,9.5 Z" fill="${color}" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                // Water droplet
+                iconPath = `
+                    <path d="M18,9 C15,13.5 13,16 13,18 C13,20.8 15.2,23 18,23 C20.8,23 23,20.8 23,18 C23,16 21,13.5 18,9 Z" fill="${color}" stroke="#fff" stroke-width="0.8"/>
+                    <ellipse cx="16" cy="17.5" rx="1.5" ry="2" fill="#fff" opacity="0.3"/>
                 `;
                 break;
             case 'tube_well_needed':
-                // fa-faucet
-                customSvg = `
-                    <path d="M15,16 L21,16 M21,14 L21,18 M21,14 C21,12 19.5,10.5 17.5,10.5 C16,10.5 15,11.5 15,12.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
-                    <circle cx="15" cy="13.5" r="0.8" fill="${color}"/>
+                // Faucet / tap
+                iconPath = `
+                    <path d="M14,17 L20,17 M20,15 L20,19" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M20,15 C20,12.5 18,11 16,11 C14.5,11 13.5,12 13.5,13" fill="none" stroke="${color}" stroke-width="1.3" stroke-linecap="round"/>
+                    <circle cx="13.5" cy="14.5" r="1" fill="${color}"/>
+                    <path d="M17,19 L17,21" fill="none" stroke="${color}" stroke-width="1" stroke-linecap="round" stroke-dasharray="1,1"/>
                 `;
                 break;
             case 'railway_repair':
             case 'railway_new':
-                // fa-train
-                customSvg = `
-                    <path d="M16,11 L24,11 C25,11 25,12 25,13 L25,19 C25,19.5 24.5,20 24,20 L24,21 L23,21 L23,20 L17,20 L17,21 L16,21 L16,20 C15.5,20 15,19.5 15,19 L15,13 C15,12 15,11 16,11 Z" fill="${color}" stroke="#ffffff" stroke-width="1"/>
-                    <rect x="17" y="13" width="6" height="3" fill="#021008" stroke="#ffffff" stroke-width="0.6"/>
-                    <circle cx="17.5" cy="18" r="0.8" fill="#ffffff"/>
-                    <circle cx="22.5" cy="18" r="0.8" fill="#ffffff"/>
+                // Train
+                iconPath = `
+                    <rect x="13" y="11" width="10" height="8" rx="2" fill="${color}" stroke="#fff" stroke-width="0.8"/>
+                    <rect x="15" y="13" width="6" height="3" rx="0.5" fill="#021008" stroke="#fff" stroke-width="0.5"/>
+                    <circle cx="15.5" cy="18" r="0.8" fill="#fff"/>
+                    <circle cx="20.5" cy="18" r="0.8" fill="#fff"/>
+                    <path d="M14,20 L13,21 M22,20 L23,21" fill="none" stroke="${color}" stroke-width="0.8" stroke-linecap="round"/>
                 `;
                 break;
             case 'railway_station_new':
-                // fa-building-shield
-                customSvg = `
-                    <path d="M13,19 L13,11 L21,11 L21,19 Z" fill="none" stroke="#ffffff" stroke-width="1.2"/>
-                    <path d="M20,11 L20,19 C20,19 22,17 24,17 C24,17 24,11 20,11 Z" fill="${color}" stroke="#ffffff" stroke-width="0.8"/>
+                // Building with shield
+                iconPath = `
+                    <rect x="12" y="12" width="8" height="9" fill="none" stroke="${color}" stroke-width="1.2"/>
+                    <rect x="14" y="14" width="2" height="2" fill="${color}" opacity="0.5"/>
+                    <rect x="14" y="18" width="2" height="3" fill="${color}" opacity="0.5"/>
+                    <path d="M20,12 L20,21 C22,20 24,18 24,16 C24,14 22,12 20,12 Z" fill="${color}" stroke="#fff" stroke-width="0.8"/>
                 `;
                 break;
             case 'bus_station_repair':
             case 'bus_station_new':
-                // fa-bus / fa-signs-post
-                customSvg = `
-                    <path d="M16,11 L24,11 C25,11 25,12 25,13 L25,19 L15,19 L15,13 C15,12 15,11 16,11 Z" fill="${color}" stroke="#ffffff" stroke-width="1"/>
-                    <rect x="17" y="13" width="6" height="3" fill="#021008" stroke="#ffffff" stroke-width="0.6"/>
-                    <circle cx="17.5" cy="17.5" r="1" fill="#ffffff"/>
-                    <circle cx="22.5" cy="17.5" r="1" fill="#ffffff"/>
+                // Bus
+                iconPath = `
+                    <rect x="13" y="11" width="10" height="8" rx="1.5" fill="${color}" stroke="#fff" stroke-width="0.8"/>
+                    <rect x="14.5" y="13" width="7" height="3" rx="0.5" fill="#021008" stroke="#fff" stroke-width="0.5"/>
+                    <circle cx="15.5" cy="18.5" r="1" fill="#fff"/>
+                    <circle cx="20.5" cy="18.5" r="1" fill="#fff"/>
                 `;
                 break;
             case 'chor_development':
-                // fa-wheat-awn
-                customSvg = `
-                    <path d="M20,19 L20,9 M20,11 L17,9 M20,11 L23,9 M20,14 L17,12 M20,14 L23,12 M20,17 L17,15 M20,17 L23,15" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                // Wheat / plant
+                iconPath = `
+                    <path d="M18,20 L18,10" fill="none" stroke="${color}" stroke-width="1.3" stroke-linecap="round"/>
+                    <path d="M18,12 L15,10 M18,12 L21,10" fill="none" stroke="${color}" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M18,15 L15,13 M18,15 L21,13" fill="none" stroke="${color}" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M18,18 L15,16 M18,18 L21,16" fill="none" stroke="${color}" stroke-width="1.2" stroke-linecap="round"/>
                 `;
                 break;
             case 'opinion':
-                // fa-comments
-                customSvg = `
-                    <path d="M15,9.5 L25,9.5 C26,9.5 27,10.3 27,11.2 L27,15.8 C27,16.7 26,17.5 25,17.5 L22,17.5 L19,19.5 L19,17.5 L15,17.5 C14,17.5 13,16.7 13,15.8 L13,11.2 C13,10.3 14,9.5 15,9.5 Z" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                // Speech bubble
+                iconPath = `
+                    <rect x="12" y="10" width="12" height="8" rx="2" fill="none" stroke="${color}" stroke-width="1.3"/>
+                    <path d="M16,18 L14,21 L18,18" fill="${color}" stroke="${color}" stroke-width="0.8" stroke-linejoin="round"/>
+                    <circle cx="15.5" cy="14" r="0.8" fill="${color}"/>
+                    <circle cx="18" cy="14" r="0.8" fill="${color}"/>
+                    <circle cx="20.5" cy="14" r="0.8" fill="${color}"/>
                 `;
                 break;
             default:
                 break;
         }
-        
-        if (customSvg) {
-            innerIconSvg = `
-                <circle cx="20" cy="15" r="7.5" fill="#021008" stroke="${color}" stroke-width="0.8" opacity="0.9"/>
-                ${customSvg}
-            `;
-        }
     }
 
-    const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
-            <defs>
-                <radialGradient id="glow-${cleanColor}" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="${color}" stop-opacity="0.6"/>
-                    <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
-                </radialGradient>
-                <linearGradient id="grad-${cleanColor}" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#ffffff"/>
-                    <stop offset="40%" stop-color="${color}"/>
-                    <stop offset="100%" stop-color="${color}" stop-opacity="0.7"/>
-                </linearGradient>
-            </defs>
-            <!-- Pulsing outer glow -->
-            <circle cx="20" cy="35" r="5" fill="url(#glow-${cleanColor})"/>
-            <!-- Radar ring -->
-            <circle cx="20" cy="15" r="13" fill="none" stroke="${color}" stroke-width="1.2" stroke-dasharray="3,3" opacity="0.7"/>
-            <!-- Location Pin Outer -->
-            <path d="M20 3 C12 3 6 9 6 17 C6 26 20 37 20 37 C20 37 34 26 34 17 C34 9 28 3 20 3 Z" 
-                  fill="url(#grad-${cleanColor})" stroke="${color}" stroke-width="1.5"/>
-            <!-- Center Icon -->
-            ${innerIconSvg}
-        </svg>
-    `;
+    // Build the final SVG marker
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 44" width="36" height="44">
+  <!-- Drop shadow ellipse -->
+  <ellipse cx="18" cy="42" rx="6" ry="2" fill="rgba(0,0,0,0.25)"/>
+  <!-- Pin body -->
+  <path d="M18 0 C8 0 0 8 0 18 C0 28 18 44 18 44 C18 44 36 28 36 18 C36 8 28 0 18 0 Z"
+        fill="${color}" stroke="#ffffff" stroke-width="1.5"/>
+  <!-- White inner circle -->
+  <circle cx="18" cy="16" r="12" fill="#ffffff" stroke="${color}" stroke-width="0.5" opacity="0.95"/>
+  <!-- Category icon -->
+  ${iconPath || `<circle cx="18" cy="16" r="4" fill="${color}"/><circle cx="18" cy="16" r="1.5" fill="#fff"/>`}
+</svg>`;
+
     return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
 };
